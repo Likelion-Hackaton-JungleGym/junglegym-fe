@@ -5,7 +5,7 @@ export default function JungleTalkPage() {
   return (
     <>
       <Header />
-      <p>정글톡</p>
+      <p>정글톡 AI</p>
       <Outlet />
     </>
   );
