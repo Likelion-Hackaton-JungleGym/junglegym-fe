@@ -41,3 +41,8 @@ export const NavItem = styled(Link)`
     font-weight: bold;
   }
 `;
+
+export const HeaderWrapper = styled.header`
+  background-color: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+`;
