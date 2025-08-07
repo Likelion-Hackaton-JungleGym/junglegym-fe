@@ -30,16 +30,16 @@ export default function Header() {
     <HeaderWrapper $visible={showHeader}>
       <Logo>정글짐</Logo>
       <Nav>
-        <NavItem to="/" className={path === "/" ? "active1" : ""}>
+        <NavItem to="/" className={path === "/" ? "active" : ""}>
           동네 한 바퀴
         </NavItem>
-        <NavItem to="/junglepeople" className={path === "/junglepeople" ? "active2" : ""}>
+        <NavItem to="/junglepeople" className={path === "/junglepeople" ? "active" : ""}>
           정글 사람들
         </NavItem>
-        <NavItem to="/jungletalk" className={path === "/jungletalk" ? "active3" : ""}>
+        <NavItem to="/jungletalk" className={path === "/jungletalk" ? "active" : ""}>
           정글톡 AI
         </NavItem>
-        <NavItem to="/junglesound" className={path === "/junglesound" ? "active4" : ""}>
+        <NavItem to="/junglesound" className={path === "/junglesound" ? "active" : ""}>
           정글의 소리
         </NavItem>
       </Nav>
