@@ -1,5 +1,5 @@
 //import styled from "styled-components";
-import Wrapper from "../../junglepeople/JunglePeoplePage";
+import Wrapper from "../JungleTownPage";
 
 export default function CardNews() {
   return (
