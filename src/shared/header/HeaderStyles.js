@@ -16,30 +16,31 @@ export const Nav = styled.nav`
   justify-content: space-around;
   padding: 10px;
   font-size: 14px;
-  background-color: #e9e9e9;
+  background-color: #ffffff;
+  border-bottom: 0.5 solid #e5e5e5;
 `;
 
 export const NavItem = styled(Link)`
+  position: relative;
   color: #a7a7a7;
+  text-decoration: none;
   font-weight: 500;
   margin: 10px;
   cursor: pointer;
 
-  &.active1 {
+  &.active {
     color: black;
     font-weight: bold;
-  }
-  &.active2 {
-    color: black;
-    font-weight: bold;
-  }
-  &.active3 {
-    color: black;
-    font-weight: bold;
-  }
-  &.active4 {
-    color: black;
-    font-weight: bold;
+
+    &::after {
+      content: "";
+      position: absolute;
+      bottom: -22px;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background-color: black;
+    }
   }
 `;
 
