@@ -1,16 +1,16 @@
 import styled from "styled-components";
 import Title from "./components/Title";
-//import CardNews from "./components/CardNews";
-//import MiniPeople from "./components/MiniPeople";
-//import JungleDictionary from "./components/JungleDictionary";
+import CardNews from "./components/CardNews";
+import MiniPeople from "./components/MiniPeople";
+import JungleDictionary from "./components/JungleDictionary";
 
 export default function JungleTownPage() {
   return (
     <Wrapper>
       <Title />
-      {/*<CardNews />
+      <CardNews />
       <MiniPeople />
-      <JungleDictionary /> */}
+      <JungleDictionary />
     </Wrapper>
   );
 }
