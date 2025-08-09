@@ -4,8 +4,8 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  width: 430px;
-  height: 932px;
+
+  /* width/height 고정 제거 — 반응형을 위해 */
 }
 
 * {
