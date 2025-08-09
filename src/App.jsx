@@ -4,7 +4,6 @@ import JungleTownPage from "./pages/jungletown/JungleTownPage";
 import JunglePeoplePage from "./pages/junglepeople/JunglePeoplePage";
 import JungleTalkPage from "./pages/jungletalk/JungleTalkPage";
 import JungleSoundPage from "./pages/junglesound/JungleSoundPage";
-//import RootLayout from "./shared/layouts/RootLayout";
 
 export default function App() {
   return (
