@@ -44,9 +44,9 @@ const BigText = styled.div`
 const Highlight = styled.div`
   position: absolute;
   bottom: 3px;
-  left: 35.5%;
-  width: 22%;
-  height: 13px;
+  left: 36%;
+  width: 21%;
+  height: 14px;
   background: #e1e0ff;
   z-index: -1;
   border-radius: 2px;

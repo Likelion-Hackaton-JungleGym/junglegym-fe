@@ -7,8 +7,8 @@ import kimnamgeun from "./img/kimnamgeun.svg";
 
 export default function Profile() {
   return (
-    <wrapper>
-      <ProfileCards class="image-container">
+    <Wrapper>
+      <ProfileCards>
         <ProfileCard>
           {/*} <Link to="/leeseungroProfile">*/}
           <Img src={leeseungro} />
@@ -30,30 +30,29 @@ export default function Profile() {
           {/*</Link>*/}
         </ProfileCard>
       </ProfileCards>
-    </wrapper>
+    </Wrapper>
   );
 }
 
 const Wrapper = styled.div`
-  padding: 20px;
+  margin: 20px;
 `;
 
 const ProfileCards = styled.div`
   margin: 10px;
   display: grid;
-  grid-template-columns: repeat(2, 1fr); /* 두 개의 열 */
-  gap: 20px; /* 카드 간격 */
+  grid-template-columns: repeat(2, 1fr); /* 2열 */
+  gap: 15px; /* 카드 간격 */
 `;
 
 const ProfileCard = styled.div`
-  height: 100px;
-  //  display: flex;
-  //  justify-content: center;
-  //align-items: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 const Img = styled.img`
-  width: 50%; /* 이미지를 80% 크기로 설정 */
+  width: 100%; /* 카드 폭 꽉 채우기 */
   height: auto;
   cursor: pointer;
 `;
