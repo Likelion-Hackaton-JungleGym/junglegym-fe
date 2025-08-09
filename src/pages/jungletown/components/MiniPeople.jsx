@@ -41,14 +41,14 @@ export default function Minipeople() {
 }
 
 const Wrapper = styled.div`
-  margin: 10px;
+  margin: 25px;
 `;
 
 const Text = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin: 10px 15px;
+  margin: 10px;
   font-family: Pretendard;
 `;
 
@@ -66,7 +66,6 @@ const Plus = styled.div`
 
 const MiniPeople = styled.div`
   display: flex;
-  margin: 10px;
   &.scroll-container {
     display: flex;
     overflow-x: auto;
@@ -83,5 +82,5 @@ const Img = styled.img`
 `;
 
 const People = styled.div`
-  margin: 3px 7px 0px 7px;
+  margin: 5px;
 `;

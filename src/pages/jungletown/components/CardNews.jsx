@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import imsi from "../components/img/imsi.svg";
+import imsi from "../components/img/imsi2.svg";
 
 export default function CardNews() {
   return (
@@ -27,8 +27,8 @@ const Date = styled.div`
 `;
 
 const Card1 = styled.div`
-  width: 380px;
-  height: 350px;
+  width: 330px;
+  height: 300px;
   background-image: url(${imsi});
   background-size: cover;
   background-position: center;
