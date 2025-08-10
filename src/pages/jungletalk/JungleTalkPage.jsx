@@ -2,9 +2,10 @@ import React, { useState } from "react";
 import JungleTalkMain from "./JungleTalkMain";
 import JungleTalkQuestion from "./JungleTalkQuestion";
 import JungleTalkAnswer from "./JungleTalkAnswer";
+import { useJungleTalkStore } from "../../store/jungleTalkStore";
 
 const JungleTalkPage = () => {
-  const [step, setStep] = useState(1);
+  const { step, setStep } = useJungleTalkStore();
   const [question, setQuestion] = useState("");
   const [isPrivate, setIsPrivate] = useState(false);
   const [answer, setAnswer] = useState("");
@@ -39,6 +40,7 @@ const JungleTalkPage = () => {
           question={question}
           answer={answer}
           lawText={lawText}
+          setStep={setStep}
           dummyQuestions={Array(10).fill("비례대표와 지역감은 어떻게 다른건가요?")}
         />
       )}
