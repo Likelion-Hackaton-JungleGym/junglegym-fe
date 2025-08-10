@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import {
   Container,
   TopImageWrapper,
@@ -6,17 +6,27 @@ import {
   WhiteContainer,
   MyQuestion,
   AnswerText,
-  SubTitle,
-  QuestionList,
-  QuestionCard
+  BackButton,
 } from "./JungleTalk.styles";
+import BackIcon from "../../assets/icons/BackIcon.svg";
 import LawImage from "../../assets/images/LawImage.png";
+import OtherQuestion from "./OtherQuestion";
 
-const JungleTalkAnswer = ({ question, answer, lawText, dummyQuestions }) => {
+const lawImages = Array(10).fill(LawImage);
+
+//배경이미지 랜덤으로
+const JungleTalkAnswer = ({ question, answer, lawText, dummyQuestions, setStep }) => {
+  const randomImage = useMemo(() => {
+    const randomIndex = Math.floor(Math.random() * lawImages.length);
+    return lawImages[randomIndex];
+  }, []);
   return (
     <Container>
+      <BackButton onClick={() => setStep(2)}>
+        <img src={BackIcon} alt="뒤로가기" />
+      </BackButton>
       <TopImageWrapper>
-        <img src={LawImage} alt="법 관련 이미지" />
+        <img src={randomImage} alt="법 관련 이미지" />
         <OverlayText>
           <p>{lawText}</p>
         </OverlayText>
@@ -32,12 +42,11 @@ const JungleTalkAnswer = ({ question, answer, lawText, dummyQuestions }) => {
           <br />
           {answer}
         </AnswerText>
-        <SubTitle>다른 사람들의 질문</SubTitle>
-        <QuestionList>
-          {dummyQuestions.map((q, i) => (
-            <QuestionCard key={i}>{q}</QuestionCard>
-          ))}
-        </QuestionList>
+        <OtherQuestion
+          title="다른 사람들의 궁금증"
+          questions={dummyQuestions}
+          onClick={(i, q) => console.log("클릭한 질문:", q)}
+        />
       </WhiteContainer>
     </Container>
   );
