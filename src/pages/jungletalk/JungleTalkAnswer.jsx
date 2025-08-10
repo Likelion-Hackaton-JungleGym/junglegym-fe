@@ -22,7 +22,7 @@ const JungleTalkAnswer = ({ question, answer, lawText, dummyQuestions, setStep }
   }, []);
   return (
     <Container>
-      <BackButton onClick={() => setStep(2)}>
+      <BackButton onClick={() => setStep(1)}>
         <img src={BackIcon} alt="뒤로가기" />
       </BackButton>
       <TopImageWrapper>
