@@ -4,11 +4,10 @@ import {
   Section,
   Title,
   Description,
-  SubTitle,
-  QuestionList,
-  QuestionCard,
-  FloatingButton
+  FloatingButton,
 } from "./JungleTalk.styles";
+
+import OtherQuestion from "./OtherQuestion";
 
 const JungleTalkMain = ({ setStep }) => {
   const dummyQuestions = Array(10).fill("비례대표와 지역감은 어떻게 다른건가요?");
@@ -26,12 +25,11 @@ const JungleTalkMain = ({ setStep }) => {
           복잡한 정치 이슈도 중립적인 시선으로 쉽게 풀어드립니다.
         </Description>
 
-        <SubTitle>다른 사람들의 궁금증</SubTitle>
-        <QuestionList>
-          {dummyQuestions.map((q, i) => (
-            <QuestionCard key={i}>{q}</QuestionCard>
-          ))}
-        </QuestionList>
+        <OtherQuestion
+          title="다른 사람들의 궁금증"
+          questions={dummyQuestions}
+          onClick={(i, q) => console.log("클릭한 질문:", q)}
+        />
         <FloatingButton onClick={() => setStep(2)}>+ 질문하기</FloatingButton>
       </Section>
     </Container>
