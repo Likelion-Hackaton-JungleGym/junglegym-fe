@@ -14,7 +14,7 @@ export const Logo = styled.h1`
 export const Nav = styled.nav`
   display: flex;
   justify-content: space-around;
-  padding: 10px;
+  padding: 10px 0px;
   font-size: 14px;
   background-color: #ffffff;
   border-bottom: 0.5 solid #e5e5e5;

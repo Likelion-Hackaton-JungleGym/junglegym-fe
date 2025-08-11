@@ -36,8 +36,8 @@ export default function Header() {
         <NavItem to="/junglepeople" className={path === "/junglepeople" ? "active" : ""}>
           정글 사람들
         </NavItem>
-        <NavItem to="/jungletalk" className={path === "/jungletalk" ? "active" : ""}>
-          정글톡 AI
+        <NavItem to="/junglechat" className={path === "/junglechat" ? "active" : ""}>
+          정글챗 AI
         </NavItem>
         <NavItem to="/junglesound" className={path === "/junglesound" ? "active" : ""}>
           정글의 소리
