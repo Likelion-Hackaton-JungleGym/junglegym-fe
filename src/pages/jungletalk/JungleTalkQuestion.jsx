@@ -12,7 +12,7 @@ import BackIcon from "../../assets/icons/BackIcon.svg";
 
 const JungleTalkQuestion = ({ question, setQuestion, isPrivate, setIsPrivate, setStep, handleSubmit }) => {
   return (
-    <Container>
+    <Container $isStep3={false}>
       <Section>
         <BackButton onClick={() => setStep(1)}>
           <img src={BackIcon} alt="뒤로가기" />

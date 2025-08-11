@@ -3,14 +3,15 @@ import styled from 'styled-components';
 export const Container = styled.div`
   width: 100%;
   min-height: 100vh;
-  padding: 16px;
   box-sizing: border-box;
   font-family: 'Pretendard', sans-serif;
   background-color: #fff;
+  margin-top: ${props => props.$isStep3 ? '0' : '160px'};
 `;
 
 export const Section = styled.section`
   margin-top: 20px;
+  padding: 0 16px;
 `;
 
 export const Title = styled.h2`
@@ -28,26 +29,42 @@ export const Description = styled.p`
 export const SubTitle = styled.h3`
   font-size: 20px;
   font-weight: 700;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 `;
 
 export const QuestionList = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
   margin-bottom: 70px;
+  margin-top: 24px;
 `;
 
 export const QuestionCard = styled.div`
   background: #ffffff;
   display: flex;
-  align-items: center;
-  height: 55px;
-  padding: 14px 16px;
+  align-items: flex-start;
+  padding: 16px;
   border-radius: 12px;
-  border: 1px solid #ddd;
+  border: 1px solid #e0e0e0;
   font-size: 15px;
   color: #000;
+  transition: all 0.2s ease;
+`;
+
+export const QuestionText = styled.div`
+  font-size: 15px;
+  color: #000;
+  line-height: 1.4;
+  margin-bottom: 8px;
+`;
+
+export const CheckAnswerText = styled.div`
+  font-size: 13px;
+  color: #888;
+  display: flex;
+  align-items: center;
+  gap: 4px;
 `;
 
 export const FloatingButton = styled.button`
@@ -65,6 +82,9 @@ export const FloatingButton = styled.button`
   padding: 14px;
   border-radius: 999px;
   z-index: 20;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
 `;
 
 export const BackButton = styled.button`
@@ -72,6 +92,24 @@ export const BackButton = styled.button`
   border: none;
   font-size: 20px;
   margin-bottom: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  padding: 0;
+`;
+
+export const AbsoluteBackButton = styled.button`
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  padding: 0;
 `;
 
 export const Textarea = styled.textarea`
@@ -116,6 +154,7 @@ export const SubmitButton = styled.button`
   font-size: 18px;
   font-weight: 600;
   border: none;
+  cursor: pointer;
 `;
 
 export const FooterText = styled.p`
@@ -128,26 +167,24 @@ export const FooterText = styled.p`
 
 export const TopImageWrapper = styled.div`
   position: relative;
-  width: 100%;
-  height: 200px;
-  overflow: hidden;
+  height: 400px;
+  background-image: url(${({ $bg }) => $bg});
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  padding: 16px;
 
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
 `;
 
 export const OverlayText = styled.div`
-  position: absolute;
-  bottom: 16px;
-  left: 16px;
-  color: white;
-  font-size: 14px;
+  position: relative;
+  z-index: 5;
+  color: #fff;
+  font-size: 17px;
   line-height: 1.4;
-  padding: 12px;
-  border-radius: 8px;
   white-space: pre-line;
 `;
 
@@ -166,4 +203,5 @@ export const AnswerText = styled.div`
   margin-top: 24px;
   font-size: 15px;
   line-height: 1.6;
+  margin-bottom: 24px;
 `;

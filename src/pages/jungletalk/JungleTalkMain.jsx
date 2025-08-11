@@ -10,9 +10,8 @@ import {
 import OtherQuestion from "./OtherQuestion";
 
 const JungleTalkMain = ({ setStep }) => {
-  const dummyQuestions = Array(10).fill("비례대표와 지역감은 어떻게 다른건가요?");
   return (
-    <Container>
+    <Container $isStep3={false}>
       <Section>
         <Title>정글톡AI</Title>
         <Description>
@@ -27,7 +26,6 @@ const JungleTalkMain = ({ setStep }) => {
 
         <OtherQuestion
           title="다른 사람들의 궁금증"
-          questions={dummyQuestions}
           onClick={(i, q) => console.log("클릭한 질문:", q)}
         />
         <FloatingButton onClick={() => setStep(2)}>+ 질문하기</FloatingButton>
