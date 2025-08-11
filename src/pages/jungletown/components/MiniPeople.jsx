@@ -1,5 +1,5 @@
 import styled from "styled-components";
-//import { Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import leeseungro from "../components/img/leeseungro.svg";
 import kimyungbae from "../components/img/kimyungbae.svg";
 import kimnamgeun from "../components/img/kimnamgeun.svg";
@@ -10,30 +10,30 @@ export default function Minipeople() {
     <Wrapper>
       <Text>
         <Title>정글 사람들</Title>
-        {/*} <Link to="/junglePeople">*/}
-        <Plus>{`전체보기 >`}</Plus>
-        {/*</Link>*/}
+        <Plus to="/junglepeople">
+          <p>{`전체보기 >`}</p>
+        </Plus>
       </Text>
       <MiniPeople className="scroll-container">
         <People>
-          {/*} <Link to="/leeseungro">*/}
-          <Img src={leeseungro} />
-          {/*</Link>*/}
+          <Link to="/junglepeople/leeseungro">
+            <Img src={leeseungro} />
+          </Link>
         </People>
         <People>
-          {/*} <Link to="/kimyungbae">*/}
-          <Img src={kimyungbae} />
-          {/*</Link>*/}
+          <Link to="/junglepeople/kimyungbae">
+            <Img src={kimyungbae} />
+          </Link>
         </People>
         <People>
-          {/*} <Link to="/kimnamgeun">*/}
-          <Img src={kimnamgeun} />
-          {/*</Link>*/}
+          <Link to="/junglepeople/kimnamgeun">
+            <Img src={kimnamgeun} />
+          </Link>
         </People>
         <People>
-          {/*} <Link to="/ohsehun">*/}
-          <Img src={ohsehun} />
-          {/*</Link>*/}
+          <Link to="/junglepeople/ohsehun">
+            <Img src={ohsehun} />
+          </Link>
         </People>
       </MiniPeople>
     </Wrapper>
@@ -48,7 +48,6 @@ const Text = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin: 10px 15px;
   font-family: Pretendard;
 `;
 
@@ -58,15 +57,17 @@ const Title = styled.div`
   letter-spacing: -0.2px;
 `;
 
-const Plus = styled.div`
+const Plus = styled(Link)`
   color: #959595;
   font-size: 13px;
+  text-decoration: none;
   cursor: pointer;
 `;
 
 const MiniPeople = styled.div`
   display: flex;
-  margin: 10px;
+  margin: 10px 0px 50px 0px;
+  gap: 3%;
   &.scroll-container {
     display: flex;
     overflow-x: auto;
@@ -80,8 +81,7 @@ const MiniPeople = styled.div`
 
 const Img = styled.img`
   cursor: pointer;
+  width: 91px;
 `;
 
-const People = styled.div`
-  margin: 3px 7px 0px 7px;
-`;
+const People = styled.div``;

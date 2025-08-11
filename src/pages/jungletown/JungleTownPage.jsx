@@ -16,6 +16,5 @@ export default function JungleTownPage() {
 }
 
 const Wrapper = styled.div`
-  border: 1px solid skyblue;
+  padding: 10px;
 `;
-//확인용 임시 컬러. 나중에 바꿀 것

@@ -27,8 +27,8 @@ const Date = styled.div`
 `;
 
 const Card1 = styled.div`
-  width: 380px;
-  height: 350px;
+  width: 340px;
+  height: 320px;
   background-image: url(${imsi});
   background-size: cover;
   background-position: center;

@@ -48,7 +48,6 @@ const Wrapper = styled.div`
 `;
 
 const Text = styled.div`
-  margin: 10px 15px;
   font-family: Pretendard;
 `;
 
@@ -60,7 +59,7 @@ const Title = styled.div`
 
 const DictCards = styled.div`
   display: flex;
-  margin: 10px;
+  gap: 3%;
   &.scroll-container {
     display: flex;
     overflow-x: auto;
@@ -74,9 +73,9 @@ const DictCards = styled.div`
 
 const Img = styled.img`
   cursor: pointer;
+  width: 180px;
 `;
 
 const DictCard = styled.div`
-  margin: 3px 10px 0px 0px;
-  height: 100%;
+  padding: 10px 0px;
 `;

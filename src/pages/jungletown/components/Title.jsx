@@ -32,7 +32,7 @@ const Highlight = styled.div`
   position: absolute;
   bottom: 3px;
   left: 50%;
-  width: 41%;
+  width: 50%;
   height: 13px;
   background: #e1e0ff;
   z-index: -1;
