@@ -25,7 +25,7 @@ export const NavItem = styled(Link)`
   color: #a7a7a7;
   text-decoration: none;
   font-weight: 500;
-  margin: 10px;
+  margin: 10px 0px;
   cursor: pointer;
 
   &.active {
