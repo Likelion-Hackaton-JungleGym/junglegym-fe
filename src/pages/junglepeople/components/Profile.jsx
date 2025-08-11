@@ -1,5 +1,5 @@
 import styled from "styled-components";
-//import { Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import leeseungro from "./img/leeseungro.svg";
 import ohsehun from "./img/ohsehun.svg";
 import kimyungbae from "./img/kimyungbae.svg";
@@ -10,24 +10,24 @@ export default function Profile() {
     <Wrapper>
       <ProfileCards>
         <ProfileCard>
-          {/*} <Link to="/leeseungroProfile">*/}
-          <Img src={leeseungro} />
-          {/*</Link>*/}
+          <Link to="/junglepeople/leeseungro">
+            <Img src={leeseungro} />
+          </Link>
         </ProfileCard>
         <ProfileCard>
-          {/*} <Link to="/ohsehunProfile">*/}
-          <Img src={ohsehun} />
-          {/*</Link>*/}
+          <Link to="/junglepeople/ohsehun">
+            <Img src={ohsehun} />
+          </Link>
         </ProfileCard>
         <ProfileCard>
-          {/*} <Link to="/kimyungbaeProfile">*/}
-          <Img src={kimyungbae} />
-          {/*</Link>*/}
+          <Link to="/junglepeople/kimyungbae">
+            <Img src={kimyungbae} />
+          </Link>
         </ProfileCard>
         <ProfileCard>
-          {/*} <Link to="/kimnamgeunProfile">*/}
-          <Img src={kimnamgeun} />
-          {/*</Link>*/}
+          <Link to="/junglepeople/kimnamgeun">
+            <Img src={kimnamgeun} />
+          </Link>
         </ProfileCard>
       </ProfileCards>
     </Wrapper>
