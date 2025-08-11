@@ -20,11 +20,11 @@ export default function Title() {
 }
 
 const Wrapper = styled.div`
-  padding: 20px;
+  margin: 20px;
 `;
 
 const BigTexts = styled.div`
-  padding-top: 20px;
+  margin-top: 10px;
 `;
 
 const BigText = styled.div`

@@ -35,14 +35,13 @@ export default function Profile() {
 }
 
 const Wrapper = styled.div`
-  margin: 20px;
+  margin: 30px 10px;
 `;
 
 const ProfileCards = styled.div`
-  margin: 10px;
   display: grid;
-  grid-template-columns: repeat(2, 1fr); /* 2열 */
-  gap: 15px; /* 카드 간격 */
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
 `;
 
 const ProfileCard = styled.div`
@@ -52,7 +51,7 @@ const ProfileCard = styled.div`
 `;
 
 const Img = styled.img`
-  width: 100%; /* 카드 폭 꽉 채우기 */
+  width: 160px;
   height: auto;
   cursor: pointer;
 `;
