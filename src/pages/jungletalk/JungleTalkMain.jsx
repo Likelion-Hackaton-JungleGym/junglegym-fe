@@ -1,15 +1,9 @@
 import React from "react";
-import {
-  Container,
-  Section,
-  Title,
-  Description,
-  FloatingButton,
-} from "./JungleTalk.styles";
+import { Container, Section, Title, Description, FloatingButton } from "./JungleTalk.styles";
 
 import OtherQuestion from "./OtherQuestion";
 
-const JungleTalkMain = ({ setStep }) => {
+const JungleTalkMain = ({ setStep, onQuestionClick, questions }) => {
   return (
     <Container $isStep3={false}>
       <Section>
@@ -26,7 +20,8 @@ const JungleTalkMain = ({ setStep }) => {
 
         <OtherQuestion
           title="다른 사람들의 궁금증"
-          onClick={(i, q) => console.log("클릭한 질문:", q)}
+          questions={questions}
+          onClick={(i, q) => onQuestionClick?.(q)}
         />
         <FloatingButton onClick={() => setStep(2)}>+ 질문하기</FloatingButton>
       </Section>

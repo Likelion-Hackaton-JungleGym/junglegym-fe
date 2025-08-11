@@ -15,7 +15,15 @@ import OtherQuestion from "./OtherQuestion";
 
 const lawImages = Array(10).fill(LawImage);
 
-const JungleTalkAnswer = ({ question, answer, lawText, setStep }) => {
+const JungleTalkAnswer = ({
+  question,
+  answer,
+  lawText,
+  setStep,
+  fromOthers,
+  dummyQuestions = [],
+  onOtherClick,
+}) => {
   const randomImage = useMemo(() => {
     const randomIndex = Math.floor(Math.random() * lawImages.length);
     return lawImages[randomIndex];
@@ -31,7 +39,7 @@ const JungleTalkAnswer = ({ question, answer, lawText, setStep }) => {
       <WhiteContainer>
         <MyQuestion>
           <SubTitle>
-            <strong>나의 질문</strong>
+            <strong>{fromOthers ? "다른 이의 질문" : "나의 질문"}</strong>
             <br />
           </SubTitle>
 
@@ -47,8 +55,9 @@ const JungleTalkAnswer = ({ question, answer, lawText, setStep }) => {
         </AnswerText>
         <OtherQuestion
           title="다른 사람들의 질문"
-          showCheckAnswer={true}
-          onClick={(i, q) => console.log("클릭한 질문:", q)}
+          questions={dummyQuestions}
+          showCheckAnswer
+          onClick={(i, q) => onOtherClick?.(q)}
         />
       </WhiteContainer>
     </Container>
