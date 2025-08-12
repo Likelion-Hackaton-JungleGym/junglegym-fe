@@ -6,7 +6,6 @@ export const Container = styled.div`
   box-sizing: border-box;
   font-family: 'Pretendard', sans-serif;
   background-color: #fff;
-  margin-top: ${props => props.$isStep3 ? '0' : '160px'};
 `;
 
 export const Section = styled.section`

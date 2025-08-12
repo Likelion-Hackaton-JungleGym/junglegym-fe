@@ -18,7 +18,6 @@ export default function RootLayout() {
 }
 
 const ScrollRoot = styled.div`
-  padding-top: 120px;
   height: 100vh;
   overflow: auto;
   -webkit-overflow-scrolling: touch;
