@@ -28,6 +28,7 @@ const JungleTalkAnswer = ({
   fromOthers,
   dummyQuestions,
   onOtherClick,
+  loading,
 }) => {
   const { setHeaderMode, setIsStep3 } = useOutletContext();
 
@@ -70,7 +71,12 @@ const JungleTalkAnswer = ({
           title="다른 사람들의 질문"
           questions={dummyQuestions}
           showCheckAnswer
-          onClick={(i, q) => onOtherClick?.(q)}
+          onClick={(i, q) => {
+            if (loading) return;
+            console.log('[OtherQuestion click]', { index: i, q });
+            onOtherClick?.(q);
+          }}
+          disabled={loading}
         />
       </WhiteContainer>
     </Container>
