@@ -21,7 +21,7 @@ const HighlightText = styled.div`
   color: #111111;
   text-align: center;
   font-family: Pretendard;
-  font-size: 30px;
+  font-size: 27px;
   font-style: normal;
   font-weight: 700;
   padding-top: 20px;
@@ -32,7 +32,7 @@ const Highlight = styled.div`
   position: absolute;
   bottom: 3px;
   left: 50%;
-  width: 50%;
+  width: 46%;
   height: 13px;
   background: #e1e0ff;
   z-index: -1;
