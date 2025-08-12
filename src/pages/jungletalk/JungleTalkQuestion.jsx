@@ -31,7 +31,7 @@ const JungleTalkQuestion = ({ question, setQuestion, isPrivate, setIsPrivate, se
           작성 완료
         </SubmitButton>
         <FooterText>
-          정글톡AI는 단순 ChatGPT와 달리 존재하지 않는 답변을 인위적으로 생성하지 않으며, 정치적으로 편향된 해석을 줄 수 있는 답을 제공하지 않습니다. 헌법·법률·판례·행정관례에 기반해 중립적이고 정확하게 안내해드립니다.
+          정글챗AI는 단순 ChatGPT와 달리 존재하지 않는 답변을 인위적으로 생성하지 않으며, 정치적으로 편향된 해석을 줄 수 있는 답을 제공하지 않습니다. 헌법·법률·판례·행정관례에 기반해 중립적이고 정확하게 안내해드립니다.
         </FooterText>
       </Section>
     </Container>
