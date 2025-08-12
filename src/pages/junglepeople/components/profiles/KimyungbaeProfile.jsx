@@ -1,21 +1,99 @@
+import { useState } from "react";
 import styled from "styled-components";
+import kimyungbae from "./img/kimyungbae.svg";
+import SeongbukGap from "./img/SeongbukGap.svg";
+import BlueParty from "./img/BlueParty.svg";
+import TooltipImg from "./img/TooltipButton.svg";
 
 export default function KimyungbaeProfile() {
+  const [showTooltip, setShowTooltip] = useState(false);
+  const toggleTooltip = () => setShowTooltip((prev) => !prev);
+
   return (
     <Wrapper>
-      <Title>김영배 프로필</Title>
+      <ProfileImg src={kimyungbae} />
+      <Name>김영배</Name>
+      <PartyImg src={BlueParty} />
+      <PositionWrapper>
+        <PositionImg src={SeongbukGap} />
+        <TooltipWrapper>
+          <TooltipButton src={TooltipImg} onClick={toggleTooltip} />
+          {showTooltip && (
+            <TooltipBox>
+              <TooltipText>
+                • 정릉동
+                <br />• 길음 1/2동
+                <br />• 마마동
+                <br />• 파파동
+                <br />• 가가동
+                <br />• 나나동
+              </TooltipText>
+            </TooltipBox>
+          )}
+        </TooltipWrapper>
+      </PositionWrapper>
     </Wrapper>
   );
 }
 
 const Wrapper = styled.div`
-  margin: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 30px 20px;
   font-family: Pretendard;
 `;
 
-const Title = styled.div`
-  font-size: 22px;
+const ProfileImg = styled.img`
+  width: 160px;
+  height: auto;
+  //border-radius: 8px;
+`;
+
+const Name = styled.div`
+  font-size: 30px;
   font-weight: 700;
-  letter-spacing: -0.2px;
-  margin-top: 50px;
+  margin: 5px;
+`;
+
+const PartyImg = styled.img`
+  margin: 5px;
+`;
+
+const PositionWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  margin: 25px;
+`;
+
+const PositionImg = styled.img``;
+
+const TooltipWrapper = styled.div`
+  position: relative;
+  margin-left: 4px;
+`;
+
+const TooltipButton = styled.img`
+  cursor: pointer;
+`;
+
+const TooltipBox = styled.div`
+  position: absolute;
+  top: 50%;
+  left: calc(100% + 8px);
+  transform: translateY(-50%);
+  width: 95px;
+  //height: 150px;
+  padding: 5px 10px;
+  background-color: #e0e0e0;
+  border-radius: 8px;
+  border: 1px dashed #8e8e8e;
+`;
+
+const TooltipText = styled.div`
+  font-size: 14px;
+  color: gray;
+  line-height: 1.5;
+  text-align: left;
+  white-space: pre-line;
 `;
