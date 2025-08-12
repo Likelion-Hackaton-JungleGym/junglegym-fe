@@ -6,29 +6,23 @@ import kimyungbae from "./img/kimyungbae.svg";
 import kimnamgeun from "./img/kimnamgeun.svg";
 
 export default function Profile() {
+  const people = [
+    { path: "/junglepeople/leeseungro", img: leeseungro, alt: "이승로" },
+    { path: "/junglepeople/ohsehun", img: ohsehun, alt: "오세훈" },
+    { path: "/junglepeople/kimyungbae", img: kimyungbae, alt: "김영배" },
+    { path: "/junglepeople/kimnamgeun", img: kimnamgeun, alt: "김남근" },
+  ];
+
   return (
     <Wrapper>
       <ProfileCards>
-        <ProfileCard>
-          <Link to="/junglepeople/leeseungro">
-            <Img src={leeseungro} />
-          </Link>
-        </ProfileCard>
-        <ProfileCard>
-          <Link to="/junglepeople/ohsehun">
-            <Img src={ohsehun} />
-          </Link>
-        </ProfileCard>
-        <ProfileCard>
-          <Link to="/junglepeople/kimyungbae">
-            <Img src={kimyungbae} />
-          </Link>
-        </ProfileCard>
-        <ProfileCard>
-          <Link to="/junglepeople/kimnamgeun">
-            <Img src={kimnamgeun} />
-          </Link>
-        </ProfileCard>
+        {people.map((person, index) => (
+          <ProfileCard key={index}>
+            <Link to={person.path}>
+              <Img src={person.img} alt={person.alt} />
+            </Link>
+          </ProfileCard>
+        ))}
       </ProfileCards>
     </Wrapper>
   );
