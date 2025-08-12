@@ -4,6 +4,7 @@ import JungleTalkQuestion from "./JungleTalkQuestion";
 import JungleTalkAnswer from "./JungleTalkAnswer";
 import { useJungleTalkStore } from "../../store/jungleTalkStore";
 import { askJungleTalkAI, getChats } from "../../shared/utils/chatApi.js";
+import LoadingBar from "./LoadingBar";
 
 const DUMMY_QUESTIONS = [
   "비례대표와 지역갑을은 어떻게 다른건가요?",
@@ -61,6 +62,7 @@ const JungleTalkPage = () => {
     const q = question.trim();
     if (!q) return;
     setFromOthers(false);
+    setIsAnswerLoading(true);
     setStep(2);
     try {
       const data = await askJungleTalkAI(q, { privated: isPrivate });
@@ -69,8 +71,10 @@ const JungleTalkPage = () => {
       setStep(3);
     } catch (e) {
       console.log("[ask error]", e?.response?.data || e.message);
-      alert("답변을 가져오는 중 문제가 발생했어. 잠시 후 다시 시도해줘.");
+      alert("답변을 가져오는 중 문제가 발생했어요. 잠시 후 다시 시도해주세요.");
       setStep(1);
+    } finally {
+      setIsAnswerLoading(false);
     }
   };
 
@@ -103,27 +107,39 @@ const JungleTalkPage = () => {
       )}
 
       {step === 2 && (
-        <JungleTalkQuestion
-          question={question}
-          setQuestion={setQuestion}
-          isPrivate={isPrivate}
-          setIsPrivate={setIsPrivate}
-          setStep={setStep}
-          handleSubmit={handleSubmit}
-        />
+        <>
+          {isAnswerLoading ? (
+            <LoadingBar />
+          ) : (
+            <JungleTalkQuestion
+              question={question}
+              setQuestion={setQuestion}
+              isPrivate={isPrivate}
+              setIsPrivate={setIsPrivate}
+              setStep={setStep}
+              handleSubmit={handleSubmit}
+            />
+          )}
+        </>
       )}
 
       {step === 3 && (
-        <JungleTalkAnswer
-          question={question}
-          answer={answer}
-          lawText={lawText}
-          setStep={setStep}
-          fromOthers={fromOthers}
-          dummyQuestions={questionsForUI}
-          onOtherClick={openAnswer}
-          isLoading={isAnswerLoading}
-        />
+        <>
+          {isAnswerLoading ? (
+            <LoadingBar />
+          ) : (
+            <JungleTalkAnswer
+              question={question}
+              answer={answer}
+              lawText={lawText}
+              setStep={setStep}
+              fromOthers={fromOthers}
+              dummyQuestions={questionsForUI}
+              onOtherClick={openAnswer}
+              isLoading={isAnswerLoading}
+            />
+          )}
+        </>
       )}
     </>
   );

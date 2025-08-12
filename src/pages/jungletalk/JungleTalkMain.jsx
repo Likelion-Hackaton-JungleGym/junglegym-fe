@@ -1,5 +1,12 @@
 import React from "react";
-import { Container, Section, Title, Description, FloatingButton } from "./JungleTalk.styles";
+import {
+  Container,
+  Section,
+  Title,
+  Description,
+  FloatingButton,
+  Highlight,
+} from "./JungleTalk.styles";
 
 import OtherQuestion from "./OtherQuestion";
 
@@ -7,7 +14,11 @@ const JungleTalkMain = ({ setStep, onQuestionClick, questions }) => {
   return (
     <Container $isStep3={false}>
       <Section>
-        <Title>정글챗AI</Title>
+        <Title>
+          정글챗AI
+          <Highlight />
+        </Title>
+
         <Description>
           정치가 어렵게 느껴지시나요?
           <br />
