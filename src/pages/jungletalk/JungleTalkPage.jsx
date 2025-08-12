@@ -3,6 +3,7 @@ import JungleTalkMain from "./JungleTalkMain";
 import JungleTalkQuestion from "./JungleTalkQuestion";
 import JungleTalkAnswer from "./JungleTalkAnswer";
 import { useJungleTalkStore } from "../../store/jungleTalkStore";
+import { askJungleTalkAI } from "../../shared/utils/ChatApi.js";
 
 const JungleTalkPage = () => {
   const { step, setStep } = useJungleTalkStore();
@@ -12,27 +13,39 @@ const JungleTalkPage = () => {
   const [lawText, setLawText] = useState("");
   const [fromOthers, setFromOthers] = useState(false);
 
-  const fillDummy = () => {
-    setAnswer(
-      "서울시장처럼 지방자치단체장은 대부분 정당에 소속된 사람이 많습니다. 다만 법적으로는 정당 소속이 필수는 아닙니다."
-    );
-    setLawText(
-      "헌법 제116조 제1항\n“지방자치단체의 장은 주민의 보통·평등·직접·비밀선거에 의하여 선출한다.”\n→ 정당 소속 여부는 법적으로 강제되지 않습니다.\n\n행정관례: 대한민국의 광역자치단체장(서울특별시장 포함)은 대부분 정당 공천을 통해 출마하며, 정당 간 정치적 경쟁이 존재합니다."
-    );
-  };
-
-  const handleSubmit = () => {
-    if (question.trim().length === 0) return;
+  const handleSubmit = async () => {
+ const q = question.trim();
+    if (!q) return;
     setFromOthers(false);
-    fillDummy();
-    setStep(3);
+    setStep(2); // 로딩
+   try {
+      const data = await askJungleTalkAI(q, { privated: isPrivate });
+      setAnswer(data?.answer ?? "");
+      setLawText(data?.constitution ?? "");
+      setStep(3);
+    } catch (e) {
+      console.log("[ask error]", e?.response?.data || e.message);
+      alert("답변을 가져오는 중 문제가 발생했어. 잠시 후 다시 시도해줘.");
+      setStep(1);
+    }
   };
 
-  const openAnswer = (q) => {
-    setQuestion(q);
+ const openAnswer = async (q) => {
+    const qq = String(q || "").trim();
+    if (!qq) return;
+    setQuestion(qq);
     setFromOthers(true);
-    fillDummy();
-    if (step !== 3) setStep(3);
+    setStep(2); // 로딩
+    try {
+      const data = await askJungleTalkAI(qq, { privated: false });
+      setAnswer(data?.answer ?? "");
+      setLawText(data?.constitution ?? "");
+      setStep(3);
+    } catch (e) {
+      console.log("[ask error]", e?.response?.data || e.message);
+      alert("답변을 불러오지 못했어요.");
+      setStep(1);
+    }
   };
 
   const dummyQuestions = [
