@@ -1,25 +1,28 @@
-import styled from 'styled-components';
+import styled from "styled-components";
 
 export const Container = styled.div`
   width: 100%;
   min-height: 100vh;
   box-sizing: border-box;
-  font-family: 'Pretendard', sans-serif;
+  font-family: "Pretendard", sans-serif;
   background-color: #fff;
 `;
 
 export const Section = styled.section`
-  margin-top: 20px;
-  padding: 0 16px;
+  margin-top: 35px;
+  padding: 0 30px;
 `;
 
 export const Title = styled.h2`
-  font-size: 25px;
+  position: relative;
+  display: inline-block;
+  font-size: 24px;
   font-weight: 700;
+  z-index: 0;
 `;
 
 export const Description = styled.p`
-  margin: 12px 0 24px;
+  margin: 5px 0 40px;
   font-size: 14px;
   color: #000;
   line-height: 1.4;
@@ -35,27 +38,30 @@ export const QuestionList = styled.div`
   display: flex;
   flex-direction: column;
   gap: 12px;
-  margin-bottom: 70px;
-  margin-top: 24px;
+  padding-bottom: 100px;
+  margin-top: 15px;
+  align-items: center;
 `;
 
 export const QuestionCard = styled.div`
   background: #ffffff;
   display: flex;
-  align-items: flex-start;
-  padding: 16px;
-  border-radius: 12px;
-  border: 1px solid #e0e0e0;
+  align-items: center;
+  padding: 0 16px;
+  border-radius: 10px;
+  border: 1px solid #d2d2d2;
   font-size: 15px;
   color: #000;
   transition: all 0.2s ease;
+  min-height: 45px;
+  width: 100%;
 `;
 
 export const QuestionText = styled.div`
   font-size: 15px;
   color: #000;
   line-height: 1.4;
-  margin-bottom: 8px;
+  margin-bottom: 0;
 `;
 
 export const CheckAnswerText = styled.div`
@@ -73,7 +79,7 @@ export const FloatingButton = styled.button`
   transform: translateX(-50%);
   width: 90%;
   height: 55px;
-  background: #7471F9;
+  background: #7471f9;
   color: white;
   font-size: 18px;
   font-weight: 600;
@@ -83,7 +89,6 @@ export const FloatingButton = styled.button`
   z-index: 20;
   cursor: pointer;
   transition: all 0.2s ease;
-
 `;
 
 export const BackButton = styled.button`
@@ -91,7 +96,6 @@ export const BackButton = styled.button`
   border: none;
   font-size: 20px;
   margin-bottom: 16px;
-  cursor: pointer;
   display: flex;
   align-items: center;
   padding: 0;
@@ -114,7 +118,6 @@ export const AbsoluteBackButton = styled.button`
 export const Textarea = styled.textarea`
   width: 100%;
   height: 250px;
-  padding: 12px;
   border: 1px solid #fff;
   border-radius: 10px;
   font-size: 20px;
@@ -123,15 +126,16 @@ export const Textarea = styled.textarea`
   outline: none;
 
   &::placeholder {
-    color: #b5b5b5;
+    color: #d6d6d6;
     font-size: 20px;
+    font-weight: 600;
   }
 `;
 
 export const CheckBoxLabel = styled.label`
   display: flex;
   align-items: center;
-  margin: 12px 20px;
+  margin: 12px 0px;
   color: #b5b5b5;
 
   input[type="checkbox"] {
@@ -143,14 +147,13 @@ export const CheckBoxLabel = styled.label`
 export const SubmitButton = styled.button`
   display: block;
   width: 100%;
-  margin: 15px auto;
-  padding: 12px;
-  height: 55px;
-  width: 95%;
-  border-radius: 999px;
-  background: #7471F9;
+  margin: 15px 0;
+  padding: 12px 0;
+  height: 45px;
+  border-radius: 25px;
+  background: #7471f9;
   color: #fff;
-  font-size: 18px;
+  font-size: 15px;
   font-weight: 600;
   border: none;
 
@@ -161,10 +164,11 @@ export const SubmitButton = styled.button`
 `;
 
 export const FooterText = styled.p`
-  padding: 0 10px;
+  padding: 0;
   margin-top: 15px;
   font-size: 13px;
   color: #000;
+  font-weight: 400;
   line-height: 1.4;
 `;
 
@@ -179,7 +183,6 @@ export const TopImageWrapper = styled.div`
   align-items: center;
   text-align: center;
   padding: 16px;
-
 `;
 
 export const OverlayText = styled.div`
@@ -207,4 +210,15 @@ export const AnswerText = styled.div`
   font-size: 15px;
   line-height: 1.6;
   margin-bottom: 24px;
+`;
+
+export const Highlight = styled.div`
+  position: absolute;
+  bottom: 3px;
+  width: calc(100% + 20px);
+  left: -10px;
+  height: 14px;
+  background: #e1e0ff;
+  z-index: -1;
+  border-radius: 2px;
 `;
