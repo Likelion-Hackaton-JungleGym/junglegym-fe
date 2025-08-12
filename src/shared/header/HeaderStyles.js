@@ -45,6 +45,11 @@ export const NavItem = styled(Link)`
 `;
 
 export const HeaderWrapper = styled.header`
+  position: relative;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
   background-color: white;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 `;
