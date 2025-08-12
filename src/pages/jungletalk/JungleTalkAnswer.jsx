@@ -54,7 +54,7 @@ const JungleTalkAnswer = ({
         </MyQuestion>
         <AnswerText>
           <SubTitle>
-            <strong>정글톡</strong>
+            <strong>정글챗</strong>
             <br />
           </SubTitle>
           {(answer && answer.trim()) || ""}
