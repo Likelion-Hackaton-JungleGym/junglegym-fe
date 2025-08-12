@@ -10,7 +10,7 @@ export default function RootLayout() {
   return (
     <>
       <Header mode={headerMode} />
-      <ScrollRoot $isStep3={isStep3}>
+      <ScrollRoot id="scrollRoot" $isStep3={isStep3}>
         <Outlet context={{ setHeaderMode, setIsStep3 }} />
       </ScrollRoot>
     </>
