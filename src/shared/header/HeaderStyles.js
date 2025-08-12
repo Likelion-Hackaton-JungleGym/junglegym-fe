@@ -45,11 +45,12 @@ export const NavItem = styled(Link)`
 `;
 
 export const HeaderWrapper = styled.header`
-  position: relative;
+  position: fixed;
   top: 0;
   left: 0;
   right: 0;
-  z-index: 1000;
+  z-index: 100;
   background-color: white;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transform: ${({ $visible }) => ($visible ? "translateY(0)" : "translateY(-100%)")};
+  transition: transform 0.25s ease;
 `;

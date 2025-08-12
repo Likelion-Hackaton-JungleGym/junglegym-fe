@@ -1,15 +1,32 @@
 import { Outlet } from "react-router-dom";
+import { useState } from "react";
 import Header from "../header/Header";
-import { useJungleTalkStore } from "../../store/jungleTalkStore";
+import styled from "styled-components";
 
 export default function RootLayout() {
-  const { step } = useJungleTalkStore();
+  const [headerMode, setHeaderMode] = useState("fixed"); // 'fixed' | 'hideOnScroll' | 'hidden'
 
-return (
+  return (
     <>
-      {/* step이 3이면 헤더 숨김 */}
-      {!(window.location.pathname.includes("/jungletalk") && step === 3) && <Header />}
-      <Outlet />
+      <Header mode={headerMode} />
+
+      <ScrollRoot id="scrollRoot">
+        <Outlet context={{ setHeaderMode }} />
+      </ScrollRoot>
     </>
   );
 }
+
+const ScrollRoot = styled.div`
+  padding-top: 120px;
+  height: 100vh;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    height: 0;
+    display: none;
+  }
+`;
