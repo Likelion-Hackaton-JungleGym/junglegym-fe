@@ -23,7 +23,7 @@ const JungleTalkAnswer = ({
   lawText,
   setStep,
   fromOthers,
-  dummyQuestions = [],
+  dummyQuestions,
   onOtherClick,
 }) => {
   const { setHeaderMode } = useOutletContext();
@@ -42,7 +42,7 @@ const JungleTalkAnswer = ({
         <AbsoluteBackButton onClick={() => setStep(1)}>
           <img src={BackIcon} alt="뒤로가기" />
         </AbsoluteBackButton>
-        <OverlayText>{lawText}</OverlayText>
+        <OverlayText>{(lawText && lawText.trim()) || ""}</OverlayText>
       </TopImageWrapper>
       <WhiteContainer>
         <MyQuestion>
@@ -50,16 +50,14 @@ const JungleTalkAnswer = ({
             <strong>{fromOthers ? "다른 이의 질문" : "나의 질문"}</strong>
             <br />
           </SubTitle>
-
-          {question}
+          {(question && question.trim()) || ""}
         </MyQuestion>
         <AnswerText>
           <SubTitle>
             <strong>정글톡</strong>
             <br />
           </SubTitle>
-
-          {answer}
+          {(answer && answer.trim()) || ""}
         </AnswerText>
         <OtherQuestion
           title="다른 사람들의 질문"
