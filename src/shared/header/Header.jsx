@@ -12,13 +12,7 @@ export default function Header() {
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
-
-      if (currentScrollY > lastScrollY) {
-        setShowHeader(false);
-      } else {
-        setShowHeader(true);
-      }
-
+      setShowHeader(currentScrollY <= lastScrollY);
       setLastScrollY(currentScrollY);
     };
 
@@ -26,22 +20,35 @@ export default function Header() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [lastScrollY]);
 
+  // 메뉴 데이터
+  const menuItems = [
+    { label: "동네 한 바퀴", path: "/" },
+    { label: "정글 사람들", path: "/junglepeople" },
+    { label: "정글톡 AI", path: "/jungletalk" },
+    { label: "정글의 소리", path: "/junglesound" },
+  ];
+
+  // 경로 매칭 함수
+  const isActive = (currentPath, targetPath) => {
+    if (targetPath === "/") {
+      return currentPath === "/";
+    }
+    return currentPath.startsWith(targetPath);
+  };
+
   return (
     <HeaderWrapper $visible={showHeader}>
       <Logo>정글짐</Logo>
       <Nav>
-        <NavItem to="/" className={path === "/" ? "active" : ""}>
-          동네 한 바퀴
-        </NavItem>
-        <NavItem to="/junglepeople" className={path === "/junglepeople" ? "active" : ""}>
-          정글 사람들
-        </NavItem>
-        <NavItem to="/jungletalk" className={path === "/jungletalk" ? "active" : ""}>
-          정글톡 AI
-        </NavItem>
-        <NavItem to="/junglesound" className={path === "/junglesound" ? "active" : ""}>
-          정글의 소리
-        </NavItem>
+        {menuItems.map((item) => (
+          <NavItem
+            key={item.path}
+            to={item.path}
+            className={isActive(path, item.path) ? "active" : ""}
+          >
+            {item.label}
+          </NavItem>
+        ))}
       </Nav>
     </HeaderWrapper>
   );

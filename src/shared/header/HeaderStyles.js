@@ -17,7 +17,7 @@ export const Nav = styled.nav`
   padding: 10px;
   font-size: 14px;
   background-color: #ffffff;
-  border-bottom: 0.5 solid #e5e5e5;
+  border-bottom: 0.5px solid #e5e5e5;
 `;
 
 export const NavItem = styled(Link)`
@@ -25,7 +25,7 @@ export const NavItem = styled(Link)`
   color: #a7a7a7;
   text-decoration: none;
   font-weight: 500;
-  margin: 10px;
+  margin: 10px 0px;
   cursor: pointer;
 
   &.active {

@@ -1,10 +1,87 @@
-//import styled from "styled-components";
-import Wrapper from "../../junglepeople/JunglePeoplePage";
+import styled from "styled-components";
+import { Link } from "react-router-dom";
+import leeseungro from "../components/img/leeseungro.svg";
+import kimyungbae from "../components/img/kimyungbae.svg";
+import kimnamgeun from "../components/img/kimnamgeun.svg";
+import ohsehun from "../components/img/ohsehun.svg";
 
 export default function Minipeople() {
   return (
     <Wrapper>
-      <p>미니정글사람들</p>
+      <Text>
+        <Title>정글 사람들</Title>
+        <Plus to="/junglepeople">
+          <p>{`전체보기 >`}</p>
+        </Plus>
+      </Text>
+      <MiniPeople className="scroll-container">
+        <People>
+          <Link to="/junglepeople/leeseungro">
+            <Img src={leeseungro} />
+          </Link>
+        </People>
+        <People>
+          <Link to="/junglepeople/kimyungbae">
+            <Img src={kimyungbae} />
+          </Link>
+        </People>
+        <People>
+          <Link to="/junglepeople/kimnamgeun">
+            <Img src={kimnamgeun} />
+          </Link>
+        </People>
+        <People>
+          <Link to="/junglepeople/ohsehun">
+            <Img src={ohsehun} />
+          </Link>
+        </People>
+      </MiniPeople>
     </Wrapper>
   );
 }
+
+const Wrapper = styled.div`
+  margin: 10px;
+`;
+
+const Text = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: Pretendard;
+`;
+
+const Title = styled.div`
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.2px;
+`;
+
+const Plus = styled(Link)`
+  color: #959595;
+  font-size: 13px;
+  text-decoration: none;
+  cursor: pointer;
+`;
+
+const MiniPeople = styled.div`
+  display: flex;
+  margin: 10px 0px 50px 0px;
+  gap: 3%;
+  &.scroll-container {
+    display: flex;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  &.scroll-container::-webkit-scrollbar {
+    height: 0px;
+  }
+`;
+
+const Img = styled.img`
+  cursor: pointer;
+  width: 91px;
+`;
+
+const People = styled.div``;
