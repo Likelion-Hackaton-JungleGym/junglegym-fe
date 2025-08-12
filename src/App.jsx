@@ -2,7 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import RootLayout from "./shared/layouts/RootLayout";
 import JungleTownPage from "./pages/jungletown/JungleTownPage";
 import JunglePeoplePage from "./pages/junglepeople/JunglePeoplePage";
-import JungleTalkPage from "./pages/jungletalk/JungleTalkPage";
+import JungleChatPage from "./pages/jungletalk/JungletalkPage";
 import JungleSoundPage from "./pages/junglesound/JungleSoundPage";
 import PersonProfile from "./pages/junglepeople/components/PersonProfile";
 
@@ -15,7 +15,7 @@ export default function App() {
           <Route path="/junglepeople" element={<JunglePeoplePage />} />
           <Route path="/junglepeople/:id" element={<PersonProfile />} />
 
-          <Route path="/jungletalk" element={<JungleTalkPage />} />
+          <Route path="/junglechat" element={<JungleChatPage />} />
           <Route path="/junglesound" element={<JungleSoundPage />} />
         </Route>
       </Routes>
