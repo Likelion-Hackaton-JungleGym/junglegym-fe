@@ -1,4 +1,6 @@
-import React, { useMemo } from "react";
+import { useMemo, useEffect } from "react";
+import { useOutletContext } from "react-router-dom";
+
 import {
   Container,
   TopImageWrapper,
@@ -24,6 +26,12 @@ const JungleTalkAnswer = ({
   dummyQuestions = [],
   onOtherClick,
 }) => {
+  const { setHeaderMode } = useOutletContext();
+
+  useEffect(() => {
+    setHeaderMode("hidden"); // 이 페이지에 들어오면 스크롤 시 숨김
+    return () => setHeaderMode("fixed"); // 떠나면 기본으로 복구
+  }, [setHeaderMode]);
   const randomImage = useMemo(() => {
     const randomIndex = Math.floor(Math.random() * lawImages.length);
     return lawImages[randomIndex];
