@@ -153,7 +153,11 @@ export const SubmitButton = styled.button`
   font-size: 18px;
   font-weight: 600;
   border: none;
-  cursor: pointer;
+
+  &:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+  }
 `;
 
 export const FooterText = styled.p`

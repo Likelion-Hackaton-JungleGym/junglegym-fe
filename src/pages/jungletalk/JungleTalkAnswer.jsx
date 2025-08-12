@@ -26,12 +26,16 @@ const JungleTalkAnswer = ({
   dummyQuestions,
   onOtherClick,
 }) => {
-  const { setHeaderMode } = useOutletContext();
+  const { setHeaderMode, setIsStep3 } = useOutletContext();
 
   useEffect(() => {
-    setHeaderMode("hidden"); // 이 페이지에 들어오면 스크롤 시 숨김
-    return () => setHeaderMode("fixed"); // 떠나면 기본으로 복구
-  }, [setHeaderMode]);
+    setIsStep3(true);
+    setHeaderMode("hidden"); // step3 페이지 진입
+    return () => {
+      setIsStep3(false);
+      setHeaderMode("fixed"); // 페이지 떠날 때 복구
+    };
+  }, [setHeaderMode, setIsStep3]);
   const randomImage = useMemo(() => {
     const randomIndex = Math.floor(Math.random() * lawImages.length);
     return lawImages[randomIndex];
