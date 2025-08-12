@@ -12,10 +12,13 @@ import {
   SubTitle,
 } from "./JungleTalk.styles";
 import BackIcon from "../../assets/icons/BackIcon.svg";
-import LawImage from "../../assets/images/LawImage.png";
+import LawImage1 from "../../assets/images/LawImage1.png";
+import LawImage2 from "../../assets/images/LawImage2.png";
+import LawImage3 from "../../assets/images/LawImage3.png";
+import LawImage4 from "../../assets/images/LawImage4.png";
 import OtherQuestion from "./OtherQuestion";
 
-const lawImages = Array(10).fill(LawImage);
+const lawImages = [LawImage1, LawImage2, LawImage3, LawImage4];
 
 const JungleTalkAnswer = ({
   question,
