@@ -1,12 +1,12 @@
 import styled from "styled-components";
-import orgchartimg from "./img/orgimsi.svg";
+import orgchartImg from "./img/orgImsi.svg";
 
 export default function OrgChart() {
   return (
     <Wrapper>
       <Title>성북구 조직도</Title>
 
-      <Img src={orgchartimg} />
+      <Img src={orgchartImg} />
     </Wrapper>
   );
 }

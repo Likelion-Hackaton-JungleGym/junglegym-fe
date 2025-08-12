@@ -1,16 +1,16 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-import leeseungro from "./img/leeseungro.svg";
-import ohsehun from "./img/ohsehun.svg";
-import kimyungbae from "./img/kimyungbae.svg";
-import kimnamgeun from "./img/kimnamgeun.svg";
+import leeseungroCard from "./img/leeseungroCard.svg";
+import ohsehunCard from "./img/ohsehunCard.svg";
+import kimyungbaeCard from "./img/kimyungbaeCard.svg";
+import kimnamgeunCard from "./img/kimnamgeunCard.svg";
 
 export default function Profile() {
   const people = [
-    { path: "/junglepeople/leeseungro", img: leeseungro, alt: "이승로" },
-    { path: "/junglepeople/ohsehun", img: ohsehun, alt: "오세훈" },
-    { path: "/junglepeople/kimyungbae", img: kimyungbae, alt: "김영배" },
-    { path: "/junglepeople/kimnamgeun", img: kimnamgeun, alt: "김남근" },
+    { path: "/junglepeople/leeseungro", img: leeseungroCard, alt: "이승로" },
+    { path: "/junglepeople/ohsehun", img: ohsehunCard, alt: "오세훈" },
+    { path: "/junglepeople/kimyungbae", img: kimyungbaeCard, alt: "김영배" },
+    { path: "/junglepeople/kimnamgeun", img: kimnamgeunCard, alt: "김남근" },
   ];
 
   return (
