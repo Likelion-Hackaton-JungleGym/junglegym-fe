@@ -52,7 +52,7 @@ export default function Header({ mode = "fixed" }) {
   const menu = [
     { label: "동네 한 바퀴", path: "/" },
     { label: "정글 사람들", path: "/junglepeople" },
-    { label: "정글톡 AI", path: "/jungletalk" },
+    { label: "정글챗 AI", path: "/junglechat" },
     { label: "정글의 소리", path: "/junglesound" },
   ];
 
