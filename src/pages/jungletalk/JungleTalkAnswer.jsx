@@ -34,8 +34,7 @@ const JungleTalkAnswer = ({
     return lawImages[randomIndex];
   }, []);
   return (
-    <Container>
-      {" "}
+    <Container className="answerHeader">
       <TopImageWrapper $bg={randomImage}>
         <AbsoluteBackButton onClick={() => setStep(1)}>
           <img src={BackIcon} alt="뒤로가기" />

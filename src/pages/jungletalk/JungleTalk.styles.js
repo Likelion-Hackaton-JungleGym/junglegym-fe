@@ -6,6 +6,9 @@ export const Container = styled.div`
   box-sizing: border-box;
   font-family: "Pretendard", sans-serif;
   background-color: #fff;
+  &.answerHaeder {
+    //적용 안 해도 괜찮은듯?
+  }
 `;
 
 export const Section = styled.section`
