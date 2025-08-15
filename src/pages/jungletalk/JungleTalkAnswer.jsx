@@ -1,5 +1,4 @@
-import { useMemo, useEffect } from "react";
-import { useOutletContext } from "react-router-dom";
+import { useMemo } from "react";
 
 import {
   Container,
@@ -30,22 +29,12 @@ const JungleTalkAnswer = ({
   onOtherClick,
   loading,
 }) => {
-  const { setHeaderMode, setIsStep3 } = useOutletContext();
-
-  useEffect(() => {
-    setIsStep3(true);
-    setHeaderMode("hidden"); // step3 페이지 진입
-    return () => {
-      setIsStep3(false);
-      setHeaderMode("fixed"); // 페이지 떠날 때 복구
-    };
-  }, [setHeaderMode, setIsStep3]);
   const randomImage = useMemo(() => {
     const randomIndex = Math.floor(Math.random() * lawImages.length);
     return lawImages[randomIndex];
   }, []);
   return (
-    <Container $isStep3={true}>
+    <Container className="answerHeader">
       <TopImageWrapper $bg={randomImage}>
         <AbsoluteBackButton onClick={() => setStep(1)}>
           <img src={BackIcon} alt="뒤로가기" />
@@ -73,7 +62,7 @@ const JungleTalkAnswer = ({
           showCheckAnswer
           onClick={(i, q) => {
             if (loading) return;
-            console.log('[OtherQuestion click]', { index: i, q });
+            console.log("[OtherQuestion click]", { index: i, q });
             onOtherClick?.(q);
           }}
           disabled={loading}
