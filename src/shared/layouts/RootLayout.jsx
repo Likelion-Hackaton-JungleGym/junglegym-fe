@@ -6,25 +6,25 @@ import ScrollToTop from "../utils/ScrollToTop";
 
 export default function RootLayout() {
   const [headerMode, setHeaderMode] = useState("fixed"); // 'fixed' | 'hideOnScroll' | 'hidden'
+  const [isStep3, setIsStep3] = useState(false);
 
   return (
     <>
       <Header mode={headerMode} />
-
       <ScrollRoot id="scrollRoot">
         <ScrollToTop />
         <Outlet context={{ setHeaderMode }} />
+
       </ScrollRoot>
     </>
   );
 }
 
 const ScrollRoot = styled.div`
-  padding-top: 120px;
+  margin-top: ${({ $isStep3 }) => ($isStep3 ? "0" : "120px")};
   height: 100vh;
   overflow: auto;
   -webkit-overflow-scrolling: touch;
-
   -ms-overflow-style: none;
   scrollbar-width: none;
   &::-webkit-scrollbar {
