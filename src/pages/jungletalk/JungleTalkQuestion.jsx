@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Container,
   Section,
@@ -10,7 +10,18 @@ import {
 } from "./JungleTalk.styles";
 import BackIcon from "../../assets/icons/BackIcon.svg";
 
-const JungleTalkQuestion = ({ question, setQuestion, isPrivate, setIsPrivate, setStep, handleSubmit }) => {
+const JungleTalkQuestion = ({
+  question,
+  setQuestion,
+  isPrivate,
+  setIsPrivate,
+  setStep,
+  handleSubmit,
+}) => {
+  useEffect(() => {
+    setQuestion(""); // 페이지 들어올 때 질문 초기화
+  }, [setQuestion]);
+
   return (
     <Container $isStep3={false}>
       <Section>
@@ -31,7 +42,9 @@ const JungleTalkQuestion = ({ question, setQuestion, isPrivate, setIsPrivate, se
           작성 완료
         </SubmitButton>
         <FooterText>
-          정글톡AI는 단순 ChatGPT와 달리 존재하지 않는 답변을 인위적으로 생성하지 않으며, 정치적으로 편향된 해석을 줄 수 있는 답을 제공하지 않습니다. 헌법·법률·판례·행정관례에 기반해 중립적이고 정확하게 안내해드립니다.
+          정글챗AI는 단순한 ChatGPT와 달리 존재하지 않는 답변을 인위적으로 생성하지 않으며,
+          정치적으로 편향된 해석을 배제합니다. 사용자의 정치 관련 궁금증을 헌법·법률·판례·행정관례에
+          기반해 중립적이고 정확하게 안내하는 정책 해설 AI 서비스입니다.
         </FooterText>
       </Section>
     </Container>
