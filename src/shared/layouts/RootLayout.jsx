@@ -2,6 +2,7 @@ import { Outlet } from "react-router-dom";
 import { useState } from "react";
 import Header from "../header/Header";
 import styled from "styled-components";
+import ScrollToTop from "../utils/ScrollToTop";
 
 export default function RootLayout() {
   const [headerMode, setHeaderMode] = useState("fixed"); // 'fixed' | 'hideOnScroll' | 'hidden'
@@ -10,8 +11,10 @@ export default function RootLayout() {
   return (
     <>
       <Header mode={headerMode} />
-      <ScrollRoot id="scrollRoot" $isStep3={isStep3}>
-        <Outlet context={{ setHeaderMode, setIsStep3 }} />
+      <ScrollRoot id="scrollRoot">
+        <ScrollToTop />
+        <Outlet context={{ setHeaderMode }} />
+
       </ScrollRoot>
     </>
   );
