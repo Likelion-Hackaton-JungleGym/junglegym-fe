@@ -4,6 +4,8 @@ import styled from "styled-components";
 import { PEOPLE } from "./peopleData";
 import TooltipImg from "./profiles/img/TooltipButton.svg";
 
+import ProfileDetails from "../../peopledetail/ProfileDetails.jsx";
+
 export default function PersonProfile() {
   const { id } = useParams();
   const person = PEOPLE[id];
@@ -16,7 +18,13 @@ export default function PersonProfile() {
     );
   }
 
-  return <ProfileView {...person} />;
+  return (
+    <>
+      <ProfileView {...person} />
+      {/* 하단 상세 */}
+      <ProfileDetails person={person} />
+    </>
+  );
 }
 
 function ProfileView({ name, photo, partyImg, positionImg, areas }) {
