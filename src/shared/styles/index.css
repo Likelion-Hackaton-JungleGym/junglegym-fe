@@ -1,11 +1,9 @@
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: Pretendard, system-ui, Avenir, Helvetica, Arial, sans-serif;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-
-  /* width/height 고정 제거 — 반응형을 위해 */
 }
 
 * {
@@ -15,8 +13,8 @@
 }
 
 body {
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* IE, Edge */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 
 p,
@@ -34,12 +32,12 @@ h6 {
 html,
 body {
   height: 100%;
-  overflow: auto; /* 스크롤 기능 유지 */
-  -ms-overflow-style: none; /* IE, Edge */
-  scrollbar-width: none; /* Firefox */
+  overflow: auto;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
 html::-webkit-scrollbar,
 body::-webkit-scrollbar {
-  display: none; /* Chrome, Safari */
+  display: none;
 }
