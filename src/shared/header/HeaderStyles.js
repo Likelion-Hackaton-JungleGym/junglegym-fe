@@ -46,9 +46,10 @@ export const NavItem = styled(Link)`
 
 export const HeaderWrapper = styled.header`
   position: fixed;
+  width: 390px;
   top: 0;
-  left: 0;
-  right: 0;
+  //left: 0;
+  //right: 0;
   z-index: 100;
   background-color: white;
   transform: ${({ $visible }) => ($visible ? "translateY(0)" : "translateY(-100%)")};

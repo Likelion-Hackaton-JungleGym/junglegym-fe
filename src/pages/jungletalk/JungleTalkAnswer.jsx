@@ -1,4 +1,5 @@
-import { useMemo } from "react";
+import { useMemo, useEffect } from "react";
+import { useOutletContext } from "react-router-dom";
 
 import {
   Container,
@@ -33,6 +34,14 @@ const JungleTalkAnswer = ({
     const randomIndex = Math.floor(Math.random() * lawImages.length);
     return lawImages[randomIndex];
   }, []);
+
+  const { setHeaderMode } = useOutletContext();
+
+  useEffect(() => {
+    setHeaderMode("hidden");
+    return () => setHeaderMode("fixed"); // 페이지 떠날 때 원복
+  }, [setHeaderMode]);
+
   return (
     <Container className="answerHeader">
       <TopImageWrapper $bg={randomImage}>
