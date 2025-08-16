@@ -218,10 +218,10 @@ export const AnswerText = styled.div`
 
 export const Highlight = styled.div`
   position: absolute;
-  bottom: 3px;
-  width: calc(100% + 20px);
-  left: -10px;
-  height: 14px;
+  bottom: 2px;
+  width: 100px;
+  left: -6px;
+  height: 13px;
   background: #e1e0ff;
   z-index: -1;
   border-radius: 2px;
