@@ -1,51 +1,99 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-import leeseungroCard from "./img/leeseungroCard.svg";
-import ohsehunCard from "./img/ohsehunCard.svg";
-import kimyungbaeCard from "./img/kimyungbaeCard.svg";
-import kimnamgeunCard from "./img/kimnamgeunCard.svg";
+import { PEOPLE_LIST } from "./peopleData";
 
 export default function Profile() {
-  const people = [
-    { path: "/junglepeople/leeseungro", img: leeseungroCard, alt: "이승로" },
-    { path: "/junglepeople/ohsehun", img: ohsehunCard, alt: "오세훈" },
-    { path: "/junglepeople/kimyungbae", img: kimyungbaeCard, alt: "김영배" },
-    { path: "/junglepeople/kimnamgeun", img: kimnamgeunCard, alt: "김남근" },
-  ];
-
   return (
     <Wrapper>
-      <ProfileCards>
-        {people.map((person, index) => (
-          <ProfileCard key={index}>
-            <Link to={person.path}>
-              <Img src={person.img} alt={person.alt} />
-            </Link>
-          </ProfileCard>
+      <Grid>
+        {PEOPLE_LIST.map((p) => (
+          <CardLink to={p.path} key={p.id} aria-label={`${p.name} 상세`}>
+            <Card>
+              <Top $bg={p.bg}>
+                <Badge src={p.badge} alt="정당" />
+                <Person src={p.cropPhoto} alt={`${p.name}`} />
+              </Top>
+              <Bottom>
+                <Name>{p.name}</Name>
+                <Title>{p.title}</Title>
+              </Bottom>
+            </Card>
+          </CardLink>
         ))}
-      </ProfileCards>
+      </Grid>
     </Wrapper>
   );
 }
 
+/* ---------- styles ---------- */
 const Wrapper = styled.div`
   margin: 30px 10px;
 `;
 
-const ProfileCards = styled.div`
+const Grid = styled.div`
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 10px;
 `;
 
-const ProfileCard = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
+const CardLink = styled(Link)`
+  text-decoration: none;
+  color: inherit;
 `;
 
-const Img = styled.img`
+const Card = styled.article`
+  border-radius: 10px;
+  overflow: hidden;
+  background: #fff;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #d2d2d2;
+`;
+
+const Top = styled.div`
+  position: relative;
+  height: 184px;
+  background: ${(p) => p.$bg};
+`;
+
+const Person = styled.img`
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: bottom;
+  display: block;
+`;
+
+const Badge = styled.img`
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 10px;
+  height: 19px;
+  z-index: 2;
+  pointer-events: none;
+`;
+
+const Bottom = styled.div`
+  background: #fff;
+  text-align: center;
   width: 160px;
-  height: auto;
-  cursor: pointer;
+  height: 60px;
+  padding: 12px;
+`;
+
+const Name = styled.div`
+  font-size: 18px;
+  font-weight: 800;
+  line-height: 1.2;
+  color: #111;
+`;
+
+const Title = styled.div`
+  margin-top: 3px;
+  font-size: 12px;
+  color: #8e8e8e;
 `;
