@@ -73,7 +73,7 @@ const DictCards = styled.div`
 
 const Img = styled.img`
   cursor: pointer;
-  width: 180px;
+  width: 170px;
 `;
 
 const DictCard = styled.div`
