@@ -5,6 +5,7 @@ import JunglePeoplePage from "./pages/junglepeople/JunglePeoplePage";
 import JungleTalkPage from "./pages/jungletalk/JungletalkPage";
 import JungleSoundPage from "./pages/junglesound/JungleSoundPage";
 import PersonProfile from "./pages/junglepeople/components/PersonProfile";
+import Newsletter from "./pages/junglesound/components/Newsletter";
 
 export default function App() {
   return (
@@ -17,6 +18,7 @@ export default function App() {
 
           <Route path="/jungletalk" element={<JungleTalkPage />} />
           <Route path="/junglesound" element={<JungleSoundPage />} />
+          <Route path="/junglesound/:id" element={<Newsletter />} />
         </Route>
       </Routes>
     </Router>
