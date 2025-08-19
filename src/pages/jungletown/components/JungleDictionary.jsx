@@ -44,7 +44,7 @@ export default function JungleDictionary() {
 }
 
 const Wrapper = styled.div`
-  margin: 10px 10px 10px 10px;
+  margin: 10px 0px 10px 10px;
 `;
 
 const Text = styled.div`
@@ -73,7 +73,7 @@ const DictCards = styled.div`
 
 const Img = styled.img`
   cursor: pointer;
-  width: 170px;
+  width: 185px;
 `;
 
 const DictCard = styled.div`

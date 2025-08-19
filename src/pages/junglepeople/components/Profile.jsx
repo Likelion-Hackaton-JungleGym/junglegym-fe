@@ -27,7 +27,8 @@ export default function Profile() {
 
 /* ---------- styles ---------- */
 const Wrapper = styled.div`
-  margin: 30px 10px;
+  margin: 30px auto;
+  padding: 0 5px;
 `;
 
 const Grid = styled.div`
@@ -45,10 +46,9 @@ const Card = styled.article`
   border-radius: 10px;
   overflow: hidden;
   background: #fff;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
   display: flex;
   flex-direction: column;
-  border: 1px solid #d2d2d2;
+  border: 2px solid #d2d2d2;
 `;
 
 const Top = styled.div`
