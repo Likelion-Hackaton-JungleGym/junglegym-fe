@@ -1,88 +1,207 @@
-import { useParams, Link } from "react-router-dom";
 import styled from "styled-components";
+import { useEffect } from "react";
+import { useParams, Link, useOutletContext } from "react-router-dom";
+
 import { SOUND } from "./NewsletterData.js";
+import chevronBack from "./chevron-back.svg";
 
-export default function Newsletters({ id: propId }) {
-  const { id: routeId } = useParams();
-  const id = propId ?? routeId;
-  const sound = id ? SOUND[id] : undefined;
+export default function Newsletter() {
+  const { id } = useParams();
+  const key = decodeURIComponent(String(id || ""));
 
-  if (!sound) {
+  const items = Array.isArray(SOUND) ? SOUND : Object.values(SOUND ?? {});
+  const newsletter = Array.isArray(SOUND)
+    ? items.find((it) => String(it.NewsLink ?? it.id ?? it.slug) === key)
+    : SOUND[key] ?? items.find((it) => String(it.NewsLink ?? it.id ?? it.slug) === key);
+
+  if (!newsletter) {
     return (
       <Empty>
-        존재하지 않는 소리예요. <Link to="/junglesound">목록으로</Link>
+        페이지를 찾을 수 없습니다. <br />
+        <br />
+        <BackButton to="/junglesound">{">정글의 소리로 돌아가기"}</BackButton>
       </Empty>
     );
   }
 
-  return <SoundView {...sound} />;
+  return <NewsletterView {...newsletter} />;
 }
 
-function SoundView({ newsletterTitle, date, previewContents, etcLink }) {
+function NewsletterView({
+  title,
+  date,
+  thumbnail,
+  media_img_url,
+  inTitle,
+  subtitle1,
+  content1,
+  subtitle2,
+  content2,
+  todayQuestion,
+  titleQuestion,
+  questionContent,
+}) {
+  const { setHeaderMode } = useOutletContext();
+
+  useEffect(() => {
+    setHeaderMode?.("hidden");
+    return () => setHeaderMode?.("fixed");
+  }, [setHeaderMode]);
+
   return (
     <Wrapper>
-      <PreviewWrapper>
-        <NewsletterTitle>{newsletterTitle}</NewsletterTitle>
+      <Top>
+        <ChevronImg to="/junglesound">
+          <img src={chevronBack} alt="뒤로가기" />
+        </ChevronImg>
+      </Top>
+      <Bottom>
+        <Title>{title}</Title>
         <Date>{date}</Date>
-        <PreviewContents dangerouslySetInnerHTML={{ __html: previewContents }} />
-        <EtcLink>{etcLink}</EtcLink>
-      </PreviewWrapper>
-      <Detail>{`자세히 보기 >`}</Detail>
+        <Thumbnail> {thumbnail}</Thumbnail>
+        <Media_img_url> {media_img_url}</Media_img_url>
+        <InTitle>{inTitle}</InTitle>
+        <Subtitle1>{subtitle1}</Subtitle1>
+        <Content1>{content1}</Content1>
+        <Subtitle2>{subtitle2}</Subtitle2>
+        <Content2> {content2}</Content2>
+        <TodayQuestion>{todayQuestion}</TodayQuestion>
+        <TitleQuestion>{titleQuestion}</TitleQuestion>
+        <QuestionContent>{questionContent}</QuestionContent>
+      </Bottom>
     </Wrapper>
   );
 }
+
 const Wrapper = styled.div`
-  border: 0.5px solid #d2d2d2;
-  margin: 10px;
-  border-radius: 15px;
-  background: #fff;
-  box-shadow: 0 2px 10px rgba(17, 17, 17, 0.05);
-  overflow: hidden;
-`;
-
-const PreviewWrapper = styled.div`
-  padding: 20px;
-`;
-
-const NewsletterTitle = styled.div`
-  font-size: 20px;
-  font-weight: 700;
-  color: #111;
-  margin-bottom: 6px;
-`;
-
-const Date = styled.div`
-  font-size: 12px;
-  color: #8a8a8a;
-  margin-bottom: 10px;
-`;
-
-const PreviewContents = styled.div`
-  font-size: 14px;
-  line-height: 1.5;
-  color: #444;
-`;
-
-const EtcLink = styled.div`
-  margin-top: 14px;
-  height: 140px;
-  //border-radius: 12px;
-  background: #f3f3f5;
-  display: grid;
-  place-items: center;
-  color: #b1b1b8;
-  font-size: 14px;
-`;
-
-const Detail = styled.div`
-  background-color: #7471f9;
-  color: #ffffff;
-  font-weight: 700;
-  text-align: center;
-  padding: 12px 16px;
+  white-space: pre-line;
 `;
 
 const Empty = styled.div`
   padding: 40px 16px;
   text-align: center;
+`;
+
+const BackButton = styled(Link)`
+  text-decoration: none;
+  color: darkgray;
+`;
+const Top = styled.div`
+  height: 100px;
+  border-bottom: 1px solid #e9e9e9;
+  padding-left: 10px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-start;
+  padding-bottom: 15px;
+`;
+
+const ChevronImg = styled(Link)`
+  //width: 100%
+  //길게 늘릴까 말까
+`;
+
+const Bottom = styled.div`
+  margin: 10px;
+  padding: 10px;
+`;
+
+const Title = styled.div`
+  font-size: 22px;
+  font-weight: 600;
+  color: #111;
+  margin-bottom: 6px;
+`;
+
+const Date = styled.div`
+  color: gray;
+  font-size: 13px;
+  margin: 20px 0px 10px;
+`;
+const Thumbnail = styled.div`
+  background-color: #e6e5e5;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  height: 170px;
+`;
+const Media_img_url = styled.div`
+  background-color: #d1d1d1;
+  border-radius: 10px;
+  margin-bottom: 40px;
+  height: 70px;
+`;
+
+const InTitle = styled.span`
+  font-size: 21px;
+  font-weight: 600;
+  color: #111;
+  margin-bottom: 6px;
+
+  background: linear-gradient(to top, #e1e0ff 40%, transparent 40%);
+  display: inline;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+`;
+
+const Subtitle1 = styled.div`
+  font-size: 18px;
+  font-weight: 600;
+  margin-top: 20px;
+`;
+const Content1 = styled.div`
+  font-size: 15px;
+  margin-top: 5px;
+`;
+const Subtitle2 = styled.div`
+  font-size: 18px;
+  font-weight: 600;
+  margin-top: 20px;
+`;
+const Content2 = styled.div`
+  font-size: 15px;
+  margin-top: 5px;
+  margin-bottom: 50px;
+`;
+
+const TodayQuestion = styled.div`
+  position: relative;
+  display: inline-block;
+  font-size: 22px;
+  font-weight: 600;
+  color: #111;
+  margin-bottom: 6px;
+  z-index: 0;
+
+  &::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0.08em;
+    height: 0.62em;
+    background: #e1e0ff;
+    border-radius: 2px;
+    z-index: -1;
+  }
+`;
+
+const TitleQuestion = styled.div`
+  position: relative;
+  font-size: 16px;
+  font-weight: 500;
+  padding: 5px 5px 5px 10px;
+
+  &::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 4px;
+    bottom: 4px;
+    width: 4px;
+    background: #9290ff;
+  }
+`;
+const QuestionContent = styled.div`
+  font-size: 15px;
+  margin: 10px;
 `;

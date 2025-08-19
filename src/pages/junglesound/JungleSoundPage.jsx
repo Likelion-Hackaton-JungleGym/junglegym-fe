@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import NewsLetters from "./components/Newsletter.jsx";
+import NewsPreview from "./components/NewsPreview.jsx";
 
 export default function JungleSoundPage() {
   return (
@@ -12,13 +12,13 @@ export default function JungleSoundPage() {
         같은 정책을 우리 동네 관점으로 해석하고,
         <br /> 지역 차이를 비교·질문하는 뉴스레터
       </SubText>
-      <NewsLettersWrapper>
-        <NewsLetters id="newsletter1" />
-        <NewsLetters id="newsletter2" />
-        <NewsLetters id="newsletter3" />
-        <NewsLetters id="newsletter4" />
-        <NewsLetters id="newsletter5" />
-      </NewsLettersWrapper>
+      <NewsPreviewWrapper>
+        <NewsPreview id="newsletter1" />
+        <NewsPreview id="newsletter2" />
+        <NewsPreview id="newsletter3" />
+        <NewsPreview id="newsletter4" />
+        <NewsPreview id="newsletter5" />
+      </NewsPreviewWrapper>
     </Wrapper>
   );
 }
@@ -61,6 +61,6 @@ const SubText = styled.p`
   margin-bottom: 30px;
 `;
 
-const NewsLettersWrapper = styled.div`
+const NewsPreviewWrapper = styled.div`
   margin: 10px 0px;
 `;

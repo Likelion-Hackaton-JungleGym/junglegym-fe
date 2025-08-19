@@ -3,8 +3,10 @@ import { useState } from "react";
 import Header from "../header/Header";
 import styled from "styled-components";
 import ScrollToTop from "../utils/ScrollToTop";
+import FloatingButton from "../utils/floatingButton";
 
 const HEADER_H = 120;
+const EXCLUDE_FLOATING = ["/jungletalk"]; //숨길곳 관리
 
 export default function RootLayout() {
   const [headerMode, setHeaderMode] = useState("fixed"); // 'fixed' | 'hideOnScroll' | 'hidden'
@@ -18,6 +20,15 @@ export default function RootLayout() {
         <ScrollToTop />
         <Outlet context={{ setHeaderMode }} />
       </ScrollRoot>
+
+      <FloatingButton
+        targetId="scrollRoot" // 창 자체 스크롤이면 이 줄 삭제
+        threshold={0} // 0 = 거의 항상 표시
+        size={56}
+        right={20}
+        bottom={30}
+        excludePaths={EXCLUDE_FLOATING}
+      />
     </>
   );
 }
