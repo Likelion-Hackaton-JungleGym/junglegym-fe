@@ -13,7 +13,7 @@ export default function PersonProfile() {
   if (!person) {
     return (
       <Empty>
-        존재하지 않는 인물이에요. <Link to="/junglepeople">목록으로</Link>
+        존재하지 않는 인물이에요. <Link to="/junglepeople">뒤로가기</Link>
       </Empty>
     );
   }

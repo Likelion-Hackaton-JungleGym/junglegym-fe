@@ -31,33 +31,27 @@ const BigText = styled.div`
   position: relative;
   color: #111111;
   text-align: center;
-  font-family: Pretendard;
-
   font-style: normal;
   font-weight: 700;
   margin: -5px;
   font-size: 26px;
-  //padding-top: 20px;
   letter-spacing: -0.5px;
 `;
 
 const Highlight = styled.div`
   position: absolute;
   bottom: 3px;
-  left: 36%;
-  width: 21%;
+  left: 35%;
+  width: 72px;
   height: 14px;
   background: #e1e0ff;
   z-index: -1;
   border-radius: 2px;
-  //left: 50%;
-  //transform: translate(-67%, 0%);
 `;
 
 const SubText = styled.p`
   color: #111111;
   text-align: center;
-  font-family: Pretendard;
   font-size: 15px;
   font-style: normal;
   font-weight: 500;

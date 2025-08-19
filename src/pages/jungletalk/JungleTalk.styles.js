@@ -7,7 +7,7 @@ export const Container = styled.div`
   font-family: "Pretendard", sans-serif;
   background-color: #fff;
   &.answerHaeder {
-    //적용 안 해도 괜찮은듯?
+    //필요 없으면 이 부분 버리기
   }
 `;
 
@@ -120,6 +120,7 @@ export const AbsoluteBackButton = styled.button`
 
 export const Textarea = styled.textarea`
   width: 100%;
+  font-family: "Pretendard", sans-serif;
   height: 250px;
   border: 1px solid #fff;
   border-radius: 10px;
@@ -217,10 +218,10 @@ export const AnswerText = styled.div`
 
 export const Highlight = styled.div`
   position: absolute;
-  bottom: 3px;
-  width: calc(100% + 20px);
-  left: -10px;
-  height: 14px;
+  bottom: 2px;
+  width: 100px;
+  left: -6px;
+  height: 13px;
   background: #e1e0ff;
   z-index: -1;
   border-radius: 2px;

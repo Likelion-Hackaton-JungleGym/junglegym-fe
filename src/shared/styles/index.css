@@ -16,6 +16,8 @@
 body {
   scrollbar-width: none;
   -ms-overflow-style: none;
+  width: 390px;
+  height: 844px;
 }
 
 p,
