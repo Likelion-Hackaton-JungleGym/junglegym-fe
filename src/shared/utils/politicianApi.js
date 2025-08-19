@@ -59,6 +59,68 @@ export const getPoliticianById = async (politicianId) => {
 };
 
 /**
+ * 정치인 SNS/홈페이지 조회 API
+ * @param {number} politicianId - 정치인 ID
+ * @returns {Promise<Array>} SNS/홈페이지 리스트
+ */
+export const getPoliticianHomepages = async (politicianId) => {
+  try {
+    console.log('정치인 SNS/홈페이지 조회 API 호출');
+    console.log('요청 URL:', `${api.defaults.baseURL}/api/politician/${politicianId}/homepages`);
+
+    const response = await api.get(`/api/politician/${politicianId}/homepages`);
+
+    console.log('정치인 SNS/홈페이지 API 응답:', response.data);
+
+    if (response.data.success) {
+      return response.data.data;
+    } else {
+      throw new Error(response.data.message || '정치인 SNS/홈페이지 조회 실패');
+    }
+  } catch (error) {
+    console.error('정치인 SNS/홈페이지 조회 오류:', error);
+    
+    // 서버 에러 시 에러를 그대로 던짐
+    if (error.response?.status === 500 || error.response?.status === 400) {
+      throw new Error('정치인 SNS/홈페이지 조회에 실패했습니다.');
+    }
+    
+    throw error;
+  }
+};
+
+/**
+ * 정치인 최근 이슈 조회 API
+ * @param {number} politicianId - 정치인 ID
+ * @returns {Promise<Array>} 최근 이슈 리스트
+ */
+export const getPoliticianIssues = async (politicianId) => {
+  try {
+    console.log('정치인 최근 이슈 조회 API 호출');
+    console.log('요청 URL:', `${api.defaults.baseURL}/api/politicians/${politicianId}/issues`);
+
+    const response = await api.get(`/api/politicians/${politicianId}/issues`);
+
+    console.log('정치인 최근 이슈 API 응답:', response.data);
+
+    if (response.data.success) {
+      return response.data.data;
+    } else {
+      throw new Error(response.data.message || '정치인 최근 이슈 조회 실패');
+    }
+  } catch (error) {
+    console.error('정치인 최근 이슈 조회 오류:', error);
+    
+    // 서버 에러 시 에러를 그대로 던짐
+    if (error.response?.status === 500 || error.response?.status === 400) {
+      throw new Error('정치인 최근 이슈 조회에 실패했습니다.');
+    }
+    
+    throw error;
+  }
+};
+
+/**
  * 지역별 정치인 리스트 조회 API
  * @returns {Promise<Array>} 정치인 리스트
  */
@@ -96,10 +158,31 @@ export const getPoliticiansByRegion = async () => {
 export const transformPoliticianData = (apiData) => {
   if (!apiData) return null;
 
-  // careerSummary를 학력과 경력으로 분리 (임시 로직)
-  const careerParts = apiData.careerSummary ? apiData.careerSummary.split('~~') : [];
-  const education = careerParts.length > 0 ? [careerParts[0].trim()] : [];
-  const experience = careerParts.length > 1 ? [careerParts[1].trim()] : [];
+  // careerSummary를 학력, 경력, 저서로 분리
+  let education = [];
+  let experience = [];
+  let books = [];
+
+  if (apiData.careerSummary) {
+    const careerText = apiData.careerSummary.replace(/\r\n/g, '\n');
+    const sections = careerText.split('\n\n');
+    
+    sections.forEach(section => {
+      const lines = section.split('\n').filter(line => line.trim());
+      if (lines.length === 0) return;
+      
+      const title = lines[0].trim();
+      const content = lines.slice(1).map(line => line.trim()).filter(line => line);
+      
+      if (title.includes('학력')) {
+        education = content;
+      } else if (title.includes('주요경력') || title.includes('경력')) {
+        experience = content;
+      } else if (title.includes('저서')) {
+        books = content;
+      }
+    });
+  }
 
   return {
     // 기본 프로필 탭
@@ -113,7 +196,7 @@ export const transformPoliticianData = (apiData) => {
     },
     education: education,
     experience: experience,
-    issues: [], // API에서 최근 이슈 정보가 오면 설정
+    issues: [], // 최근 이슈는 별도 API로 조회
     sns: {
       facebook: "",
       instagram: "",

@@ -118,7 +118,6 @@ export const ItemLink = styled.a`
   font-size: 12px;
   color: #a0a0a0;
   text-decoration: none;
-
   &:hover {
     text-decoration: underline;
   }
@@ -133,6 +132,7 @@ export const Button = styled.button`
   border: 1px solid #d0d0d0;
   border-radius: 8px;
   transition: transform 0.2s;
+  text-decoration: none;
 `;
 
 // 공통 버튼 아이콘 스타일

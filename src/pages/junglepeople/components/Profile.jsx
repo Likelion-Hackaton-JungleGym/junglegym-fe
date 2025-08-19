@@ -1,12 +1,59 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-import { PEOPLE_LIST } from "./peopleData";
 
-export default function Profile() {
+import RedPartyWhite from "./img/redPartyWhite.svg";
+import BluePartyWhite from "./img/bluePartyWhite.svg";
+
+
+export default function Profile({ politicians = [], isLoading = false }) {
+  // API 데이터를 새로운 UI 구조에 맞게 변환
+  const people = politicians.map((politician) => {
+    // 정당에 따른 배경색 설정
+    const getBgColor = (polyName) => {
+      if (polyName?.includes("더불어민주당")) return "#4191E6";
+      if (polyName?.includes("국민의힘")) return "#F8575E";
+      return "#f5f5f5"; // 기본값
+    };
+
+    const getBadge = (polyName) => {
+    if (polyName?.includes("더불어민주당")) return BluePartyWhite;
+    if (polyName?.includes("국민의힘")) return RedPartyWhite;
+    return;
+  };
+
+    return {
+      id: politician.id,
+      path: `/junglepeople/${politician.id}`,
+      name: politician.name,
+      title: politician.roleName,
+      cropPhoto: politician.profileImg || "/dummy-profile.jpg",
+      badge: getBadge(politician.polyName),
+      bg: getBgColor(politician.polyName),
+    };
+  });
+
+  // 데이터가 없을 때 처리
+  if (politicians.length === 0) {
+    return (
+      <Wrapper>
+        <div
+          style={{
+            textAlign: "center",
+            padding: "40px 20px",
+            color: "#666",
+            fontSize: "16px",
+          }}
+        >
+          정치인 정보를 준비 중입니다. 
+        </div>
+      </Wrapper>
+    );
+  }
+
   return (
     <Wrapper>
       <Grid>
-        {PEOPLE_LIST.map((p) => (
+        {people.map((p) => (
           <CardLink to={p.path} key={p.id} aria-label={`${p.name} 상세`}>
             <Card>
               <Top $bg={p.bg}>
