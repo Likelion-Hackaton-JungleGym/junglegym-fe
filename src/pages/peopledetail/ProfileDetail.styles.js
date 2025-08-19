@@ -51,8 +51,6 @@ export const InfoIcon = styled.span`
     width: 100%;
     height: 100%;
     display: block;
-    /* 보라색 톤으로 보정 (대부분의 단색/라인 아이콘에 잘 맞음) */
-    filter: invert(43%) sepia(45%) saturate(934%) hue-rotate(214deg) brightness(99%) contrast(96%);
   }
 `;
 
@@ -82,7 +80,6 @@ export const EmptyInfo = styled.div`
   align-items: center;
   gap: 8px;
   padding: 20px;
-  background: #f8f9fa;
   border-radius: 8px;
 `;
 
