@@ -24,7 +24,7 @@ const HighlightText = styled.div`
   font-size: 27px;
   font-style: normal;
   font-weight: 700;
-  padding-top: 20px;
+  padding-top: 15px;
   letter-spacing: -1px;
 `;
 
@@ -32,12 +32,12 @@ const Highlight = styled.div`
   position: absolute;
   bottom: 3px;
   left: 50%;
-  width: 140px;
-  height: 13px;
+  width: 147px;
+  height: 12px;
   background: #e1e0ff;
   z-index: -1;
   border-radius: 2px;
-  transform: translateX(-50%);
+  transform: translate(-50%, 30%);
 `;
 
 const SubText = styled.p`
@@ -46,6 +46,7 @@ const SubText = styled.p`
   font-family: Pretendard;
   font-size: 15px;
   font-style: normal;
-  font-weight: 500;
+  font-weight: 400;
+  margin-top: 5px;
   letter-spacing: -0.2px;
 `;

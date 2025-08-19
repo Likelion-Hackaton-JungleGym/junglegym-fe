@@ -1,7 +1,7 @@
 export const SOUND = {
   newsletter1: {
     id: "newsletter1",
-    title: "🧠 1성북구 소비쿠폰, 지급률 96% 돌파!",
+    title: "1성북구 소비쿠폰, 지급률 96% 돌파!",
     date: "2025-08-01",
     newsLink: "https://www.khan.co.kr/article/202508141624001",
     thumbnail: "썸네일 사진으로 바꿔야댐@",

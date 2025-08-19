@@ -16,5 +16,6 @@ export default function JungleTownPage() {
 }
 
 const Wrapper = styled.div`
-  padding: 10px;
+  padding: 10px 0px 10px 10px;
+  margin: 5px 0px 5px 5px;
 `;

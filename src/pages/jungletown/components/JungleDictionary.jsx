@@ -44,7 +44,7 @@ export default function JungleDictionary() {
 }
 
 const Wrapper = styled.div`
-  margin: 10px;
+  margin: 10px 10px 10px 10px;
 `;
 
 const Text = styled.div`

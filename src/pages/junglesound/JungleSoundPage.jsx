@@ -24,7 +24,8 @@ export default function JungleSoundPage() {
 }
 
 const Wrapper = styled.div`
-  margin: 20px;
+  padding: 10px 0px 10px 0px;
+  margin: 5px 20px 5px 20px;
 `;
 
 const HighlightText = styled.div`
@@ -37,6 +38,7 @@ const HighlightText = styled.div`
   font-weight: 700;
   padding-top: 20px;
   letter-spacing: -1px;
+  margin-bottom: 7px;
 `;
 
 const Highlight = styled.div`
@@ -48,7 +50,7 @@ const Highlight = styled.div`
   background: #e1e0ff;
   z-index: -1;
   border-radius: 2px;
-  transform: translateX(-50%);
+  transform: translate(-50%, 3px);
 `;
 
 const SubText = styled.p`
@@ -56,7 +58,7 @@ const SubText = styled.p`
   text-align: center;
   font-size: 15px;
   font-style: normal;
-  font-weight: 500;
+  font-weight: 400;
   letter-spacing: -0.3px;
   margin-bottom: 30px;
 `;

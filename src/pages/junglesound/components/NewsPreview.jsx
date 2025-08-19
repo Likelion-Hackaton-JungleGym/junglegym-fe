@@ -70,7 +70,7 @@ function SoundView({ title, date, content1, newsLink, thumbnail, keyForRoute }) 
 
 const Wrapper = styled.div`
   border: 0.5px solid #d2d2d2;
-  margin: 10px;
+  margin: 10px 5px;
   border-radius: 15px;
   background: #fff;
   box-shadow: 0 2px 10px rgba(17, 17, 17, 0.05);
@@ -84,7 +84,7 @@ const PreviewWrapper = styled.div`
 
 const NewsTitle = styled.div`
   font-size: 20px;
-  font-weight: 700;
+  font-weight: 600;
   color: #111;
   margin-bottom: 6px;
 `;
@@ -92,20 +92,19 @@ const NewsTitle = styled.div`
 const Date = styled.div`
   font-size: 12px;
   color: #8a8a8a;
-  margin-bottom: 10px;
+  margin: 10px 0px;
   right: 0;
 `;
 
 const PreviewContents = styled.div`
-  font-size: 14px;
-  line-height: 1.5;
+  font-size: 13px;
+  line-height: 1.3;
   color: #444;
 `;
 
 const EtcLink = styled.div`
   margin-top: 14px;
-  height: 140px;
-  border-radius: 10px;
+  height: 120px;
   background: #f3f3f5;
   display: grid;
   place-items: center;
@@ -116,7 +115,8 @@ const EtcLink = styled.div`
 const Detail = styled.div`
   background-color: #7471f9;
   color: #ffffff;
-  font-weight: 700;
+  font-weight: 300;
+  font-size: 14px;
   text-align: center;
   padding: 12px 16px;
 `;

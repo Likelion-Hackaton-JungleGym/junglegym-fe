@@ -33,7 +33,7 @@ const Wrapper = styled.div`
 const Grid = styled.div`
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 10px;
+  gap: 13px;
 `;
 
 const CardLink = styled(Link)`
@@ -81,13 +81,13 @@ const Bottom = styled.div`
   background: #fff;
   text-align: center;
   width: 160px;
-  height: 60px;
-  padding: 12px;
+  height: 62px;
+  padding: 10px;
 `;
 
 const Name = styled.div`
-  font-size: 18px;
-  font-weight: 800;
+  font-size: 20px;
+  font-weight: 700;
   line-height: 1.2;
   color: #111;
 `;
@@ -95,5 +95,5 @@ const Name = styled.div`
 const Title = styled.div`
   margin-top: 3px;
   font-size: 12px;
-  color: #8e8e8e;
+  color: #797979;
 `;
