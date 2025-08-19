@@ -11,7 +11,7 @@ export default function JungleTownPage() {
       <CardNews />
       <MarginBox>
         <MiniPeople />
-        <JungleDictionary />{" "}
+        <JungleDictionary />
       </MarginBox>
     </Wrapper>
   );
