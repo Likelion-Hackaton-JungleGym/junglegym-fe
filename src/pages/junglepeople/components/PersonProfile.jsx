@@ -50,6 +50,7 @@ const Wrapper = styled.div`
   flex-direction: column;
   align-items: center;
   padding: 30px 20px;
+  margin-top: 25px;
   font-family: Pretendard;
 `;
 const ProfileImg = styled.img`
@@ -57,12 +58,12 @@ const ProfileImg = styled.img`
   height: auto;
 `;
 const Name = styled.div`
-  font-size: 30px;
+  font-size: 33px;
   font-weight: 700;
-  margin: 5px;
+  margin: 10px 5px 5px 5px;
 `;
 const PartyImg = styled.img`
-  margin: 5px;
+  margin: 3px;
 `;
 const PositionWrapper = styled.div`
   display: flex;
@@ -70,6 +71,7 @@ const PositionWrapper = styled.div`
   margin: 25px;
 `;
 const PositionImg = styled.img``;
+
 const TooltipWrapper = styled.div`
   position: relative;
   margin-left: 4px;
@@ -82,18 +84,19 @@ const TooltipBox = styled.div`
   top: 50%;
   left: calc(100% + 8px);
   transform: translateY(-50%);
-  width: 110px;
+  width: 100px;
   padding: 6px 10px;
-  background: #e0e0e0;
-  border-radius: 8px;
+  background: #f2f3f7;
+  border-radius: 15px;
   border: 1px dashed #8e8e8e;
 `;
 const TooltipText = styled.div`
-  font-size: 14px;
-  color: gray;
+  font-size: 12px;
+  color: #767676;
   line-height: 1.5;
   text-align: left;
   white-space: pre-line;
+  margin: 6px;
 `;
 const Empty = styled.div`
   padding: 40px 16px;

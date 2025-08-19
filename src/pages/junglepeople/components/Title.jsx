@@ -25,6 +25,7 @@ const Wrapper = styled.div`
 
 const BigTexts = styled.div`
   margin-top: 10px;
+  margin-bottom: 14px;
 `;
 
 const BigText = styled.div`
@@ -34,7 +35,7 @@ const BigText = styled.div`
   font-style: normal;
   font-weight: 700;
   margin: -5px;
-  font-size: 26px;
+  font-size: 27px;
   letter-spacing: -0.5px;
 `;
 
@@ -42,11 +43,12 @@ const Highlight = styled.div`
   position: absolute;
   bottom: 3px;
   left: 35%;
-  width: 72px;
-  height: 14px;
+  width: 73px;
+  height: 12px;
   background: #e1e0ff;
   z-index: -1;
   border-radius: 2px;
+  transform: translateY(2px);
 `;
 
 const SubText = styled.p`

@@ -9,12 +9,20 @@ export default function JungleTownPage() {
     <Wrapper>
       <Title />
       <CardNews />
-      <MiniPeople />
-      <JungleDictionary />
+      <MarginBox>
+        <MiniPeople />
+        <JungleDictionary />
+      </MarginBox>
     </Wrapper>
   );
 }
 
 const Wrapper = styled.div`
   padding: 10px;
+  margin: 5px;
+`;
+
+const MarginBox = styled.div`
+  padding: -10px;
+  margin-right: -15px;
 `;
