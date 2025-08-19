@@ -88,19 +88,16 @@ const BackButton = styled(Link)`
   color: darkgray;
 `;
 const Top = styled.div`
-  height: 100px;
+  height: 120px;
   border-bottom: 1px solid #e9e9e9;
-  padding-left: 10px;
+  padding-left: 13px;
   display: flex;
   align-items: flex-end;
   justify-content: flex-start;
   padding-bottom: 15px;
 `;
 
-const ChevronImg = styled(Link)`
-  //width: 100%
-  //길게 늘릴까 말까
-`;
+const ChevronImg = styled(Link)``;
 
 const Bottom = styled.div`
   margin: 10px;
@@ -111,7 +108,7 @@ const Title = styled.div`
   font-size: 22px;
   font-weight: 600;
   color: #111;
-  margin: 0px 3px 6px 3px;
+  margin: 10px 3px 6px 3px;
 `;
 
 const Date = styled.div`

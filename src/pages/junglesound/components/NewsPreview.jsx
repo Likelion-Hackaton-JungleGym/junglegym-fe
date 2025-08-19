@@ -39,7 +39,7 @@ const stripHtml = (html = "") =>
     .replace(/\s+/g, " ")
     .trim();
 
-const ellipsize = (text = "", max = 50) => {
+const ellipsize = (text = "", max = 60) => {
   const t = text.trim();
   return t.length > max
     ? { text: t.slice(0, max), truncated: true }
@@ -47,7 +47,7 @@ const ellipsize = (text = "", max = 50) => {
 };
 
 function SoundView({ title, date, content1, newsLink, thumbnail, keyForRoute }) {
-  const { text, truncated } = ellipsize(stripHtml(content1), 50);
+  const { text, truncated } = ellipsize(stripHtml(content1), 60);
   return (
     <Wrapper>
       <PreviewWrapper>
@@ -71,7 +71,7 @@ function SoundView({ title, date, content1, newsLink, thumbnail, keyForRoute }) 
 const Wrapper = styled.div`
   border: 0.5px solid #d2d2d2;
   margin: 10px 5px;
-  border-radius: 15px;
+  border-radius: 13px;
   background: #fff;
   box-shadow: 0 2px 10px rgba(17, 17, 17, 0.05);
   overflow: hidden;
