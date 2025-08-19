@@ -9,11 +9,14 @@ import {
   ValueStack,
   EmptyInfo,
   EmptyText,
+  NoteIcon,
+  NoteSection,
 } from "../ProfileDetail.styles.js";
 
 import AssetIcon from "../../../assets/icons/AssetIcon.svg";
 import DebtIcon from "../../../assets/icons/DebtIcon.svg";
 import RealAssetIcon from "../../../assets/icons/RealAssetIcon.svg";
+import NoticeIcon from "../../../assets/icons/NoticeIcon.svg";
 
 const FIELDS = [
   { key: "total", label: "총 자산", icon: AssetIcon, alt: "총 자산" },
@@ -23,12 +26,14 @@ const FIELDS = [
 
 export default function Assets({ assets = {} }) {
   // 빈 상태 처리 (기존 로직 유지)
-  if (assets?.total === "—") {
+  if (!assets || assets.count === 0) {
     return (
       <Card>
         <CardTitle>재산 정보</CardTitle>
         <EmptyInfo>
-          <InfoIcon>ℹ️</InfoIcon>
+          <NoteSection>
+            <img src={NoticeIcon} alt="Notice" />
+          </NoteSection>
           <EmptyText>아직 등록된 정보가 없어요</EmptyText>
         </EmptyInfo>
       </Card>
