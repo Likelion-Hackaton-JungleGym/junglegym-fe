@@ -1,54 +1,73 @@
 import { useState } from "react";
 import styled from "styled-components";
 
-import CardNews1 from "../components/img/CardNews1.svg?url";
-import CardNews2 from "../components/img/CardNews2.svg?url";
-import CardNews3 from "../components/img/CardNews3.svg?url";
-import CardNews4 from "../components/img/CardNews4.svg?url";
-import CardNews5 from "../components/img/CardNews5.svg?url";
+import { CARDNEWS } from "./CardNewsData";
+import bgImg from "./img/bgCard.svg";
 
 import leftButton from "../components/img/leftButton.svg?url";
 import rightButton from "../components/img/rightButton.svg?url";
 
-//import Group9962 from "../components/img/Group9962.svg";
-
 export default function CardNews() {
-  const images = [CardNews1, CardNews2, CardNews3, CardNews4, CardNews5];
   const [current, setCurrent] = useState(0);
+  const [expanded, setExpanded] = useState(false); // 확장 여부
+  const len = CARDNEWS.length;
+  const item = CARDNEWS[current];
 
-  const prevIndex = (current - 1 + images.length) % images.length;
-  const nextIndex = (current + 1) % images.length;
+  const prev = () => {
+    setCurrent((i) => (i === 0 ? len - 1 : i - 1));
+    setExpanded(false);
+  };
+  const next = () => {
+    setCurrent((i) => (i === len - 1 ? 0 : i + 1));
+    setExpanded(false);
+  };
 
-  const prev = () => setCurrent((i) => (i === 0 ? images.length - 1 : i - 1));
-  const next = () => setCurrent((i) => (i === images.length - 1 ? 0 : i + 1));
-
-  const meta = [
-    {
-      icon: "사회",
-      title: "성북, 자치회관 프로그램 온라인 접수",
-      desc: "누구나 클릭 한 번으로 신청 가능",
-    },
-    { icon: "경제", title: "제목 2", desc: "설명 2 ..." },
-    // ...
-  ];
   return (
     <Wrapper>
       <Date>25년 8월 1주차</Date>
 
       <Viewport>
-        <PrevPeek>
-          <PeekImg src={images[prevIndex]} />
-        </PrevPeek>
-        <NextPeek>
-          <PeekImg src={images[nextIndex]} />
-        </NextPeek>
-        <Card>
-          <MainImg src={images[current]} alt={`card-${current + 1}`} />
-          <Overlay>
-            {meta[current]?.icon && <OverlayIcon>{meta[current].icon}</OverlayIcon>}
-            {meta[current]?.title && <OverlayTitle>{meta[current].title}</OverlayTitle>}
-            {meta[current]?.desc && <OverlayDesc>{meta[current].desc}</OverlayDesc>}
-          </Overlay>
+        <BgImg src={bgImg} alt="" />
+
+        {/* 카드 */}
+        <Card
+          role="group"
+          aria-roledescription="slide"
+          aria-label={`${current + 1} / ${len}`}
+          onClick={() => setExpanded((v) => !v)} // 클릭 시 토글
+        >
+          <MainImg src={item.card} alt="" />
+
+          {!expanded ? (
+            <CompactOverlay>
+              {item.icon && <OverlayIcon src={item.icon} alt="" />}
+              {item.title && <OverlayTitle>{item.title}</OverlayTitle>}
+              {item.content1 && <OverlayDesc>{item.content1}</OverlayDesc>}
+            </CompactOverlay>
+          ) : (
+            <ExpandedOverlay>
+              {item.title && <OverlayTitle2>{item.title}</OverlayTitle2>}
+              {item.content2 && <OverlayBody>{item.content2}</OverlayBody>}
+              <FooterRow>
+                <Source>
+                  {item.name && <span>{item.name}</span>}
+                  {item.date && <span className="date">{item.date}</span>}
+                </Source>
+
+                {item.newslink && (
+                  <ArticleBtn
+                    href={item.newslink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={(e) => e.stopPropagation()} // 카드 클릭 토글 방지
+                  >
+                    원문 기사 보기
+                  </ArticleBtn>
+                )}
+              </FooterRow>
+              {item.graph && <GraphImg src={item.graph} alt="" />}
+            </ExpandedOverlay>
+          )}
         </Card>
 
         <ArrowLeft onClick={prev} aria-label="이전">
@@ -57,9 +76,17 @@ export default function CardNews() {
         <ArrowRight onClick={next} aria-label="다음">
           <ArrowIcon src={rightButton} alt="" />
         </ArrowRight>
+
         <Dots>
-          {images.map((_, i) => (
-            <Dot key={i} $active={i === current} onClick={() => setCurrent(i)} />
+          {CARDNEWS.map((_, i) => (
+            <Dot
+              key={i}
+              $active={i === current}
+              onClick={() => {
+                setCurrent(i);
+                setExpanded(false);
+              }}
+            />
           ))}
         </Dots>
       </Viewport>
@@ -67,8 +94,8 @@ export default function CardNews() {
   );
 }
 
-const PEEK_WIDTH = 50;
-const GUTTER = 18;
+/* ---------- styles ---------- */
+const GUTTER = 10;
 
 const Wrapper = styled.div`
   margin-bottom: 55px;
@@ -81,74 +108,87 @@ const Wrapper = styled.div`
 const Date = styled.div`
   color: #111;
   text-align: center;
-  font-size: 16px;
+  font-size: 17px;
   font-weight: 600;
   padding: 15px 10px 10px;
 `;
 
 const Viewport = styled.div`
-  display: flex;
-  justify-content: center;
   position: relative;
   width: 95%;
-  height: 320px; //나중에
+  height: 320px;
   margin: 0 auto;
   border-radius: 16px;
   overflow: hidden;
 `;
 
+const BgImg = styled.img`
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 340px;
+  height: 292px;
+  transform: translateY(-53%);
+  z-index: 0;
+`;
+
 const Card = styled.div`
   position: absolute;
-  top: 0;
+  inset: 0;
   left: ${GUTTER}px;
   right: ${GUTTER}px;
-  bottom: 0;
   border-radius: 16px;
   overflow: hidden;
   z-index: 2;
-  border-radius: 16px;
+  cursor: pointer;
 `;
 
 const MainImg = styled.img`
-  width: 100%;
-  height: 100%;
+  width: 320px;
+  height: 300px;
   object-fit: cover;
   display: block;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
 `;
 
-const Overlay = styled.div`
+/* ===== Compact (축약) ===== */
+const CompactOverlay = styled.div`
   position: absolute;
-  inset: 0; /* 카드 전체 덮기 */
+  inset: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   text-align: center;
-  padding: 24px 20px 66px; /* 하단 점(dot)과 간격 */
+  padding: 0px 20px 60px;
   color: #fff;
   z-index: 3;
-  pointer-events: none; /* 오버레이 위에서도 화살표 클릭 되게 */
+  pointer-events: none;
+  gap: 6px;
 `;
 
-const OverlayIcon = styled.div`
-  margin-bottom: 10px;
-  padding: 4px 10px;
-  font-size: 12px;
-  font-weight: 700;
+const OverlayIcon = styled.img`
+  width: 200px;
+  height: 200px;
 `;
-//나중에 이미지로 바꾸기
 
 const OverlayTitle = styled.div`
   margin: 0 0 8px;
-  font-size: 24px;
+  font-size: 23px;
   font-weight: 500;
   line-height: 1.3;
   letter-spacing: -0.02em;
   max-width: 90%;
-  //white-space: nowrap;
-  //overflow: hidden;
-  //text-overflow: ellipsis;
+  white-space: pre-line;
+`;
+
+const OverlayTitle2 = styled.div`
+  margin: 0 0 8px;
+  font-size: 21px;
+  font-weight: 500;
+  line-height: 1.3;
+  letter-spacing: -0.02em;
+  max-width: 90%;
+  white-space: pre-line;
 `;
 
 const OverlayDesc = styled.div`
@@ -158,39 +198,41 @@ const OverlayDesc = styled.div`
   opacity: 0.9;
   max-width: 85%;
   display: -webkit-box;
-  -webkit-line-clamp: 1; /* 스샷처럼 한 줄 */
+  -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
   overflow: hidden;
 `;
 
-const PeekBase = styled.div`
+/* ===== Expanded (확장) ===== */
+const ExpandedOverlay = styled.div`
   position: absolute;
   inset: 0;
-  z-index: 1;
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  text-align: left;
+  color: #fff;
+  z-index: 3;
   pointer-events: none;
-  transform: scale(0.9);
-  transform-origin: center;
-  border-radius: 16px;
-  overflow: hidden;
+  gap: 10px;
 `;
 
-const PeekImg = styled.img`
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
+const OverlayBody = styled.p`
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.95);
 `;
 
-const PrevPeek = styled(PeekBase)`
-  clip-path: inset(0 calc(100% - ${PEEK_WIDTH}px) 0 0);
-  left: -3%;
+const GraphImg = styled.img`
+  align-self: center;
+  width: 92%;
+  max-width: 330px;
+  height: auto;
 `;
 
-const NextPeek = styled(PeekBase)`
-  clip-path: inset(0 0 0 calc(100% - ${PEEK_WIDTH}px));
-  right: -3%;
-`;
-
+/* ===== Arrows & Dots ===== */
 const ArrowBase = styled.button`
   position: absolute;
   top: 50%;
@@ -199,7 +241,6 @@ const ArrowBase = styled.button`
   border: none;
   width: 36px;
   height: 36px;
-  box-shadow: none;
   cursor: pointer;
   z-index: 4;
   display: grid;
@@ -208,28 +249,28 @@ const ArrowBase = styled.button`
 `;
 
 const ArrowLeft = styled(ArrowBase)`
-  left: ${GUTTER - 10}px;
+  left: ${GUTTER - 13}px;
 `;
 const ArrowRight = styled(ArrowBase)`
-  right: ${GUTTER - 10}px;
+  right: ${GUTTER - 12}px;
+`;
+
+const ArrowIcon = styled.img`
+  width: 20px;
+  height: 20px;
+  display: block;
 `;
 
 const Dots = styled.div`
   position: absolute;
   display: flex;
-  bottom: 20px;
+  bottom: 35px;
   transform: translateX(-50%);
   left: 50%;
   justify-content: center;
   align-items: center;
   gap: 6px;
   z-index: 5;
-`;
-
-const ArrowIcon = styled.img`
-  width: 12px;
-  height: 12px;
-  display: block;
 `;
 
 const Dot = styled.button`
@@ -240,4 +281,43 @@ const Dot = styled.button`
   background: ${(p) => (p.$active ? "#FFFFFF" : "#e0e0e0")};
   cursor: pointer;
   transition: all 160ms ease;
+`;
+
+const FooterRow = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* 왼쪽/오른쪽 정렬 */
+  gap: 12px;
+`;
+
+const Source = styled.div`
+  display: flex;
+  gap: 8px;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.9);
+  .date {
+    opacity: 0.9;
+  }
+`;
+
+const ArticleBtn = styled.a`
+  pointer-events: auto; /* ExpandedOverlay가 pointer-events:none 이라 버튼만 활성화 */
+  display: inline-block;
+  padding: 5px 10px;
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  border-radius: 999px;
+  text-decoration: none;
+  font-size: 12px;
+  font-weight: 200;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(4px);
+  transition: background 120ms ease, transform 120ms ease;
+  &:hover {
+    background: rgba(255, 255, 255, 0.18);
+    transform: translateY(-1px);
+  }
+  &:active {
+    transform: translateY(0);
+  }
 `;
