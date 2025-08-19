@@ -1,34 +1,91 @@
-import { Nav, TabButton } from "./PeopleDetail.styles.js";
+import styled from "styled-components";
 
-// 네 탭만 존재
+// 탭 상수
 export const TABS = {
-  BASIC: "BASIC",
-  PROMISES: "PROMISES",
-  ASSETS_CRIMES: "ASSETS_CRIMES",
-  BILLS: "BILLS",
+  BASIC: "basic",
+  PROMISES: "promises",
+  ASSETS_CRIMES: "assets_crimes",
+  BILLS: "bills",
 };
 
-const items = [
-  { key: TABS.BASIC, label: "기본 프로필" },
-  { key: TABS.PROMISES, label: "공약 이행" },
-  { key: TABS.ASSETS_CRIMES, label: "재산 및 전과" },
-  { key: TABS.BILLS, label: "발의법률" },
-];
+const ProfileTabs = ({ active, onChange }) => {
+  const tabs = [
+    { id: TABS.BASIC, label: "기본 프로필" },
+    { id: TABS.PROMISES, label: "공약 이행" },
+    { id: TABS.ASSETS_CRIMES, label: "재산 및 전과" },
+    { id: TABS.BILLS, label: "발의법률" },
+  ];
 
-export default function ProfileTabs({ active, onChange }) {
   return (
-    <Nav role="tablist" aria-label="프로필 상세 탭">
-      {items.map((it) => (
-        <TabButton
-          key={it.key}
-          role="tab"
-          aria-selected={active === it.key}
-          $active={active === it.key}
-          onClick={() => onChange?.(it.key)}
-        >
-          {it.label}
-        </TabButton>
-      ))}
-    </Nav>
+    <TabScrollWrap>
+      <TabContainer role="tablist">
+        {tabs.map((tab) => (
+          <TabButton
+            key={tab.id}
+            $active={active === tab.id}
+            onClick={() => onChange(tab.id)}
+            role="tab"
+            aria-selected={active === tab.id}
+          >
+            {tab.label}
+          </TabButton>
+        ))}
+      </TabContainer>
+    </TabScrollWrap>
   );
-}
+};
+
+/** 고정 폭(부모 너비)에 맞춰 내부에서만 스크롤 */
+const TabScrollWrap = styled.div`
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  /* 모바일에서 스크롤바 감추기(필요 없으면 제거) */
+  scrollbar-width: none; /* Firefox */
+  &::-webkit-scrollbar {
+    display: none;
+  }
+`;
+
+const TabContainer = styled.div`
+  display: inline-flex; /* 내용 너비만큼만 차지해서 가로 스크롤 유도 */
+  gap: 12px;
+  padding: 6px 2px; /* 좌우 여백으로 스크롤 여지 */
+  border-radius: 12px;
+  margin: 20px 0;
+  position: relative;
+
+  /* 스크롤 스냅(원하면 켜기) */
+  scroll-snap-type: x proximity;
+`;
+
+const TabButton = styled.button`
+  flex: 0 0 auto; /* 폭 고정(내용 기반) + 줄바꿈 방지 */
+  padding: 10px 16px;
+  border-radius: 20px;
+  font-size: 15px;
+  font-weight: 600;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.2s ease;
+  position: relative;
+  min-width: 100px;
+  white-space: nowrap;
+  scroll-snap-align: start;
+
+  /* 테두리/배경/글자색 */
+  border: 1px solid ${(p) => (p.$active ? "#4846D8" : "#E6E6F0")};
+  background: ${(p) => (p.$active ? "#4846D8" : "#FFFFFF")};
+  color: ${(p) => (p.$active ? "#FFFFFF" : "#000000")};
+
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+  }
+
+  &:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(116, 113, 249, 0.25);
+  }
+`;
+
+export default ProfileTabs;

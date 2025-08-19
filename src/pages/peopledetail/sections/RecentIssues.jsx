@@ -1,30 +1,23 @@
-import {
-  Card,
-  Title,
-  IssueList,
-  IssueItem,
-  IssueTitle,
-  IssueLink,
-} from "../PeopleDetail.styles.js";
+import { Card, CardTitle, ListContainer, ItemText, ItemLink } from "../ProfileDetail.styles.js";
 
-export default function RecentIssues({ issues = [] }) {
-  if (!issues || issues.length === 0) return null;
+const RecentIssues = ({ issues }) => (
+  <Card>
+    <CardTitle>최근 이슈</CardTitle>
+    <ListContainer>
+      {issues.map((issue, index) => (
+        <div key={index} style={{ borderBottom: "1px solid #eee", paddingBottom: "15px" }}>
+          <ItemText>{issue.title}</ItemText>
+          <ItemLink 
+            href={issue.link} 
+            target="_blank" 
+            rel="noopener noreferrer"
+          >
+            원본 기사로 넘어가기 {">"}
+          </ItemLink>
+        </div>
+      ))}
+    </ListContainer>
+  </Card>
+);
 
-  return (
-    <Card>
-      <Title>최근 이슈</Title>
-      <IssueList>
-        {issues.map((it, i) => (
-          <IssueItem key={i}>
-            <IssueTitle>{it.title}</IssueTitle>
-            {it.link && (
-              <IssueLink href={it.link} target="_blank" rel="noreferrer">
-                원문 보기
-              </IssueLink>
-            )}
-          </IssueItem>
-        ))}
-      </IssueList>
-    </Card>
-  );
-}
+export default RecentIssues;
