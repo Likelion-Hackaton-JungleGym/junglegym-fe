@@ -3,7 +3,8 @@ import { useEffect } from "react";
 import { useParams, Link, useOutletContext } from "react-router-dom";
 
 import { SOUND } from "./NewsletterData.js";
-import chevronBack from "./chevron-back.svg";
+import chevronBack from "./img/chevron-back.svg";
+import newsLinkIcon from "./img/newsLinkIcon.svg";
 
 export default function Newsletter() {
   const { id } = useParams();
@@ -31,7 +32,8 @@ function NewsletterView({
   title,
   date,
   thumbnail,
-  media_img_url,
+  newsLink,
+  percentImg,
   inTitle,
   subtitle1,
   content1,
@@ -58,13 +60,27 @@ function NewsletterView({
       <Bottom>
         <Title>{title}</Title>
         <Date>{date}</Date>
-        <Thumbnail> {thumbnail}</Thumbnail>
-        <Media_img_url> {media_img_url}</Media_img_url>
+        <ThumbnailWrapper>
+          <Thumbnail src={thumbnail} alt="뉴스 썸네일" />
+          {newsLink && (
+            <NewsLinkWrapper
+              to={newsLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="원문 보기"
+            >
+              <NewsLink src={newsLinkIcon} alt="원문 링크" />
+            </NewsLinkWrapper>
+          )}
+        </ThumbnailWrapper>
+        <PercentWrapper>
+          <PercentImg src={percentImg} />
+        </PercentWrapper>
         <InTitle>{inTitle}</InTitle>
         <Subtitle1>{subtitle1}</Subtitle1>
         <Content1>{content1}</Content1>
         <Subtitle2>{subtitle2}</Subtitle2>
-        <Content2> {content2}</Content2>
+        <Content2>{content2}</Content2>
         <TodayQuestion>{todayQuestion}</TodayQuestion>
         <TitleQuestion>{titleQuestion}</TitleQuestion>
         <QuestionContent>{questionContent}</QuestionContent>
@@ -74,7 +90,7 @@ function NewsletterView({
 }
 
 const Wrapper = styled.div`
-  //margin: 0px 3px;
+  /* margin: 0px 3px; */
   white-space: pre-line;
 `;
 
@@ -87,6 +103,7 @@ const BackButton = styled(Link)`
   text-decoration: none;
   color: darkgray;
 `;
+
 const Top = styled.div`
   height: 120px;
   border-bottom: 1px solid #e9e9e9;
@@ -117,19 +134,49 @@ const Date = styled.div`
   font-weight: 400;
   margin: 20px 3px 7px;
 `;
-const Thumbnail = styled.div`
+
+const ThumbnailWrapper = styled.div`
   background-color: #e6e5e5;
-  border-radius: 8px;
-  //margin-bottom: 14px;
+  border-radius: 5px;
   height: 170px;
   margin: 0px 3px 14px 3px;
+  overflow: hidden;
+  position: relative; /* 아이콘 배치용 */
 `;
-const Media_img_url = styled.div`
+
+const Thumbnail = styled.img`
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center; /* 가운데 기준으로 균등하게 잘림 */
+  display: block;
+`;
+
+const NewsLinkWrapper = styled(Link)`
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  display: inline-flex;
+  padding: 6px;
+  border-radius: 999px;
+`;
+
+const NewsLink = styled.img`
+  width: 25px;
+  height: 25px;
+  display: block;
+`;
+
+const PercentWrapper = styled.div`
   background-color: #d1d1d1;
   border-radius: 8px;
-  margin-bottom: 40px;
-  height: 70px;
   margin: 0px 3px 40px 3px;
+  height: 70px;
+`;
+
+const PercentImg = styled.img`
+  width: 100%;
+  display: block;
 `;
 
 const InTitle = styled.span`
@@ -137,7 +184,6 @@ const InTitle = styled.span`
   font-weight: 500;
   color: #111;
   margin-bottom: 6px;
-
   padding-left: 3px;
   padding-right: 2px;
   background: linear-gradient(to top, #e1e0ff 40%, transparent 40%);
@@ -152,6 +198,7 @@ const Subtitle1 = styled.div`
   margin-top: 20px;
   padding-left: 3px;
 `;
+
 const Content1 = styled.div`
   font-size: 14px;
   margin-top: 5px;
@@ -159,12 +206,14 @@ const Content1 = styled.div`
   padding-left: 3px;
   font-weight: 300;
 `;
+
 const Subtitle2 = styled.div`
   font-size: 18px;
   font-weight: 600;
   margin-top: 30px;
   padding-left: 3px;
 `;
+
 const Content2 = styled.div`
   font-size: 14px;
   margin-top: 5px;
@@ -191,11 +240,11 @@ const TodayQuestion = styled.div`
     right: 0;
     bottom: 0.08em;
     height: 12px;
-    width: 235px;
+    width: 103%;
     background: #e1e0ff;
     border-radius: 2px;
     z-index: -1;
-    transform: translateY(3px);
+    transform: translateY(4px);
   }
 `;
 
@@ -216,6 +265,7 @@ const TitleQuestion = styled.div`
     background: #9290ff;
   }
 `;
+
 const QuestionContent = styled.div`
   font-size: 14px;
   margin: 7px 10px 10px;
