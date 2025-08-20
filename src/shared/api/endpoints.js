@@ -1,18 +1,34 @@
-import { api } from "./client";
+import { api } from "../api/client";
+import { DICTIONARY } from "../../pages/jungletown/components/JungleDictionaryData";
+// 로컬 이미지 데이터를 객체로 변환 (id를 키로 사용)
+const imageDataMap = DICTIONARY.reduce((acc, item) => {
+  acc[item.id] = {
+    miniCard: item.miniCard,
+    bigCard: item.bigCard,
+    icon: item.icon,
+    hotRank: item.hotRank,
+  };
+  return acc;
+}, {});
 
-const transformDictionaryData = (apiData) => {
-  return apiData.map((item) => ({
-    // 컴포넌트가 사용하는 필드명: API 필드명
-    id: item.id,
-    title: item.title,
-    subtitle: item.subtitle,
-    category: item.keyword,
-    //desc: item.detail_description,
-    //icon: item.thumbnail_url,
-    //miniCard: item.thumbnail_url,
-    //bigCard: item.detail_image_url,
-    //hotRank: item.is_hot ? "/hot-icon.png" : null,
-  }));
+// 데이터 합치는 함수
+const mergeDictionaryData = (apiData) => {
+  return apiData.map((item) => {
+    const imageData = imageDataMap[item.id] || {}; // id로 이미지 데이터 찾기
+
+    return {
+      id: item.id,
+      // API 데이터
+      category: item.keyword,
+      title: item.title,
+      subtitle: item.subtitle,
+      // 로컬 이미지 데이터
+      miniCard: imageData.miniCard || null,
+      bigCard: imageData.bigCard || null,
+      icon: imageData.icon || null,
+      hotRank: imageData.hotRank || null,
+    };
+  });
 };
 
 export const getDictionaries = async () => {
@@ -21,10 +37,10 @@ export const getDictionaries = async () => {
     console.log("✅ 원본 API 응답:", response.data);
 
     const rawData = response.data.data || [];
-    const transformedData = transformDictionaryData(rawData);
+    const mergedData = mergeDictionaryData(rawData);
 
-    console.log("✅ 변환된 데이터:", transformedData);
-    return transformedData;
+    console.log("✅ 합쳐진 데이터:", mergedData);
+    return mergedData;
   } catch (error) {
     console.error("사전 데이터 가져오기 실패:", error.userMessage);
     throw error;

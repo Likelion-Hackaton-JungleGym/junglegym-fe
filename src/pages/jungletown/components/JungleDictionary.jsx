@@ -1,25 +1,24 @@
 import styled from "styled-components";
 import { useEffect, useState } from "react";
 import { getDictionaries } from "../../../shared/api/endpoints";
-import { DICTIONARY } from "./JungleDictionaryData";
-//프론트에서 데이터도 쓰고 api도 연동하고 둘다 섞는걸로 코드 쓰기
 
 export default function JungleDictionary() {
   const [list, setList] = useState([]); // 전체 데이터
   const [selected, setSelected] = useState(null);
 
-  // mount 시 사전 데이터 불러오기
   useEffect(() => {
-    console.log("🔍 API 호출 시작"); // 이 로그가 뜨는지 확인
+    console.log("🔍 API 호출 시작");
 
-    getDictionaries().then((data) => {
-      console.log("✅ API 응답 성공:", data);
-
-      const dictionaries = data.data || [];
-      console.log("📚 사전 목록:", dictionaries);
-
-      setList(dictionaries);
-    });
+    getDictionaries()
+      .then((data) => {
+        console.log("✅ 합쳐진 데이터 받음:", data);
+        // 이미 변환된 데이터이므로 그대로 사용
+        setList(data);
+      })
+      .catch((e) => {
+        console.error("❌ API 응답 실패:", e);
+        setList([]);
+      });
   }, []);
 
   // 모달 열릴 때 body 스크롤 막기
