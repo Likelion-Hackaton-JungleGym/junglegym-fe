@@ -21,7 +21,7 @@ export default function JungleDictionary() {
   return (
     <Wrapper>
       <Text>
-        <Title>정글 사전</Title>
+        <Title>정글사전</Title>
       </Text>
 
       <DictCards className="scroll-container">
