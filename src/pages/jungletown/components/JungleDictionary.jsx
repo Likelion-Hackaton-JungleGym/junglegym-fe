@@ -1,25 +1,43 @@
 import styled from "styled-components";
 import { useEffect, useState } from "react";
 import { getDictionaries } from "../../../shared/api/endpoints";
+import { getDictionariesDetail } from "../../../shared/api/endpoints";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 export default function JungleDictionary() {
   const [list, setList] = useState([]); // 전체 데이터
   const [selected, setSelected] = useState(null);
+  const [selectedDetail, setSelectedDetail] = useState(null);
 
   useEffect(() => {
-    console.log("🔍 API 호출 시작");
-
+    console.log("🔍 목록 API 호출 시작");
     getDictionaries()
       .then((data) => {
-        console.log("✅ 합쳐진 데이터 받음:", data);
-        // 이미 변환된 데이터이므로 그대로 사용
+        console.log("✅ 목록 데이터 받음:", data);
         setList(data);
       })
       .catch((e) => {
-        console.error("❌ API 응답 실패:", e);
+        console.error("❌ 목록 API 실패:", e);
         setList([]);
       });
   }, []);
+
+  const handleCardClick = async (item) => {
+    console.log("🔍 선택된 아이템:", item);
+    console.log("🔍 item.desc:", item.desc); // 목록 데이터의 desc
+    setSelected(item);
+
+    try {
+      console.log("🔍 상세 API 호출:", item.id);
+      const detailData = await getDictionariesDetail(item.id);
+      console.log("✅ 상세 데이터:", detailData);
+      console.log("✅ 상세 desc:", detailData.desc); // 상세 데이터의 desc
+      setSelectedDetail(detailData);
+    } catch (error) {
+      console.error("❌ 상세 API 실패:", error);
+    }
+  };
 
   // 모달 열릴 때 body 스크롤 막기
   useEffect(() => {
@@ -44,7 +62,7 @@ export default function JungleDictionary() {
 
       <DictCards className="scroll-container">
         {list.map((it) => (
-          <Card key={it.id} onClick={() => setSelected(it)}>
+          <Card key={it.id} onClick={() => handleCardClick(it)}>
             {/* 배경 카드 */}
             {it.miniCard && <Bg src={it.miniCard} alt="" aria-hidden />}
             {it.hotRank && <Ribbon src={it.hotRank} alt="hot" />}
@@ -61,10 +79,8 @@ export default function JungleDictionary() {
       {selected && (
         <>
           <Dim onClick={() => setSelected(null)} />
-          <Modal role="dialog" aria-modal="true" onClick={() => setSelected(null)}>
-            <ModalCard onClick={(e) => e.stopPropagation()}>
-              {selected.bigCard && <ModalBg src={selected.bigCard} alt="" aria-hidden />}
-
+          <Modal>
+            <ModalCard>
               <CloseBtn onClick={() => setSelected(null)} aria-label="닫기">
                 ×
               </CloseBtn>
@@ -80,8 +96,11 @@ export default function JungleDictionary() {
                   <IconImg src={selected.icon} alt="" />
                 </IconCenter>
               )}
-
-              <Desc>{selected.desc}</Desc>
+              <Desc>
+                <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                  {selectedDetail?.desc || selected.desc}
+                </ReactMarkdown>
+              </Desc>
             </ModalCard>
           </Modal>
         </>
@@ -279,18 +298,38 @@ const ModalSub = styled.p`
   letter-spacing: -0.2px;
 `;
 
-const Desc = styled.p`
+const Desc = styled.div`
   position: relative;
   z-index: 1;
   margin: 0;
   font-size: 13px;
   line-height: 1.6;
   letter-spacing: -0.2px;
-  white-space: pre-line;
   color: #222;
   max-height: 42vh;
   overflow: auto;
   padding-right: 2px;
+  /* 마크다운 기본 요소 약간 정리 */
+  & h1,
+  & h2,
+  & h3 {
+    margin: 1em 0 0.5em;
+    font-weight: 700;
+  }
+  & p {
+    margin: 0.6em 0;
+  }
+  & ul,
+  & ol {
+    padding-left: 1.2em;
+  }
+  & li {
+    margin: 0.2em 0;
+  }
+  & img {
+    max-width: 100%;
+    border-radius: 8px;
+  }
 `;
 
 const IconCenter = styled.div`
