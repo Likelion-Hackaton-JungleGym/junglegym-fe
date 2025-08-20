@@ -1,10 +1,28 @@
 import styled from "styled-components";
 import { useEffect, useState } from "react";
-import { DICTIONARY } from "../components/JungleDictionaryData.js";
+import { getDictionaries } from "../../../shared/api/endpoints";
+import { DICTIONARY } from "./JungleDictionaryData";
+//프론트에서 데이터도 쓰고 api도 연동하고 둘다 섞는걸로 코드 쓰기
 
 export default function JungleDictionary() {
+  const [list, setList] = useState([]); // 전체 데이터
   const [selected, setSelected] = useState(null);
 
+  // mount 시 사전 데이터 불러오기
+  useEffect(() => {
+    console.log("🔍 API 호출 시작"); // 이 로그가 뜨는지 확인
+
+    getDictionaries().then((data) => {
+      console.log("✅ API 응답 성공:", data);
+
+      const dictionaries = data.data || [];
+      console.log("📚 사전 목록:", dictionaries);
+
+      setList(dictionaries);
+    });
+  }, []);
+
+  // 모달 열릴 때 body 스크롤 막기
   useEffect(() => {
     if (!selected) return;
     const prev = document.body.style.overflow;
@@ -12,6 +30,7 @@ export default function JungleDictionary() {
     return () => (document.body.style.overflow = prev);
   }, [selected]);
 
+  // ESC 닫기
   useEffect(() => {
     const onKey = (e) => e.key === "Escape" && setSelected(null);
     window.addEventListener("keydown", onKey);
@@ -25,9 +44,10 @@ export default function JungleDictionary() {
       </Text>
 
       <DictCards className="scroll-container">
-        {DICTIONARY.map((it) => (
+        {list.map((it) => (
           <Card key={it.id} onClick={() => setSelected(it)}>
-            <Bg src={it.miniCard} alt="" aria-hidden />
+            {/* 배경 카드 */}
+            {it.miniCard && <Bg src={it.miniCard} alt="" aria-hidden />}
             {it.hotRank && <Ribbon src={it.hotRank} alt="hot" />}
             <Body>
               <IconBox>{it.icon && <Icon src={it.icon} alt="" />}</IconBox>
@@ -44,7 +64,7 @@ export default function JungleDictionary() {
           <Dim onClick={() => setSelected(null)} />
           <Modal role="dialog" aria-modal="true" onClick={() => setSelected(null)}>
             <ModalCard onClick={(e) => e.stopPropagation()}>
-              <ModalBg src={selected.bigCard} alt="" aria-hidden />
+              {selected.bigCard && <ModalBg src={selected.bigCard} alt="" aria-hidden />}
 
               <CloseBtn onClick={() => setSelected(null)} aria-label="닫기">
                 ×
