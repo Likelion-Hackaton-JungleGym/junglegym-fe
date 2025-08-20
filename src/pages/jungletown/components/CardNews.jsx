@@ -2,16 +2,17 @@ import { useState } from "react";
 import styled from "styled-components";
 
 import { CARDNEWS } from "./CardNewsData";
-import bgImg from "./img/bgCard.svg";
-
 import leftButton from "../components/img/leftButton.svg?url";
 import rightButton from "../components/img/rightButton.svg?url";
 
 export default function CardNews() {
   const [current, setCurrent] = useState(0);
-  const [expanded, setExpanded] = useState(false); // 확장 여부
+  const [expanded, setExpanded] = useState(false);
   const len = CARDNEWS.length;
   const item = CARDNEWS[current];
+
+  const prevIndex = (current - 1 + len) % len;
+  const nextIndex = (current + 1) % len;
 
   const prev = () => {
     setCurrent((i) => (i === 0 ? len - 1 : i - 1));
@@ -27,14 +28,20 @@ export default function CardNews() {
       <Date>25년 8월 1주차</Date>
 
       <Viewport>
-        <BgImg src={bgImg} alt="" />
+        {/* ---- 배경: 이전/다음 카드 프리뷰 ---- */}
+        <PrevPeek aria-hidden>
+          <PeekImg src={CARDNEWS[prevIndex]?.card} alt="" />
+        </PrevPeek>
+        <NextPeek aria-hidden>
+          <PeekImg src={CARDNEWS[nextIndex]?.card} alt="" />
+        </NextPeek>
 
-        {/* 카드 */}
+        {/* ---- 카드 ---- */}
         <Card
           role="group"
           aria-roledescription="slide"
           aria-label={`${current + 1} / ${len}`}
-          onClick={() => setExpanded((v) => !v)} // 클릭 시 토글
+          onClick={() => setExpanded((v) => !v)}
         >
           <MainImg src={item.card} alt="" />
 
@@ -59,7 +66,7 @@ export default function CardNews() {
                     href={item.newslink}
                     target="_blank"
                     rel="noopener noreferrer"
-                    onClick={(e) => e.stopPropagation()} // 카드 클릭 토글 방지
+                    onClick={(e) => e.stopPropagation()}
                   >
                     원문 기사 보기
                   </ArticleBtn>
@@ -70,6 +77,7 @@ export default function CardNews() {
           )}
         </Card>
 
+        {/* ---- 화살표 & 점 ---- */}
         <ArrowLeft onClick={prev} aria-label="이전">
           <ArrowIcon src={leftButton} alt="" />
         </ArrowLeft>
@@ -86,6 +94,7 @@ export default function CardNews() {
                 setCurrent(i);
                 setExpanded(false);
               }}
+              aria-label={`${i + 1}번으로 이동`}
             />
           ))}
         </Dots>
@@ -96,6 +105,7 @@ export default function CardNews() {
 
 /* ---------- styles ---------- */
 const GUTTER = 10;
+const PEEK_WIDTH = 50;
 
 const Wrapper = styled.div`
   margin-bottom: 55px;
@@ -122,30 +132,53 @@ const Viewport = styled.div`
   overflow: hidden;
 `;
 
-const BgImg = styled.img`
-  position: absolute;
-  top: 50%;
-  left: 0;
-  width: 340px;
-  height: 292px;
-  transform: translateY(-53%);
-  z-index: 0;
-`;
-
-const Card = styled.div`
+/* ===== 배경 프리뷰 (이전/다음) ===== */
+const PeekBase = styled.div`
   position: absolute;
   inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  transform: scale(0.9);
+  transform-origin: center;
+  border-radius: 16px;
+  overflow: hidden;
+  filter: blur(0.2px); /* 미세하게 경계 부드럽게 */
+  opacity: 0.92;
+`;
+
+const PrevPeek = styled(PeekBase)`
+  clip-path: inset(0 calc(100% - ${PEEK_WIDTH}px) 0 0);
+  left: -6%;
+`;
+const NextPeek = styled(PeekBase)`
+  clip-path: inset(0 0 0 calc(100% - ${PEEK_WIDTH}px));
+  right: -6%;
+`;
+
+const PeekImg = styled.img`
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+`;
+
+/* ===== 카드 ===== */
+const Card = styled.div`
+  position: absolute;
+  top: 0;
   left: ${GUTTER}px;
   right: ${GUTTER}px;
   border-radius: 16px;
+  bottom: 10px;
   overflow: hidden;
   z-index: 2;
   cursor: pointer;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1); //밑에도 보이고 더 사아아하게
 `;
 
 const MainImg = styled.img`
-  width: 320px;
-  height: 300px;
+  width: 100%;
+  height: 100%;
   object-fit: cover;
   display: block;
 `;
@@ -167,23 +200,13 @@ const CompactOverlay = styled.div`
 `;
 
 const OverlayIcon = styled.img`
-  width: 200px;
-  height: 200px;
+  width: 180px;
+  height: 180px;
 `;
 
 const OverlayTitle = styled.div`
   margin: 0 0 8px;
   font-size: 23px;
-  font-weight: 500;
-  line-height: 1.3;
-  letter-spacing: -0.02em;
-  max-width: 90%;
-  white-space: pre-line;
-`;
-
-const OverlayTitle2 = styled.div`
-  margin: 0 0 8px;
-  font-size: 21px;
   font-weight: 500;
   line-height: 1.3;
   letter-spacing: -0.02em;
@@ -216,6 +239,16 @@ const ExpandedOverlay = styled.div`
   z-index: 3;
   pointer-events: none;
   gap: 10px;
+`;
+
+const OverlayTitle2 = styled.div`
+  margin: 0 0 8px;
+  font-size: 21px;
+  font-weight: 500;
+  line-height: 1.3;
+  letter-spacing: -0.02em;
+  max-width: 90%;
+  white-space: pre-line;
 `;
 
 const OverlayBody = styled.p`
@@ -283,10 +316,11 @@ const Dot = styled.button`
   transition: all 160ms ease;
 `;
 
+/* ===== Footer ===== */
 const FooterRow = styled.div`
   display: flex;
   align-items: center;
-  justify-content: space-between; /* 왼쪽/오른쪽 정렬 */
+  justify-content: space-between;
   gap: 12px;
 `;
 
@@ -301,7 +335,7 @@ const Source = styled.div`
 `;
 
 const ArticleBtn = styled.a`
-  pointer-events: auto; /* ExpandedOverlay가 pointer-events:none 이라 버튼만 활성화 */
+  pointer-events: auto;
   display: inline-block;
   padding: 5px 10px;
   border: 1px solid rgba(255, 255, 255, 0.85);

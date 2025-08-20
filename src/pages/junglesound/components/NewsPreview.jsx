@@ -46,7 +46,7 @@ const ellipsize = (text = "", max = 60) => {
     : { text: t, truncated: false };
 };
 
-function SoundView({ title, date, content1, newsLink, thumbnail, keyForRoute }) {
+function SoundView({ title, date, content1, thumbnail, keyForRoute }) {
   const { text, truncated } = ellipsize(stripHtml(content1), 60);
   return (
     <Wrapper>
@@ -57,9 +57,9 @@ function SoundView({ title, date, content1, newsLink, thumbnail, keyForRoute }) 
           {text}
           {truncated && <More>···</More>}
         </PreviewContents>
-        <BackButton to={newsLink}>
-          <EtcLink>{thumbnail}</EtcLink>
-        </BackButton>
+        <ThumbnailWrapper>
+          <Thumbnail src={thumbnail} />
+        </ThumbnailWrapper>
       </PreviewWrapper>
       <LinkButton to={`/junglesound/${keyForRoute}`}>
         <Detail>{`자세히 보기 >`}</Detail>
@@ -102,14 +102,20 @@ const PreviewContents = styled.div`
   color: #444;
 `;
 
-const EtcLink = styled.div`
+const Thumbnail = styled.img`
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+`;
+
+const ThumbnailWrapper = styled.div`
   margin-top: 14px;
   height: 120px;
   background: #f3f3f5;
-  display: grid;
-  place-items: center;
-  color: #b1b1b8;
-  font-size: 14px;
+  overflow: hidden;
+  border-radius: 5px;
 `;
 
 const Detail = styled.div`
@@ -133,9 +139,4 @@ const LinkButton = styled(Link)`
 
 const More = styled.span`
   color: #7471f9;
-`;
-
-const BackButton = styled(Link)`
-  text-decoration: none;
-  color: darkgray;
 `;
