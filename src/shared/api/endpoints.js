@@ -1,5 +1,6 @@
 import { api } from "../api/client";
 import { DICTIONARY } from "../../pages/jungletown/components/JungleDictionaryData";
+
 // 로컬 이미지 데이터를 객체로 변환 (id를 키로 사용)
 const imageDataMap = DICTIONARY.reduce((acc, item) => {
   acc[item.id] = {
@@ -78,6 +79,7 @@ export const getDictionariesDetail = async (dictionaryId) => {
     throw error;
   }
 };
+
 const youtubeThumb = (link) => {
   const m = link?.match(/(?:v=|youtu\.be\/|shorts\/)([^?&#/]+)/);
   return m ? `https://img.youtube.com/vi/${m[1]}/hqdefault.jpg` : null;
@@ -89,11 +91,14 @@ const clean = (s) => (typeof s === "string" ? s.trim() : "");
 export const getNewsletters = async () => {
   try {
     const res = await api.get("/regions/newsletters");
+    console.log("📋 뉴스레터 목록 API 응답:", res?.data);
+
     const arr = Array.isArray(res?.data?.data) ? res.data.data : [];
-    // ✅ 최소 공통화: id, thumbnail만 추가
+
     return arr.map((it) => ({
       ...it,
-      id: it.newsletterId, // 공통 id
+      // 목록에서는 newsletterId를 id로 매핑 (라우팅과 호환성을 위해)
+      id: it.newsletterId,
       thumbnail: it.thumbnailImg || youtubeThumb(it.link) || "/placeholder.png",
     }));
   } catch (error) {
@@ -102,28 +107,127 @@ export const getNewsletters = async () => {
   }
 };
 
-// 상세
+// 상세 - 다른 API 패턴들을 시도
 export const getNewsletterDetail = async (newsletterId) => {
   if (!newsletterId) throw new Error("Invalid newsletterId");
 
-  const res = await api.get("/regions/newsletters", {
-    params: { newsletterId },
-  });
+  console.log("🔍 뉴스레터 상세 요청 ID:", newsletterId, typeof newsletterId);
 
-  const payload = res?.data?.data;
-  let raw;
-  if (Array.isArray(payload)) {
+  try {
+    // 방법 1: 다양한 엔드포인트 패턴 시도
+    const possibleEndpoints = [
+      `/regions/newsletters/${newsletterId}/detail`, // 상세 전용
+      `/regions/newsletters/detail/${newsletterId}`, // 다른 패턴
+      `/regions/newsletters/${newsletterId}`, // 현재 시도했던 것
+      `/newsletters/${newsletterId}`, // regions 없이
+      `/newsletters/detail/${newsletterId}`, // newsletters만
+    ];
+
+    for (const endpoint of possibleEndpoints) {
+      try {
+        console.log(`📍 시도: ${endpoint}`);
+        const res = await api.get(endpoint);
+        console.log(`✅ 성공: ${endpoint}`, res?.data);
+
+        const raw = res?.data?.data;
+        if (raw) {
+          return {
+            ...raw,
+            id: raw.id || raw.newsletterId || newsletterId,
+            newsletterId: raw.newsletterId || raw.id || newsletterId,
+            thumbnail:
+              clean(raw.thumbnailUrl) ||
+              clean(raw.thumbnailImg) ||
+              youtubeThumb(clean(raw.link)) ||
+              "/placeholder.png",
+            thumbnailUrl: clean(raw.thumbnailUrl) || clean(raw.thumbnailImg),
+          };
+        }
+      } catch (endpointError) {
+        console.log(`❌ 실패: ${endpoint} (${endpointError?.response?.status})`);
+        continue;
+      }
+    }
+
+    // 방법 2: 쿼리 파라미터 방식들 시도
+    const queryMethods = [
+      { params: { newsletterId } },
+      { params: { id: newsletterId } },
+      { params: { newsletter_id: newsletterId } },
+    ];
+
+    for (const queryParam of queryMethods) {
+      try {
+        console.log("📍 쿼리 파라미터 시도:", queryParam);
+        const res = await api.get("/regions/newsletters", queryParam);
+        console.log("✅ 쿼리 성공:", res?.data);
+
+        const payload = res?.data?.data;
+        if (Array.isArray(payload) && payload.length > 0) {
+          // 단일 결과를 찾거나 첫 번째 사용
+          const item =
+            payload.length === 1
+              ? payload[0]
+              : payload.find((it) => String(it.newsletterId || it.id) === String(newsletterId)) ||
+                payload[0];
+
+          if (item) {
+            return {
+              ...item,
+              id: item.newsletterId || item.id,
+              newsletterId: item.newsletterId || item.id,
+              thumbnail:
+                clean(item.thumbnailUrl) ||
+                clean(item.thumbnailImg) ||
+                youtubeThumb(clean(item.link)) ||
+                "/placeholder.png",
+              thumbnailUrl: clean(item.thumbnailUrl) || clean(item.thumbnailImg),
+            };
+          }
+        }
+      } catch (queryError) {
+        console.log("❌ 쿼리 실패:", queryError?.response?.status);
+        continue;
+      }
+    }
+
+    // 방법 3: 목록에서 필터링 (fallback)
+    console.log("📍 최종 방법: 목록에서 필터링");
+    const res = await api.get("/regions/newsletters");
+    const arr = Array.isArray(res?.data?.data) ? res.data.data : [];
     const key = String(newsletterId);
-    raw = payload.find((it) => String(it.id ?? it.newsletterId) === key);
-  } else {
-    raw = payload;
+    const found = arr.find((it) => String(it.newsletterId) === key);
+
+    if (found) {
+      console.log("✅ 목록에서 찾음 (제한된 데이터):", found);
+      return {
+        ...found,
+        id: found.newsletterId,
+        newsletterId: found.newsletterId,
+        thumbnail:
+          clean(found.thumbnailImg) || youtubeThumb(clean(found.link)) || "/placeholder.png",
+        thumbnailUrl: clean(found.thumbnailImg),
+        // 목록에 없는 필드들은 빈 값으로 설정
+        mediaImgUrl: null,
+        inTitle: null,
+        subtitle1: null,
+        subtitle2: null,
+        content2: null,
+        todayQuestion: null,
+        titleQuestion: null,
+        questionContent: null,
+      };
+    }
+
+    console.error("❌ 모든 방법 실패");
+    return null;
+  } catch (error) {
+    console.error("뉴스레터 상세 전체 실패:", {
+      message: error?.message,
+      status: error?.response?.status,
+      data: error?.response?.data,
+      userMessage: error?.userMessage,
+    });
+    throw error;
   }
-
-  if (!raw) return null;
-
-  return {
-    ...raw,
-    thumbnail: clean(raw.thumbnailUrl) || youtubeThumb(clean(raw.link)) || "/placeholder.png",
-    thumbnailUrl: clean(raw.thumbnailUrl), // 컴포넌트에서도 쓸 수 있게 정리된 값 유지
-  };
 };

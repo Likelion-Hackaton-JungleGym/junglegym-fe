@@ -21,17 +21,25 @@ export default function Newsletter() {
   }, [setHeaderMode]);
 
   useEffect(() => {
-    console.log("[detail] newsletterId =", newsletterId);
+    console.log("[detail] 전체 params =", params);
+    console.log("[detail] newsletterId =", newsletterId, typeof newsletterId);
+    console.log("[detail] 현재 URL =", window.location.pathname);
+
     (async () => {
       try {
         if (!newsletterId) {
+          console.log("[detail] newsletterId가 없음");
           setItem(null);
           setLoading(false);
           return;
         }
+
+        console.log("[detail] API 호출 시작...");
         const data = await getNewsletterDetail(newsletterId);
+        console.log("[detail] API 호출 결과:", data);
         setItem(data);
-      } catch {
+      } catch (error) {
+        console.error("[detail] 에러 발생:", error);
         setItem(null);
       } finally {
         setLoading(false);
