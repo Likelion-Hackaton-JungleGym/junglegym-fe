@@ -4,6 +4,7 @@ import { getDictionaries } from "../../../shared/api/endpoints";
 import { getDictionariesDetail } from "../../../shared/api/endpoints";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import { DICTIONARY } from "../components/JungleDictionaryData";
 
 export default function JungleDictionary() {
   const [list, setList] = useState([]); // 전체 데이터
@@ -23,16 +24,19 @@ export default function JungleDictionary() {
       });
   }, []);
 
+  const ASSET_MAP = Object.fromEntries(
+    DICTIONARY.map((d) => [String(d.id), d]) // id 타입 섞임 방지
+  );
+
   const handleCardClick = async (item) => {
     console.log("🔍 선택된 아이템:", item);
-    console.log("🔍 item.desc:", item.desc); // 목록 데이터의 desc
-    setSelected(item);
+    const asset = ASSET_MAP[String(item.id)] || {};
+    // 로컬 자산을 병합해서 bigCard/icon/hotRank/miniCard 보강
+    const merged = { ...item, ...asset };
+    setSelected(merged);
 
     try {
-      console.log("🔍 상세 API 호출:", item.id);
       const detailData = await getDictionariesDetail(item.id);
-      console.log("✅ 상세 데이터:", detailData);
-      console.log("✅ 상세 desc:", detailData.desc); // 상세 데이터의 desc
       setSelectedDetail(detailData);
     } catch (error) {
       console.error("❌ 상세 API 실패:", error);
@@ -63,7 +67,6 @@ export default function JungleDictionary() {
       <DictCards className="scroll-container">
         {list.map((it) => (
           <Card key={it.id} onClick={() => handleCardClick(it)}>
-            {/* 배경 카드 */}
             {it.miniCard && <Bg src={it.miniCard} alt="" aria-hidden />}
             {it.hotRank && <Ribbon src={it.hotRank} alt="hot" />}
             <Body>
@@ -81,6 +84,7 @@ export default function JungleDictionary() {
           <Dim onClick={() => setSelected(null)} />
           <Modal>
             <ModalCard>
+              {selected.bigCard && <ModalBg src={selected.bigCard} alt="" />}
               <CloseBtn onClick={() => setSelected(null)} aria-label="닫기">
                 ×
               </CloseBtn>
@@ -234,7 +238,7 @@ const ModalCard = styled.div`
   border-radius: 16px;
   padding: 18px 18px 20px;
   box-shadow: 0 16px 48px rgba(0, 0, 0, 0.22);
-  background: #f8cdb1; /* 배경 이미지 로드 전 폴백 색 */
+  background: transparent; /* ✅ 이미지가 깔리므로 투명 */
 `;
 
 const ModalBg = styled.img`
@@ -242,7 +246,7 @@ const ModalBg = styled.img`
   inset: 0;
   width: 100%;
   height: 100%;
-  object-fit: cover; /* 배경 꽉 채우기 */
+  object-fit: cover;
   z-index: 0;
   pointer-events: none;
   user-select: none;
