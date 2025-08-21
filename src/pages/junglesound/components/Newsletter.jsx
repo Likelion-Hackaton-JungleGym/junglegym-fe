@@ -1,21 +1,74 @@
 import styled from "styled-components";
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useParams, Link, useOutletContext } from "react-router-dom";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
-import { SOUND } from "./NewsletterData.js";
+import { getNewsletterDetail } from "../../../shared/api/endpoints";
 import chevronBack from "./img/chevron-back.svg";
 import newsLinkIcon from "./img/newsLinkIcon.svg";
 
 export default function Newsletter() {
-  const { id } = useParams();
-  const key = decodeURIComponent(String(id || ""));
+  const params = useParams();
+  const newsletterId = params.newsletterId ?? params.id;
+  const [item, setItem] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const { setHeaderMode } = useOutletContext() ?? {};
 
-  const items = Array.isArray(SOUND) ? SOUND : Object.values(SOUND ?? {});
-  const newsletter = Array.isArray(SOUND)
-    ? items.find((it) => String(it.NewsLink ?? it.id ?? it.slug) === key)
-    : SOUND[key] ?? items.find((it) => String(it.NewsLink ?? it.id ?? it.slug) === key);
+  // 최신 요청만 반영하기 위한 요청 ID 시퀀스
+  const reqIdRef = useRef(0);
 
-  if (!newsletter) {
+  useEffect(() => {
+    setHeaderMode?.("hidden");
+    return () => setHeaderMode?.("fixed");
+  }, [setHeaderMode]);
+
+  useEffect(() => {
+    console.log("[detail] 전체 params =", params);
+    console.log("[detail] newsletterId =", newsletterId, typeof newsletterId);
+    console.log("[detail] 현재 URL =", window.location.pathname);
+
+    if (!newsletterId) {
+      console.log("[detail] newsletterId가 없음");
+      setItem(null);
+      setLoading(false);
+      return;
+    }
+
+    const myId = ++reqIdRef.current; // 이 이펙트의 요청 ID
+    setLoading(true);
+
+    // axios AbortController 사용 가능(axios v1 이상)
+    const controller = new AbortController();
+
+    (async () => {
+      try {
+        console.log("[detail] API 호출 시작...");
+        const data = await getNewsletterDetail(newsletterId, { signal: controller.signal });
+        // 최신 요청만 반영
+        if (reqIdRef.current === myId) {
+          console.log("[detail] API 호출 결과:", data);
+          setItem(data);
+        }
+      } catch (error) {
+        if (controller.signal.aborted) {
+          console.log("[detail] 요청 취소됨");
+        } else {
+          console.error("[detail] 에러 발생:", error);
+          if (reqIdRef.current === myId) setItem(null);
+        }
+      } finally {
+        if (reqIdRef.current === myId) setLoading(false);
+      }
+    })();
+
+    // cleanup: 다음 요청이 시작되면 이전 요청 취소
+    return () => controller.abort();
+  }, [newsletterId, params]);
+
+  if (loading) return <Empty>불러오는 중…</Empty>;
+
+  if (!item) {
     return (
       <Empty>
         페이지를 찾을 수 없습니다. <br />
@@ -25,15 +78,19 @@ export default function Newsletter() {
     );
   }
 
-  return <NewsletterView {...newsletter} />;
+  return <NewsletterView {...item} />;
 }
+
+const getYoutubeThumb = (link) => {
+  const m = link?.match(/(?:v=|youtu\.be\/|shorts\/)([^?&#/]+)/);
+  return m ? `https://img.youtube.com/vi/${m[1]}/hqdefault.jpg` : null;
+};
 
 function NewsletterView({
   title,
   date,
-  thumbnail,
-  newsLink,
-  percentImg,
+  link,
+  mediaImgUrl,
   inTitle,
   subtitle1,
   content1,
@@ -42,55 +99,77 @@ function NewsletterView({
   todayQuestion,
   titleQuestion,
   questionContent,
+  thumbnail,
+  thumbnailUrl,
 }) {
-  const { setHeaderMode } = useOutletContext();
-
-  useEffect(() => {
-    setHeaderMode?.("hidden");
-    return () => setHeaderMode?.("fixed");
-  }, [setHeaderMode]);
+  const thumb = thumbnail || thumbnailUrl || getYoutubeThumb(link) || "/placeholder.png";
 
   return (
     <Wrapper>
       <Top>
-        <ChevronImg to="/junglesound">
+        <ChevronImg to="/junglesound" aria-label="뒤로가기">
           <img src={chevronBack} alt="뒤로가기" />
         </ChevronImg>
       </Top>
+
       <Bottom>
         <Title>{title}</Title>
         <Date>{date}</Date>
+
         <ThumbnailWrapper>
-          <Thumbnail src={thumbnail} alt="뉴스 썸네일" />
-          {newsLink && (
-            <NewsLinkWrapper
-              to={newsLink}
+          <Thumbnail
+            src={thumb}
+            alt="뉴스 썸네일"
+            onError={(e) => (e.currentTarget.src = "/placeholder.png")}
+          />
+          {link && (
+            <NewsLinkAnchor
+              href={link}
               target="_blank"
               rel="noopener noreferrer"
               aria-label="원문 보기"
             >
               <NewsLink src={newsLinkIcon} alt="원문 링크" />
-            </NewsLinkWrapper>
+            </NewsLinkAnchor>
           )}
         </ThumbnailWrapper>
-        <PercentWrapper>
-          <PercentImg src={percentImg} />
-        </PercentWrapper>
-        <InTitle>{inTitle}</InTitle>
-        <Subtitle1>{subtitle1}</Subtitle1>
-        <Content1>{content1}</Content1>
-        <Subtitle2>{subtitle2}</Subtitle2>
-        <Content2>{content2}</Content2>
-        <TodayQuestion>{todayQuestion}</TodayQuestion>
-        <TitleQuestion>{titleQuestion}</TitleQuestion>
-        <QuestionContent>{questionContent}</QuestionContent>
+
+        {mediaImgUrl && (
+          <PercentWrapper>
+            <PercentImg src={mediaImgUrl} alt="미디어 로고" />
+          </PercentWrapper>
+        )}
+
+        {inTitle && <InTitle>{inTitle}</InTitle>}
+
+        {subtitle1 && <Subtitle1>{subtitle1}</Subtitle1>}
+        {content1 && (
+          <Md>
+            <ReactMarkdown remarkPlugins={[remarkGfm]}>{content1}</ReactMarkdown>
+          </Md>
+        )}
+
+        {subtitle2 && <Subtitle2>{subtitle2}</Subtitle2>}
+        {content2 && (
+          <Md>
+            <ReactMarkdown remarkPlugins={[remarkGfm]}>{content2}</ReactMarkdown>
+          </Md>
+        )}
+
+        {todayQuestion && <TodayQuestion>{todayQuestion}</TodayQuestion>}
+        {titleQuestion && <TitleQuestion>{titleQuestion}</TitleQuestion>}
+        {questionContent && (
+          <Md>
+            <ReactMarkdown remarkPlugins={[remarkGfm]}>{questionContent}</ReactMarkdown>
+          </Md>
+        )}
       </Bottom>
     </Wrapper>
   );
 }
 
+/* ---------- styles ---------- */
 const Wrapper = styled.div`
-  /* margin: 0px 3px; */
   white-space: pre-line;
 `;
 
@@ -141,18 +220,18 @@ const ThumbnailWrapper = styled.div`
   height: 170px;
   margin: 0px 3px 14px 3px;
   overflow: hidden;
-  position: relative; /* 아이콘 배치용 */
+  position: relative;
 `;
 
 const Thumbnail = styled.img`
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center; /* 가운데 기준으로 균등하게 잘림 */
+  object-position: center;
   display: block;
 `;
 
-const NewsLinkWrapper = styled(Link)`
+const NewsLinkAnchor = styled.a`
   position: absolute;
   bottom: 8px;
   right: 8px;
@@ -199,28 +278,28 @@ const Subtitle1 = styled.div`
   padding-left: 3px;
 `;
 
-const Content1 = styled.div`
+const Md = styled.div`
   font-size: 14px;
   margin-top: 5px;
-  line-height: 1.45;
+  line-height: 1.6;
   padding-left: 3px;
   font-weight: 300;
+  white-space: pre-wrap;
+
+  p {
+    margin: 0 0 10px 0;
+  }
+  ul,
+  ol {
+    margin: 0 0 10px 18px;
+  }
+  strong {
+    font-weight: 600;
+  }
 `;
 
-const Subtitle2 = styled.div`
-  font-size: 18px;
-  font-weight: 600;
+const Subtitle2 = styled(Subtitle1)`
   margin-top: 30px;
-  padding-left: 3px;
-`;
-
-const Content2 = styled.div`
-  font-size: 14px;
-  margin-top: 5px;
-  line-height: 1.45;
-  margin-bottom: 50px;
-  padding-left: 3px;
-  font-weight: 300;
 `;
 
 const TodayQuestion = styled.div`
@@ -266,10 +345,7 @@ const TitleQuestion = styled.div`
   }
 `;
 
-const QuestionContent = styled.div`
-  font-size: 14px;
+const QuestionContent = styled(Md)`
   margin: 7px 10px 10px;
   padding-left: 3px;
-  font-weight: 300;
-  line-height: 1.4;
 `;

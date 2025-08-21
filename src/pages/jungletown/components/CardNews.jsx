@@ -104,15 +104,13 @@ export default function CardNews() {
 }
 
 /* ---------- styles ---------- */
-const GUTTER = 10;
+const GUTTER = 7;
 const PEEK_WIDTH = 50;
 
 const Wrapper = styled.div`
-  margin-bottom: 55px;
   max-width: 420px;
   width: 100%;
-  margin-left: auto;
-  margin-right: auto;
+  margin: 0 0 55px;
 `;
 
 const Date = styled.div`
@@ -125,7 +123,7 @@ const Date = styled.div`
 
 const Viewport = styled.div`
   position: relative;
-  width: 95%;
+  width: 350px;
   height: 320px;
   margin: 0 auto;
   border-radius: 16px;
@@ -135,12 +133,11 @@ const Viewport = styled.div`
 /* ===== 배경 프리뷰 (이전/다음) ===== */
 const PeekBase = styled.div`
   position: absolute;
-  inset: 0;
   z-index: 1;
   pointer-events: none;
-  transform: scale(0.9);
+  transform: scale(0.96);
   transform-origin: center;
-  border-radius: 16px;
+  //border-radius: 16px;
   overflow: hidden;
   filter: blur(0.2px); /* 미세하게 경계 부드럽게 */
   opacity: 0.92;
@@ -148,11 +145,11 @@ const PeekBase = styled.div`
 
 const PrevPeek = styled(PeekBase)`
   clip-path: inset(0 calc(100% - ${PEEK_WIDTH}px) 0 0);
-  left: -6%;
+  left: -2%; //왜 늘리면 짤려보이지 모서리가
 `;
 const NextPeek = styled(PeekBase)`
   clip-path: inset(0 0 0 calc(100% - ${PEEK_WIDTH}px));
-  right: -6%;
+  right: -2%;
 `;
 
 const PeekImg = styled.img`

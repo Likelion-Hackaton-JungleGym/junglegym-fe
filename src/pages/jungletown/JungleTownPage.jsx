@@ -7,22 +7,26 @@ import JungleDictionary from "./components/JungleDictionary";
 export default function JungleTownPage() {
   return (
     <Wrapper>
-      <Title />
+      <MarginBox1>
+        <Title />
+      </MarginBox1>
       <CardNews />
-      <MarginBox>
+      <MarginBox2>
         <MiniPeople />
         <JungleDictionary />
-      </MarginBox>
+      </MarginBox2>
     </Wrapper>
   );
 }
 
-const Wrapper = styled.div`
+const Wrapper = styled.div``;
+
+const MarginBox1 = styled.div`
   padding: 10px;
   margin: 5px;
 `;
 
-const MarginBox = styled.div`
+const MarginBox2 = styled.div`
   padding: -10px;
-  margin-right: -15px;
+  margin: 0px -15px 10px 10px;
 `;
