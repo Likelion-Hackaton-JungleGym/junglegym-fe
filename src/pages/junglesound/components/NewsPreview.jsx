@@ -3,14 +3,31 @@ import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getNewsletters } from "../../../shared/api/endpoints";
 
-const stripHtml = (html = "") =>
-  String(html)
+// HTML & 마크다운 기호 제거 함수
+const stripMarkdown = (s = "") =>
+  String(s)
+    // 이미지 ![alt](url)
+    .replace(/!\[[^\]]*]\([^)]*\)/g, "")
+    // 링크 [text](url) -> text
+    .replace(/\[([^\]]+)]\([^)]*\)/g, "$1")
+    // 굵게/기울임 **, *, _, __
+    .replace(/(\*\*|__|\*|_)/g, "")
+    // 취소선 ~~
+    .replace(/~~/g, "")
+    // 인라인 코드 `code`
+    .replace(/`{1,3}[^`]*`{1,3}/g, (m) => m.replace(/`/g, ""))
+    // 헤더/리스트/인용
+    .replace(/^[>]\s+/gm, "")
+    .replace(/^#{1,6}\s+/gm, "")
+    // HTML 태그
     .replace(/<br\s*\/?>/gi, "\n")
     .replace(/<[^>]+>/g, "")
+    // 특수 엔티티
     .replace(/&nbsp;/g, " ")
     .replace(/&amp;/g, "&")
     .replace(/&lt;/g, "<")
     .replace(/&gt;/g, ">")
+    // 공백 정리
     .replace(/\s+/g, " ")
     .trim();
 
@@ -44,13 +61,14 @@ export default function NewsPreview() {
   return (
     <>
       {list.map((it) => {
-        const preview = stripHtml(it.content1);
+        const title = stripMarkdown(it.title); // 제목에서도 기호 제거
+        const preview = stripMarkdown(it.content1); // 본문 요약도 기호 제거
         const { text, truncated } = ellipsize(preview, 60);
 
         return (
           <Wrapper key={it.id}>
             <PreviewWrapper>
-              <NewsTitle>{it.title}</NewsTitle>
+              <NewsTitle>{title}</NewsTitle>
               <Date>{it.date}</Date>
               <PreviewContents>
                 {text}
@@ -70,6 +88,7 @@ export default function NewsPreview() {
   );
 }
 
+/* ---------- styles ---------- */
 const Wrapper = styled.div`
   border: 0.5px solid #d2d2d2;
   margin: 10px 5px;

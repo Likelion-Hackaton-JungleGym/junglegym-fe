@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useParams, Link, useOutletContext } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
@@ -15,6 +15,9 @@ export default function Newsletter() {
   const [loading, setLoading] = useState(true);
   const { setHeaderMode } = useOutletContext() ?? {};
 
+  // 최신 요청만 반영하기 위한 요청 ID 시퀀스
+  const reqIdRef = useRef(0);
+
   useEffect(() => {
     setHeaderMode?.("hidden");
     return () => setHeaderMode?.("fixed");
@@ -25,31 +28,46 @@ export default function Newsletter() {
     console.log("[detail] newsletterId =", newsletterId, typeof newsletterId);
     console.log("[detail] 현재 URL =", window.location.pathname);
 
+    if (!newsletterId) {
+      console.log("[detail] newsletterId가 없음");
+      setItem(null);
+      setLoading(false);
+      return;
+    }
+
+    const myId = ++reqIdRef.current; // 이 이펙트의 요청 ID
+    setLoading(true);
+
+    // axios AbortController 사용 가능(axios v1 이상)
+    const controller = new AbortController();
+
     (async () => {
       try {
-        if (!newsletterId) {
-          console.log("[detail] newsletterId가 없음");
-          setItem(null);
-          setLoading(false);
-          return;
-        }
-
         console.log("[detail] API 호출 시작...");
-        const data = await getNewsletterDetail(newsletterId);
-        console.log("[detail] API 호출 결과:", data);
-        setItem(data);
+        const data = await getNewsletterDetail(newsletterId, { signal: controller.signal });
+        // 최신 요청만 반영
+        if (reqIdRef.current === myId) {
+          console.log("[detail] API 호출 결과:", data);
+          setItem(data);
+        }
       } catch (error) {
-        console.error("[detail] 에러 발생:", error);
-        setItem(null);
+        if (controller.signal.aborted) {
+          console.log("[detail] 요청 취소됨");
+        } else {
+          console.error("[detail] 에러 발생:", error);
+          if (reqIdRef.current === myId) setItem(null);
+        }
       } finally {
-        setLoading(false);
+        if (reqIdRef.current === myId) setLoading(false);
       }
     })();
-  }, [newsletterId]);
 
-  if (loading) {
-    return <Empty>불러오는 중…</Empty>;
-  }
+    // cleanup: 다음 요청이 시작되면 이전 요청 취소
+    return () => controller.abort();
+  }, [newsletterId, params]);
+
+  if (loading) return <Empty>불러오는 중…</Empty>;
+
   if (!item) {
     return (
       <Empty>
@@ -102,7 +120,7 @@ function NewsletterView({
           <Thumbnail
             src={thumb}
             alt="뉴스 썸네일"
-            onError={(e) => (e.currentTarget.src = "/placeholder.png")} // 네트워크 실패 대비
+            onError={(e) => (e.currentTarget.src = "/placeholder.png")}
           />
           {link && (
             <NewsLinkAnchor
