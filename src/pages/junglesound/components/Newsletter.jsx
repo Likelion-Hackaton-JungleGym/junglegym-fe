@@ -32,8 +32,8 @@ function NewsletterView({
   title,
   date,
   thumbnail,
-  newsLink,
-  percentImg,
+  link,
+  mediaImgUrl,
   inTitle,
   subtitle1,
   content1,
@@ -62,9 +62,9 @@ function NewsletterView({
         <Date>{date}</Date>
         <ThumbnailWrapper>
           <Thumbnail src={thumbnail} alt="뉴스 썸네일" />
-          {newsLink && (
+          {link && (
             <NewsLinkWrapper
-              to={newsLink}
+              to={link}
               target="_blank"
               rel="noopener noreferrer"
               aria-label="원문 보기"
@@ -74,7 +74,7 @@ function NewsletterView({
           )}
         </ThumbnailWrapper>
         <PercentWrapper>
-          <PercentImg src={percentImg} />
+          <PercentImg src={mediaImgUrl} />
         </PercentWrapper>
         <InTitle>{inTitle}</InTitle>
         <Subtitle1>{subtitle1}</Subtitle1>
