@@ -13,11 +13,7 @@ export default function JungleSoundPage() {
         <br /> 지역 차이를 비교·질문하는 뉴스레터
       </SubText>
       <NewsPreviewWrapper>
-        <NewsPreview id="newsletter1" />
-        <NewsPreview id="newsletter2" />
-        <NewsPreview id="newsletter3" />
-        <NewsPreview id="newsletter4" />
-        <NewsPreview id="newsletter5" />
+        <NewsPreview />
       </NewsPreviewWrapper>
     </Wrapper>
   );

@@ -78,3 +78,52 @@ export const getDictionariesDetail = async (dictionaryId) => {
     throw error;
   }
 };
+const youtubeThumb = (link) => {
+  const m = link?.match(/(?:v=|youtu\.be\/|shorts\/)([^?&#/]+)/);
+  return m ? `https://img.youtube.com/vi/${m[1]}/hqdefault.jpg` : null;
+};
+
+const clean = (s) => (typeof s === "string" ? s.trim() : "");
+
+// 목록
+export const getNewsletters = async () => {
+  try {
+    const res = await api.get("/regions/newsletters");
+    const arr = Array.isArray(res?.data?.data) ? res.data.data : [];
+    // ✅ 최소 공통화: id, thumbnail만 추가
+    return arr.map((it) => ({
+      ...it,
+      id: it.newsletterId, // 공통 id
+      thumbnail: it.thumbnailImg || youtubeThumb(it.link) || "/placeholder.png",
+    }));
+  } catch (error) {
+    console.error("뉴스레터 목록 실패:", error?.userMessage || error);
+    throw error;
+  }
+};
+
+// 상세
+export const getNewsletterDetail = async (newsletterId) => {
+  if (!newsletterId) throw new Error("Invalid newsletterId");
+
+  const res = await api.get("/regions/newsletters", {
+    params: { newsletterId },
+  });
+
+  const payload = res?.data?.data;
+  let raw;
+  if (Array.isArray(payload)) {
+    const key = String(newsletterId);
+    raw = payload.find((it) => String(it.id ?? it.newsletterId) === key);
+  } else {
+    raw = payload;
+  }
+
+  if (!raw) return null;
+
+  return {
+    ...raw,
+    thumbnail: clean(raw.thumbnailUrl) || youtubeThumb(clean(raw.link)) || "/placeholder.png",
+    thumbnailUrl: clean(raw.thumbnailUrl), // 컴포넌트에서도 쓸 수 있게 정리된 값 유지
+  };
+};

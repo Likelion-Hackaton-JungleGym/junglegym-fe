@@ -1,32 +1,7 @@
 import styled from "styled-components";
-import { useParams, Link } from "react-router-dom";
-import { SOUND } from "./NewsletterData.js";
-
-export default function Newsletters({ id: propId }) {
-  const { id: routeId } = useParams();
-  const id = propId ?? routeId;
-
-  const items = Array.isArray(SOUND) ? SOUND : Object.values(SOUND ?? {});
-  const sound = id
-    ? Array.isArray(SOUND)
-      ? items.find((it) => String(it.NewsLink ?? it.id ?? it.slug) === String(id))
-      : SOUND[id] ?? items.find((it) => String(it.NewsLink ?? it.id ?? it.slug) === String(id))
-    : undefined;
-
-  if (!sound) {
-    return (
-      <Empty>
-        페이지를 찾을 수 없습니다. <br />
-        <br />
-        <LinkButton to="/junglesound">{">정글의 소리로 돌아가기"}</LinkButton>
-      </Empty>
-    );
-  }
-
-  const keyForRoute = encodeURIComponent(String(sound.NewsLink ?? sound.id ?? sound.slug));
-
-  return <SoundView {...sound} keyForRoute={keyForRoute} />;
-}
+import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { getNewsletters } from "../../../shared/api/endpoints";
 
 const stripHtml = (html = "") =>
   String(html)
@@ -46,25 +21,52 @@ const ellipsize = (text = "", max = 60) => {
     : { text: t, truncated: false };
 };
 
-function SoundView({ title, date, content1, thumbnail, keyForRoute }) {
-  const { text, truncated } = ellipsize(stripHtml(content1), 60);
+export default function NewsPreview() {
+  const [list, setList] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const data = await getNewsletters();
+        setList(data);
+      } catch {
+        setList([]);
+      } finally {
+        setLoading(false);
+      }
+    })();
+  }, []);
+
+  if (loading) return <Empty>불러오는 중…</Empty>;
+  if (!list.length) return <Empty>표시할 뉴스레터가 없어요.</Empty>;
+
   return (
-    <Wrapper>
-      <PreviewWrapper>
-        <NewsTitle>{title}</NewsTitle>
-        <Date>{date}</Date>
-        <PreviewContents>
-          {text}
-          {truncated && <More>···</More>}
-        </PreviewContents>
-        <ThumbnailWrapper>
-          <Thumbnail src={thumbnail} />
-        </ThumbnailWrapper>
-      </PreviewWrapper>
-      <LinkButton to={`/junglesound/${keyForRoute}`}>
-        <Detail>{`자세히 보기 >`}</Detail>
-      </LinkButton>
-    </Wrapper>
+    <>
+      {list.map((it) => {
+        const preview = stripHtml(it.content1);
+        const { text, truncated } = ellipsize(preview, 60);
+
+        return (
+          <Wrapper key={it.id}>
+            <PreviewWrapper>
+              <NewsTitle>{it.title}</NewsTitle>
+              <Date>{it.date}</Date>
+              <PreviewContents>
+                {text}
+                {truncated && <More>···</More>}
+              </PreviewContents>
+              <ThumbnailWrapper>
+                <Thumbnail src={it.thumbnail} alt="" />
+              </ThumbnailWrapper>
+            </PreviewWrapper>
+            <LinkButton to={`/junglesound/${it.id}`}>
+              <Detail>{`자세히 보기 >`}</Detail>
+            </LinkButton>
+          </Wrapper>
+        );
+      })}
+    </>
   );
 }
 
