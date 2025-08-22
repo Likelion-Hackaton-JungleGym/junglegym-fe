@@ -172,3 +172,10 @@ export const getNewsletterDetail = async (newsletterId) => {
   console.error("❌ 모든 방법 실패");
   return null;
 };
+
+// 지난주 뉴스 조회
+export async function getWeeklyNews({ signal, params } = {}) {
+  // params 필요하면 { regionId } 등 전달
+  const res = await api.get("/regions/weeklynews", { signal, params });
+  return res.data; // { success, code, message, data: [...] }
+}
