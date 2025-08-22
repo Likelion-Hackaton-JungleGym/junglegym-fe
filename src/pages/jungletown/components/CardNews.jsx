@@ -7,8 +7,6 @@ import { CARD_MAP } from "./CardNewsData";
 import leftButton from "../components/img/leftButton.svg?url";
 import rightButton from "../components/img/rightButton.svg?url";
 
-// 아이템 기준 "고정 랜덤"으로 아이콘 선택(깜빡임 X)
-// 바꿔가며 랜덤으로 보고 싶으면 아래 useMemo 대신 Math.random() 쓰면 됨
 function chooseIcon(category, key) {
   const list = ICON_MAP[category] ?? [];
   if (!list.length) return null;
@@ -94,15 +92,15 @@ export default function CardNews() {
   if (!len) {
     return (
       <Wrapper>
-        <Date>25년 8월 1주차</Date>
-        <Empty>지난주 뉴스가 없거나 불러오는 중이에요.</Empty>
+        <Date>25년 8월 2주차</Date>
+        <Empty>뉴스를 불러오는 중...</Empty> //없거나 로딩중
       </Wrapper>
     );
   }
 
   return (
     <Wrapper>
-      <Date>25년 8월 1주차</Date>
+      <Date>25년 8월 3주차</Date>
 
       <Viewport>
         {/* 배경: 이전/다음 프리뷰 */}
@@ -207,7 +205,7 @@ const Viewport = styled.div`
   height: 320px;
   margin: 0 auto;
   border-radius: 16px;
-  overflow: hidden;
+  //overflow: hidden;
 `;
 
 const PeekBase = styled.div`
@@ -223,11 +221,11 @@ const PeekBase = styled.div`
 
 const PrevPeek = styled(PeekBase)`
   clip-path: inset(0 calc(100% - ${PEEK_WIDTH}px) 0 0);
-  left: -2%;
+  left: -3%;
 `;
 const NextPeek = styled(PeekBase)`
   clip-path: inset(0 0 0 calc(100% - ${PEEK_WIDTH}px));
-  right: -2%;
+  right: -3%;
 `;
 
 const PeekImg = styled.img`
@@ -247,7 +245,7 @@ const Card = styled.div`
   overflow: hidden;
   z-index: 2;
   cursor: pointer;
-  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0px 10px 40px rgba(0, 0, 0, 0.1);
 `;
 
 const MainImg = styled.img`
@@ -273,8 +271,8 @@ const CompactOverlay = styled.div`
 `;
 
 const OverlayIcon = styled.img`
-  width: 180px;
-  height: 180px;
+  width: 200px;
+  height: 200px;
 `;
 
 const OverlayTitle = styled.div`
@@ -353,10 +351,10 @@ const ArrowBase = styled.button`
 `;
 
 const ArrowLeft = styled(ArrowBase)`
-  left: ${GUTTER - 13}px;
+  left: ${GUTTER - 15}px;
 `;
 const ArrowRight = styled(ArrowBase)`
-  right: ${GUTTER - 12}px;
+  right: ${GUTTER - 15}px;
 `;
 
 const ArrowIcon = styled.img`

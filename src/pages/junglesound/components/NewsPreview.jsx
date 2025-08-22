@@ -137,7 +137,7 @@ const Thumbnail = styled.img`
 
 const ThumbnailWrapper = styled.div`
   margin-top: 14px;
-  height: 120px;
+  height: 160px;
   background: #f3f3f5;
   overflow: hidden;
   border-radius: 5px;
