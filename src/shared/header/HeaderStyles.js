@@ -1,14 +1,16 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 
-export const Logo = styled.h1`
-  color: #1c1c1c;
-  text-align: center;
-  font-size: 20px;
-  font-style: normal;
-  font-weight: 700;
+export const LogoImg = styled.img`
+  height: 30px;
+  background: transparent;
+`;
+export const LogoWrapper = styled.div`
   padding: 20px;
-  background-color: #f2f2f2;
+  height: 80px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 export const Nav = styled.nav`
@@ -25,7 +27,7 @@ export const NavItem = styled(Link)`
   color: #a7a7a7;
   text-decoration: none;
   font-weight: 500;
-  margin: 10px 0px;
+  margin: 0px 0px 10px 0px;
   cursor: pointer;
 
   &.active {

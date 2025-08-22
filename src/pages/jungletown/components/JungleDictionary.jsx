@@ -129,7 +129,7 @@ const Title = styled.div`
 
 const DictCards = styled.div`
   display: flex;
-  gap: 14px;
+  gap: 10px;
   margin-top: 10px;
   &.scroll-container {
     overflow-x: auto;
@@ -166,10 +166,11 @@ const Bg = styled.img`
 
 const Ribbon = styled.img`
   position: absolute;
-  top: 0;
+  top: -2px;
   right: 15px;
-  width: 45px;
+  width: 50px;
   z-index: 2;
+  box-shadow: 0 2px 4px grba(0, 0, 0, 0.15);
 `;
 
 const Body = styled.div`
