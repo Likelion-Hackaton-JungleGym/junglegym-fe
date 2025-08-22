@@ -1,6 +1,6 @@
 import { useState } from "react";
 import styled from "styled-components";
-
+import { ICON_MAP } from "./CardNewsData";
 import { CARDNEWS } from "./CardNewsData";
 import leftButton from "../components/img/leftButton.svg?url";
 import rightButton from "../components/img/rightButton.svg?url";
@@ -22,6 +22,13 @@ export default function CardNews() {
     setCurrent((i) => (i === len - 1 ? 0 : i + 1));
     setExpanded(false);
   };
+
+  function getRandomIcon(newsCategory) {
+    const icons = ICON_MAP[newsCategory] ?? [];
+    if (icons.length === 0) return null;
+    const idx = Math.floor(Math.random() * icons.length);
+    return icons[idx];
+  }
 
   return (
     <Wrapper>
@@ -47,23 +54,23 @@ export default function CardNews() {
 
           {!expanded ? (
             <CompactOverlay>
-              {item.icon && <OverlayIcon src={item.icon} alt="" />}
+              {item.category && <OverlayIcon src={getRandomIcon(item.category)} alt="" />}
               {item.title && <OverlayTitle>{item.title}</OverlayTitle>}
-              {item.content1 && <OverlayDesc>{item.content1}</OverlayDesc>}
+              {item.oneLineContent && <OverlayDesc>{item.oneLineContent}</OverlayDesc>}
             </CompactOverlay>
           ) : (
             <ExpandedOverlay>
               {item.title && <OverlayTitle2>{item.title}</OverlayTitle2>}
-              {item.content2 && <OverlayBody>{item.content2}</OverlayBody>}
+              {item.summary && <OverlayBody>{item.summary}</OverlayBody>}
               <FooterRow>
                 <Source>
                   {item.name && <span>{item.name}</span>}
                   {item.date && <span className="date">{item.date}</span>}
                 </Source>
 
-                {item.newslink && (
+                {item.link && (
                   <ArticleBtn
-                    href={item.newslink}
+                    href={item.link}
                     target="_blank"
                     rel="noopener noreferrer"
                     onClick={(e) => e.stopPropagation()}
