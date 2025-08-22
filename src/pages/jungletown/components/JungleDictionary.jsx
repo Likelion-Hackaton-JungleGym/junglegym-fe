@@ -10,13 +10,19 @@ export default function JungleDictionary() {
   const [list, setList] = useState([]); // 전체 데이터
   const [selected, setSelected] = useState(null);
   const [selectedDetail, setSelectedDetail] = useState(null);
+  const toNum = (v) => (typeof v === "number" ? v : parseInt(v, 10) || 0);
 
   useEffect(() => {
     console.log("🔍 목록 API 호출 시작");
     getDictionaries()
       .then((data) => {
         console.log("✅ 목록 데이터 받음:", data);
-        setList(data);
+        const sorted = (Array.isArray(data) ? data : [])
+          .slice()
+          .sort((a, b) => toNum(a.id) - toNum(b.id));
+        const assetMap = Object.fromEntries(DICTIONARY.map((d) => [String(d.id), d]));
+        const merged = sorted.map((it) => ({ ...it, ...(assetMap[String(it.id)] || {}) }));
+        setList(merged);
       })
       .catch((e) => {
         console.error("❌ 목록 API 실패:", e);
@@ -24,16 +30,9 @@ export default function JungleDictionary() {
       });
   }, []);
 
-  const ASSET_MAP = Object.fromEntries(
-    DICTIONARY.map((d) => [String(d.id), d]) // id 타입 섞임 방지
-  );
-
   const handleCardClick = async (item) => {
     console.log("🔍 선택된 아이템:", item);
-    const asset = ASSET_MAP[String(item.id)] || {};
-    // 로컬 자산을 병합해서 bigCard/icon/hotRank/miniCard 보강
-    const merged = { ...item, ...asset };
-    setSelected(merged);
+    setSelected(item);
 
     try {
       const detailData = await getDictionariesDetail(item.id);

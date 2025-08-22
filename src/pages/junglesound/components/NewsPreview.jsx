@@ -46,7 +46,11 @@ export default function NewsPreview() {
     (async () => {
       try {
         const data = await getNewsletters();
-        setList(data);
+        const toNum = (v) => (typeof v === "number" ? v : parseInt(v, 10) || 0);
+        const sorted = (Array.isArray(data) ? data : [])
+          .slice()
+          .sort((a, b) => toNum(a.id) - toNum(b.id));
+        setList(sorted);
       } catch {
         setList([]);
       } finally {

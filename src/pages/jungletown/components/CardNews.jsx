@@ -1,6 +1,7 @@
-// CardNews.jsx
+import axios from "axios";
 import { useEffect, useMemo, useState } from "react";
 import styled from "styled-components";
+import { getWeeklyNews } from "../../../shared/api/endpoints";
 import { ICON_MAP } from "./CardNewsData";
 import { CARD_MAP } from "./CardNewsData";
 import leftButton from "../components/img/leftButton.svg?url";
@@ -23,13 +24,15 @@ export default function CardNews() {
   const [expanded, setExpanded] = useState(false);
 
   useEffect(() => {
+    const ctrl = new AbortController();
     (async () => {
       try {
-        const res = await fetch("/api/regions/weeklynews");
-        const json = await res.json();
+        const json = await getWeeklyNews({ signal: ctrl.signal });
         const list = Array.isArray(json?.data) ? json.data : [];
 
-        const mapped = list.map((it) => ({
+        const toNum = (v) => (typeof v === "number" ? v : parseInt(v, 10) || 0);
+        const sorted = list.slice().sort((a, b) => toNum(a.id) - toNum(b.id));
+        const mapped = sorted.map((it, i) => ({
           id: it.id,
           newsCategory: it.newsCategory,
           title: it.title,
@@ -37,18 +40,35 @@ export default function CardNews() {
           summary: it.summary,
           date: it.date,
           link: it.link,
-          card: CARD_MAP[it.id], // ← 아이디값으로 카드 지정
-          mediaImgUrl: it.mediaImgUrl, // ← 그래프는 mediaImgUrl
+          card: CARD_MAP[i + 1] ?? CARD_MAP[(i % 5) + 1],
+          mediaImgUrl: it.mediaImgUrl ?? null, // 그래프 이미지
+          media: it.media ?? null, // 나중에 백엔드가 아이콘 주면 우선
         }));
 
         setItems(mapped);
         setCurrent(0);
         setExpanded(false);
-      } catch (e) {
-        console.error("weeklynews fetch 실패:", e);
+      } catch (err) {
+        if (
+          axios.isCancel?.(err) ||
+          err?.code === "ERR_CANCELED" ||
+          err?.name === "CanceledError" ||
+          err?.message === "canceled"
+        ) {
+          return;
+        }
+
+        console.error(
+          "getWeeklyNews 실패:",
+          err.userMessage || err.message,
+          "| status:",
+          err.response?.status
+        );
+
         setItems([]);
       }
     })();
+    return () => ctrl.abort();
   }, []);
 
   const len = items.length;
