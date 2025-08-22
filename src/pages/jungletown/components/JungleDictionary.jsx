@@ -142,6 +142,7 @@ const DictCards = styled.div`
 
 const Card = styled.article`
   position: relative;
+  margin-bottom: 10px;
   //width: 188px;
   //height: 240px;
   width: 200px;
@@ -211,7 +212,7 @@ const Pill = styled.div`
 `;
 
 const H3 = styled.h3`
-  margin: 8px 0 4px;
+  margin: 8px 5px 4px;
   font-size: 17px;
   font-weight: 700;
   color: #111;
@@ -219,6 +220,7 @@ const H3 = styled.h3`
 
 const Sub = styled.p`
   font-size: 12px;
+  margin: 0px 5px 0px;
   color: #555;
   letter-spacing: -0.3px;
 `;
@@ -244,7 +246,7 @@ const ModalCard = styled.div`
   position: relative;
   width: 345px;
   height: 550px;
-  overflow: auto;
+  overflow: hidden auto;
   border-radius: 13px;
   padding: 20px 25px 10px;
   margin: 0px 10px;
@@ -353,14 +355,11 @@ const IconCenter = styled.div`
   position: relative;
   width: 190px;
   z-index: 1;
-  right: 0;
-  //  display: flex;
-  //justify-content: flex-end;
-  //  padding: 0px 0px 0px 50px;
-  //margin: 7px 40px 0px 0px;
+
+  margin: 7px 30px 0px 100px;
 `;
 
 const IconImg = styled.img`
-  //  width: 150px;
+  width: 180px;
   height: auto;
 `;
