@@ -1,33 +1,83 @@
-import { useState } from "react";
+// CardNews.jsx
+import { useEffect, useMemo, useState } from "react";
 import styled from "styled-components";
 import { ICON_MAP } from "./CardNewsData";
-import { CARDNEWS } from "./CardNewsData";
+import { CARD_MAP } from "./CardNewsData";
 import leftButton from "../components/img/leftButton.svg?url";
 import rightButton from "../components/img/rightButton.svg?url";
 
+// 아이템 기준 "고정 랜덤"으로 아이콘 선택(깜빡임 X)
+// 바꿔가며 랜덤으로 보고 싶으면 아래 useMemo 대신 Math.random() 쓰면 됨
+function chooseIcon(category, key) {
+  const list = ICON_MAP[category] ?? [];
+  if (!list.length) return null;
+  let h = 0;
+  const s = String(key ?? "");
+  for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) | 0;
+  return list[Math.abs(h) % list.length];
+}
+
 export default function CardNews() {
+  const [items, setItems] = useState([]);
   const [current, setCurrent] = useState(0);
   const [expanded, setExpanded] = useState(false);
-  const len = CARDNEWS.length;
-  const item = CARDNEWS[current];
 
-  const prevIndex = (current - 1 + len) % len;
-  const nextIndex = (current + 1) % len;
+  useEffect(() => {
+    (async () => {
+      try {
+        const res = await fetch("/api/regions/weeklynews");
+        const json = await res.json();
+        const list = Array.isArray(json?.data) ? json.data : [];
+
+        const mapped = list.map((it) => ({
+          id: it.id,
+          newsCategory: it.newsCategory,
+          title: it.title,
+          oneLineContent: it.oneLineContent,
+          summary: it.summary,
+          date: it.date,
+          link: it.link,
+          card: CARD_MAP[it.id], // ← 아이디값으로 카드 지정
+          mediaImgUrl: it.mediaImgUrl, // ← 그래프는 mediaImgUrl
+        }));
+
+        setItems(mapped);
+        setCurrent(0);
+        setExpanded(false);
+      } catch (e) {
+        console.error("weeklynews fetch 실패:", e);
+        setItems([]);
+      }
+    })();
+  }, []);
+
+  const len = items.length;
+  const item = items[current];
+  const prevIndex = (current - 1 + len) % Math.max(1, len || 1);
+  const nextIndex = (current + 1) % Math.max(1, len || 1);
 
   const prev = () => {
+    if (!len) return;
     setCurrent((i) => (i === 0 ? len - 1 : i - 1));
     setExpanded(false);
   };
   const next = () => {
+    if (!len) return;
     setCurrent((i) => (i === len - 1 ? 0 : i + 1));
     setExpanded(false);
   };
 
-  function getRandomIcon(newsCategory) {
-    const icons = ICON_MAP[newsCategory] ?? [];
-    if (icons.length === 0) return null;
-    const idx = Math.floor(Math.random() * icons.length);
-    return icons[idx];
+  // 고정 랜덤 아이콘
+  const iconSrc = useMemo(() => (item ? chooseIcon(item.newsCategory, item.id) : null), [item]);
+
+  // 로딩/빈 상태
+  if (!len) {
+    return (
+      <Wrapper>
+        <Date>25년 8월 1주차</Date>
+        <Empty>지난주 뉴스가 없거나 불러오는 중이에요.</Empty>
+      </Wrapper>
+    );
   }
 
   return (
@@ -35,15 +85,15 @@ export default function CardNews() {
       <Date>25년 8월 1주차</Date>
 
       <Viewport>
-        {/* ---- 배경: 이전/다음 카드 프리뷰 ---- */}
+        {/* 배경: 이전/다음 프리뷰 */}
         <PrevPeek aria-hidden>
-          <PeekImg src={CARDNEWS[prevIndex]?.card} alt="" />
+          <PeekImg src={items[prevIndex]?.card} alt="" />
         </PrevPeek>
         <NextPeek aria-hidden>
-          <PeekImg src={CARDNEWS[nextIndex]?.card} alt="" />
+          <PeekImg src={items[nextIndex]?.card} alt="" />
         </NextPeek>
 
-        {/* ---- 카드 ---- */}
+        {/* 카드 */}
         <Card
           role="group"
           aria-roledescription="slide"
@@ -54,7 +104,7 @@ export default function CardNews() {
 
           {!expanded ? (
             <CompactOverlay>
-              {item.category && <OverlayIcon src={getRandomIcon(item.category)} alt="" />}
+              {!!iconSrc && <OverlayIcon src={iconSrc} alt="" />}
               {item.title && <OverlayTitle>{item.title}</OverlayTitle>}
               {item.oneLineContent && <OverlayDesc>{item.oneLineContent}</OverlayDesc>}
             </CompactOverlay>
@@ -63,10 +113,7 @@ export default function CardNews() {
               {item.title && <OverlayTitle2>{item.title}</OverlayTitle2>}
               {item.summary && <OverlayBody>{item.summary}</OverlayBody>}
               <FooterRow>
-                <Source>
-                  {item.name && <span>{item.name}</span>}
-                  {item.date && <span className="date">{item.date}</span>}
-                </Source>
+                <Source>{item.date && <span className="date">{item.date}</span>}</Source>
 
                 {item.link && (
                   <ArticleBtn
@@ -79,12 +126,13 @@ export default function CardNews() {
                   </ArticleBtn>
                 )}
               </FooterRow>
-              {item.graph && <GraphImg src={item.graph} alt="" />}
+              {/* 그래프 */}
+              {item.mediaImgUrl && <GraphImg src={item.mediaImgUrl} alt="" />}
             </ExpandedOverlay>
           )}
         </Card>
 
-        {/* ---- 화살표 & 점 ---- */}
+        {/* 화살표 & 점 */}
         <ArrowLeft onClick={prev} aria-label="이전">
           <ArrowIcon src={leftButton} alt="" />
         </ArrowLeft>
@@ -93,7 +141,7 @@ export default function CardNews() {
         </ArrowRight>
 
         <Dots>
-          {CARDNEWS.map((_, i) => (
+          {items.map((_, i) => (
             <Dot
               key={i}
               $active={i === current}
@@ -110,7 +158,7 @@ export default function CardNews() {
   );
 }
 
-/* ---------- styles ---------- */
+/* ---------- styles (기존 유지) ---------- */
 const GUTTER = 7;
 const PEEK_WIDTH = 50;
 
@@ -118,6 +166,11 @@ const Wrapper = styled.div`
   max-width: 420px;
   width: 100%;
   margin: 0 0 55px;
+`;
+const Empty = styled.div`
+  color: #666;
+  text-align: center;
+  padding: 20px 0 40px;
 `;
 
 const Date = styled.div`
@@ -137,22 +190,20 @@ const Viewport = styled.div`
   overflow: hidden;
 `;
 
-/* ===== 배경 프리뷰 (이전/다음) ===== */
 const PeekBase = styled.div`
   position: absolute;
   z-index: 1;
   pointer-events: none;
   transform: scale(0.96);
   transform-origin: center;
-  //border-radius: 16px;
   overflow: hidden;
-  filter: blur(0.2px); /* 미세하게 경계 부드럽게 */
+  filter: blur(0.2px);
   opacity: 0.92;
 `;
 
 const PrevPeek = styled(PeekBase)`
   clip-path: inset(0 calc(100% - ${PEEK_WIDTH}px) 0 0);
-  left: -2%; //왜 늘리면 짤려보이지 모서리가
+  left: -2%;
 `;
 const NextPeek = styled(PeekBase)`
   clip-path: inset(0 0 0 calc(100% - ${PEEK_WIDTH}px));
@@ -166,7 +217,6 @@ const PeekImg = styled.img`
   display: block;
 `;
 
-/* ===== 카드 ===== */
 const Card = styled.div`
   position: absolute;
   top: 0;
@@ -177,7 +227,7 @@ const Card = styled.div`
   overflow: hidden;
   z-index: 2;
   cursor: pointer;
-  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1); //밑에도 보이고 더 사아아하게
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
 `;
 
 const MainImg = styled.img`
@@ -187,7 +237,6 @@ const MainImg = styled.img`
   display: block;
 `;
 
-/* ===== Compact (축약) ===== */
 const CompactOverlay = styled.div`
   position: absolute;
   inset: 0;
@@ -230,7 +279,6 @@ const OverlayDesc = styled.div`
   overflow: hidden;
 `;
 
-/* ===== Expanded (확장) ===== */
 const ExpandedOverlay = styled.div`
   position: absolute;
   inset: 0;
@@ -269,7 +317,6 @@ const GraphImg = styled.img`
   height: auto;
 `;
 
-/* ===== Arrows & Dots ===== */
 const ArrowBase = styled.button`
   position: absolute;
   top: 50%;
@@ -320,7 +367,6 @@ const Dot = styled.button`
   transition: all 160ms ease;
 `;
 
-/* ===== Footer ===== */
 const FooterRow = styled.div`
   display: flex;
   align-items: center;
