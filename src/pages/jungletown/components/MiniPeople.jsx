@@ -1,9 +1,9 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-import leeseungro from "../components/img/Leeseungro.svg";
-import kimyungbae from "../components/img/Kimyungbae.svg";
-import kimnamgeun from "../components/img/Kimnamgeun.svg";
-import ohsehun from "../components/img/Ohsehun.svg";
+import leeseungro from "../components/img/leeseungro.svg";
+import kimyungbae from "../components/img/kimyungbae.svg";
+import kimnamgeun from "../components/img/kimnamgeun.svg";
+import ohsehun from "../components/img/ohsehun.svg";
 
 const people = [
   {
