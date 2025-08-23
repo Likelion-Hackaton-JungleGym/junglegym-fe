@@ -3,7 +3,7 @@ import { useState } from "react";
 import Header from "../header/Header";
 import styled from "styled-components";
 import ScrollToTop from "../utils/ScrollToTop";
-import FloatingButton from "../utils/floatingButton";
+import FloatingButton from "../utils/FloatingButton";
 
 const HEADER_H = 120;
 const EXCLUDE_FLOATING = ["/jungletalk"]; //숨길곳 관리
