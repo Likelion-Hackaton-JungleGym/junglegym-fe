@@ -32,11 +32,7 @@ import {
   getPoliticianActivities,
   getPoliticianPromiseCategories,
   transformPoliticianData,
-  getFallbackData,
 } from "../../shared/utils/politicianApi.js";
-
-// 더미 데이터 (폴백용)
-const DUMMY = getFallbackData();
 
 // 헬퍼 함수
 function fillArr(arr, dummy) {
@@ -233,7 +229,12 @@ export default function ProfileDetails({ politicianId, politician }) {
   // SNS 데이터를 컴포넌트 형식으로 변환
   const transformedSnsData = useMemo(() => {
     if (!snsData || !Array.isArray(snsData)) {
-      return DUMMY.sns;
+      return {
+        facebook: "",
+        instagram: "",
+        blog: "",
+        twitter: ""
+      };
     }
 
     const snsMap = {
@@ -381,7 +382,15 @@ export default function ProfileDetails({ politicianId, politician }) {
   // 기본 정보 데이터 변환
   const transformedBasicInfoData = useMemo(() => {
     if (!apiData) {
-      return DUMMY.basicInfo;
+      return {
+        birth: "—",
+        ageSummary: "—",
+        ageDetails: [],
+        ageDetail1: "—",
+        ageDetail2: "",
+        committee: "—",
+        military: "—",
+      };
     }
 
     // API 데이터를 컴포넌트 형식으로 변환
@@ -426,28 +435,48 @@ export default function ProfileDetails({ politicianId, politician }) {
 
       // 기본 프로필 탭
       basicInfo: transformedBasicInfoData,
-      education: fillArr(sourceData.education, DUMMY.education),
-      experience: fillArr(sourceData.experience, DUMMY.experience),
-      issues: fillArr(issuesData || sourceData.issues, DUMMY.issues),
-      sns: fillObj(transformedSnsData, DUMMY.sns),
+      education: fillArr(sourceData.education, []),
+      experience: fillArr(sourceData.experience, []),
+      issues: fillArr(issuesData || sourceData.issues, []),
+      sns: fillObj(transformedSnsData, {
+        facebook: "",
+        instagram: "",
+        blog: "",
+        twitter: ""
+      }),
 
       // 공약 이행 탭
-      promiseProgress: fillObj(sourceData.promiseProgress, DUMMY.promiseProgress),
+      promiseProgress: fillObj(sourceData.promiseProgress, {
+        completed: 0,
+        continued: 0,
+        normal: 0,
+        notImplemented: 0,
+        total: 0,
+      }),
       keyPromises: transformedPromiseCategoriesData,
-      otherActivities: fillArr(transformedActivitiesData, DUMMY.otherActivities),
+      otherActivities: fillArr(transformedActivitiesData, []),
 
       // 재산 및 전과 탭
-      assets: fillObj(transformedPropertyData, DUMMY.assets),
-      crimes: fillObj(transformedCriminalRecordData, DUMMY.crimes),
+      assets: fillObj(transformedPropertyData, {
+        total: "—",
+        debt: "—",
+        net: "—",
+        year: new Date().getFullYear().toString(),
+        details: [],
+      }),
+      crimes: fillObj(transformedCriminalRecordData, {
+        count: 0,
+        items: [],
+      }),
 
       // 발의법률 탭
       bills: transformedBillsData || [],
     };
   }, [apiData, issuesData, transformedSnsData, transformedPropertyData, transformedCriminalRecordData, transformedBillsData, transformedPromisesData, transformedActivitiesData, transformedBasicInfoData, transformedPromiseCategoriesData]);
 
-  // Career 섹션용 원문 문자열: 상위 politician > apiData > DUMMY 순서로 폴백
+  // Career 섹션용 원문 문자열: 상위 politician > apiData 순서로 폴백
   const careerRaw = useMemo(() => {
-    return politician?.careerSummary ?? apiData?.careerSummary ?? DUMMY?.careerSummary ?? "";
+    return politician?.careerSummary ?? apiData?.careerSummary ?? "";
   }, [politician, apiData]);
 
   // 정치인 직책 확인 (구청장, 시장인 경우 발의법률안 탭 숨김)
