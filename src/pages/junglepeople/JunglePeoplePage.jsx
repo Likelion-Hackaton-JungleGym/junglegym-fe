@@ -36,9 +36,9 @@ export default function JunglePeoplePage() {
 
   return (
     <Wrapper>
-      <Title />
+      {!isLoading && <Title />}
       <Profile politicians={politicians} isLoading={isLoading} />
-      <OrgChart />
+      {!isLoading && <OrgChart />}
     </Wrapper>
   );
 }

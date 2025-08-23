@@ -1,15 +1,32 @@
 import styled from "styled-components";
 
-// 공통 카드 스타일
-export const Card = styled.div`
+// 공통 컨테이너 스타일
+export const Container = styled.div`
   background: #fff;
   border-radius: 12px;
   padding: 20px 30px;
   border: 1px solid #d9d9d9;
 `;
 
+// 핵심 공약용 컨테이너 스타일 (카드 부분만 패딩 조정)
+export const KeyPromisesContainer = styled.div`
+  background: #fff;
+  border-radius: 12px;
+  border: 1px solid #d9d9d9;
+  
+  /* 타이틀 부분은 패딩 유지 */
+  .key-promises-title {
+    padding: 20px 30px 0 30px;
+  }
+  
+  /* 카드 부분만 양옆 패딩 제거 */
+  .key-promises-content {
+    padding: 0;
+  }
+`;
+
 // 공통 제목 스타일
-export const CardTitle = styled.h3`
+export const Title = styled.h3`
   font-size: 23px;
   font-weight: 800;
   margin: 0 0 16px 0;
@@ -24,24 +41,49 @@ export const CardTitle = styled.h3`
   padding: 0 2px;
 `;
 
+// 공통 카드 스타일
+export const Card = styled.div`
+  background: #fff;
+  border-radius: 15px;
+  padding: 20px 30px;
+  border: 1px solid #d2d2d2;
+`;
+
+// 공통 제목 스타일
+export const CardTitle = styled.h3`
+  font-size: 21px;
+  font-weight: 700;
+  margin: 0 0 16px 0;
+  color: #000;
+
+  /* 텍스트 뒤에 라이트 퍼플 형광펜 효과 */
+  display: inline-block;
+  background-image: linear-gradient(#e1e0ff);
+  background-position: 0 100%;
+  background-size: 100% 12px;
+  background-repeat: no-repeat;
+  padding: 0 8px;
+`;
+
 // 공통 부제목 스타일
 export const CardSubtitle = styled.p`
   font-size: 14px;
-  color: #666;
+  color: #959595;
   margin: 0 0 16px 0;
+  font-weight: 500;
 `;
 
 export const Row = styled.div`
   display: flex;
   align-items: flex-start;
-  gap: 12px;
-  margin: 10px 0;
+  gap: 14px;
+  margin: 10px 0 0;
 `;
 
 // 공통 아이콘 스타일
 export const InfoIcon = styled.span`
-  width: 22px;
-  height: 22px;
+  width: 17px;
+  height: 17px;
   flex-shrink: 0;
   display: inline-flex;
   align-items: center;
@@ -56,12 +98,12 @@ export const InfoIcon = styled.span`
 
 // 공통 라벨 스타일
 export const InfoLabel = styled.span`
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 700;
-  color: #7b7b7b;
+  color: #959595;
   min-width: 86px; /* 74 → 86로 살짝 늘려 정렬 안정 */
   line-height: 1.6;
-  margin-bottom: 5px;
+  margin-bottom: 4px;
 `;
 
 // 공통 값 스타일
@@ -85,7 +127,7 @@ export const EmptyInfo = styled.div`
 
 export const EmptyText = styled.span`
   font-size: 14px;
-  color: #666;
+  color: #a7a7a7;
 `;
 
 // 공통 리스트 컨테이너 스타일
@@ -104,8 +146,8 @@ export const ListItem = styled.div`
 
 // 공통 텍스트 스타일
 export const ItemText = styled.p`
-  font-size: 16px;
-  font-weight: 600;
+  font-size: 15px;
+  font-weight: 500;
   color: #000;
   margin: 5px 0;
 `;
@@ -113,7 +155,8 @@ export const ItemText = styled.p`
 // 공통 링크 스타일
 export const ItemLink = styled.a`
   font-size: 12px;
-  color: #a0a0a0;
+  font-weight: 500;
+  color: #b5b5b5;
   text-decoration: none;
   &:hover {
     text-decoration: underline;
@@ -126,23 +169,28 @@ export const Button = styled.button`
   align-items: center;
   gap: 10px;
   padding: 12px;
-  border: 1px solid #d0d0d0;
+  background-color: #f6f6f6;
+  border: 1px solid #e3e3e3;
   border-radius: 8px;
   transition: transform 0.2s;
   text-decoration: none;
+  width: 140px;
+  height: 36px;
 `;
 
 // 공통 버튼 아이콘 스타일
 export const ButtonIcon = styled.span`
   font-size: 16px;
   font-weight: bold;
+  display: flex;
+  align-items: center;
 `;
 
 // 공통 버튼 텍스트 스타일
 export const ButtonText = styled.span`
   color: #000;
-  font-size: 14px;
-  font-weight: 500;
+  font-size: 13px;
+  font-weight: 400;
 `;
 
 // 공통 상태 배지 스타일
@@ -173,12 +221,16 @@ export const StatusBadge = styled.span`
 // 공통 섹션 스타일
 export const Section = styled.div`
   margin-bottom: 20px;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
 `;
 
 export const SectionTitle = styled.h4`
-  font-size: 18px;
+  font-size: 17px;
   font-weight: 600;
-  color: #333;
+  color: #000;
   margin: 0 0 12px 0;
 `;
 
@@ -194,6 +246,11 @@ export const ListItemBullet = styled.li`
   color: #000;
   margin-bottom: 8px;
   position: relative;
+  font-weight: 400;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
 
   &::before {
     content: "•";
@@ -207,6 +264,12 @@ export const ListItemBullet = styled.li`
 export const Table = styled.div`
   border: 1px solid #eee;
   border-radius: 8px;
+`;
+
+// HTML table 엘리먼트용 테이블 스타일
+export const TableElement = styled.table`
+  width: 100%;
+  border-collapse: collapse;
 `;
 
 export const TableRow = styled.div`
@@ -227,6 +290,44 @@ export const TableCell = styled.div`
     font-weight: 600;
     background: #f8f9fa;
   }
+`;
+
+// HTML table 엘리먼트용 행과 셀 스타일
+export const TableRowElement = styled.tr`
+  border-bottom: 0.5px solid #000;
+
+  &:last-child {
+    border-bottom: none;
+  }
+`;
+
+export const SectionRowElement = styled.tr`
+  td {
+    font-weight: 700;
+    background: #fff;
+  }
+`;
+
+export const TableCellElement = styled.td`
+  padding: 6px 5px;
+  border-right: 0.5px solid #000;
+  font-size: 13px;
+  font-weight: 500;
+  text-align: center;
+
+  &:last-child {
+    border-right: none;
+  }
+`;
+
+export const SubtotalRow = styled(TableRow)`
+  background-color: #fff;
+  font-weight: 500;
+`;
+
+export const SubtotalRowElement = styled(TableRowElement)`
+  background-color: #e1e0ff;
+  font-weight: 500;
 `;
 
 export const TableSubRow = styled.div`
@@ -254,18 +355,22 @@ export const NoteSection = styled.div`
   display: flex;
   gap: 5px;
   padding: 16px 0;
+  color: #a7a7a7;
+  margin-left: 10px;
 `;
 
 export const NoteIcon = styled.span`
   font-size: 16px;
-  color: #666;
+  color: #a7a7a7;
+  margin-top: 5px;
 `;
 
 export const NoteText = styled.p`
-  font-size: 12px;
-  color: #666;
-  margin: 0 25px;
+  font-size: 13px;
+  color: #a7a7a7;
+  margin: 0 10px 0 27px;
   line-height: 1.4;
+  font-weight: 400;
 `;
 
 // 공통 더보기 링크 스타일
@@ -301,25 +406,27 @@ export const Category = styled.div`
 export const DetailContainer = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 1px;
   margin-top: 6px;
   margin-left: 0px; /* 아이콘/라벨 영역만큼 들여쓰기 */
 `;
 
 export const DetailItem = styled.span`
   position: relative;
-  font-size: 14px;
-  color: #a0a0a0;
+  font-size: 12px;
+  color: #a7a6a6;
   padding-left: 12px;
+  display: block;
+  line-height: 1.4;
 
   &::before {
     content: "";
     position: absolute;
     left: 0;
-    top: 9px;
+    top: 5px;
     width: 4px;
     height: 4px;
-    background: #cfcfea; /* 라이트 퍼플-그레이 */
+    background: #a7a6a6; /* 라이트 퍼플-그레이 */
     border-radius: 50%;
   }
 `;
@@ -333,7 +440,8 @@ export const Arrow = styled.span`
 // 공통 날짜 스타일
 export const DateText = styled.p`
   font-size: 12px;
-  color: #666;
+  font-weight: 400;
+  color: #959595;
   margin: 0 0 8px 0;
 `;
 
@@ -345,28 +453,30 @@ export const ProposerContainer = styled.div`
 `;
 
 export const ProposerLabel = styled.span`
-  font-size: 12px;
-  color: #7371DF;
-  min-width: 80px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #7371df;
+  min-width: 60px;
 `;
 
 export const ProposerName = styled.span`
-  font-size: 12px;
-  color: #333;
-  font-weight: 500;
+  font-size: 13px;
+  color: #000;
+  font-weight: 400;
 `;
 
 export const ProposerNames = styled.span`
-  font-size: 12px;
-  color: #333;
+  font-size: 13px;
+  color: #000;
+  font-weight: 400;
   flex: 1;
 `;
 
 // 값 기본은 작게(이미 있음). 아래는 상황별 variant
 export const InfoValuePrimary = styled(InfoValue)`
-  font-size: 22px; /* 생년월일처럼 크게 */
+  font-size: 18px; /* 생년월일처럼 크게 */
   font-weight: 500;
-  color: #111;
+  color: #000;
 `;
 
 export const InfoValueStrong = styled(InfoValue)`
@@ -387,4 +497,215 @@ export const SummaryStrong = styled.div`
   font-size: 20px;
   font-weight: 500;
   color: #111;
+`;
+
+// 공약 사업 이행 현황 스타일
+export const ProgressSection = styled.div`
+  margin-bottom: 32px;
+`;
+
+export const ProgressTitle = styled.h3`
+  font-size: 16px;
+  font-weight: 600;
+  margin-right: 10px;
+  color: #000;
+`;
+
+export const ProgressDate = styled.p`
+  font-size: 12px;
+  color: #a7a6a6;
+  font-weight: 500;
+  margin: 0;
+`;
+
+export const ProgressHeader = styled.div`
+  display: flex;
+  justify-content: row;
+  align-items: center;
+  margin-bottom: 15px;
+`;
+
+export const ProgressBars = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+`;
+
+export const ProgressBar = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  background: ${(props) => props.color};
+  border-radius: 6px;
+  color: white;
+  font-weight: 500;
+  width: ${(props) => (props.width > 0 ? props.width : 0)}%;
+  min-width: 150px;
+  height: 35px;
+  transition: width 0.3s ease;
+
+  &.light-bg {
+    color: #333;
+  }
+`;
+
+export const ProgressBarLabel = styled.span`
+  font-size: 14px;
+  white-space: nowrap;
+`;
+
+export const ProgressBarCount = styled.span`
+  font-weight: 600;
+  font-size: 14px;
+  white-space: nowrap;
+`;
+
+export const TableSection = styled.div`
+  margin-top: 32px;
+`;
+
+export const TableTitle = styled.h3`
+  font-size: 16px;
+  font-weight: 600;
+  color: #000;
+  margin: 0 0 15px 0;
+`;
+
+export const TableContainer = styled.div`
+  border-bottom: 0.5px solid #000;
+  border-top: 0.5px solid #000;
+  overflow: hidden;
+`;
+
+export const TableHeader = styled.th`
+  padding: 10px 10px;
+  background-color: #fff;
+  border-bottom:0.5px solid #000;
+  border-right: 0.5px solid #000;
+  font-weight: 500;
+  text-align: center;
+  font-size: 13px;
+
+  &:last-child {
+    border-right: none;
+  }
+`;
+
+// 핵심 공약 스타일
+export const CategoryItem = styled.div`
+  border-bottom: 1px solid #e0e0e0;
+  border-radius: 8px;
+  margin-bottom: 12px;
+  overflow: hidden;
+
+`;
+
+export const CategoryHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  background-color: #fff;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+
+`;
+
+export const CategoryTitle = styled.h4`
+  font-size: 15px;
+  font-weight: 700;
+  color: #7471F9;
+  margin: 0 0 5px 0;
+  padding: 0 15px;
+`;
+
+export const CategorySummary = styled.p`
+  font-size: 14px;
+  font-weight: 500;
+  color: #000;
+  margin: 0;
+  line-height: 1.4;
+  padding: 0 15px;
+`;
+
+export const CategoryContent = styled.div`
+  padding: 16px;
+  border-top: 1px solid #e0e0e0;
+  background-color: #F3F2F7;
+`;
+
+export const CategoryArrow = styled.span`
+  font-size: 12px;
+  color: #606060;
+  transition: transform 0.2s ease;
+`;
+
+export const DetailPromises = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+`;
+
+export const PromiseCard = styled.div`
+  border-radius: 10px;
+  background-color: #fff;
+  min-height: 80px;
+  position: relative;
+  transform-style: preserve-3d;
+`;
+
+export const PromiseCardFront = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  padding: 12px;
+  border-radius: 10px;
+  background-color: #fff;
+  transform: rotateY(0deg);
+`;
+
+export const PromiseCardBack = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  transform: rotateY(180deg);
+  border-radius: 10px;
+  background-color: #7471F9;
+`;
+
+export const PromiseNumber = styled.div`
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: #7471F9;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 400;
+  flex-shrink: 0;
+`;
+
+export const PromiseStatus = styled.span`
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  margin-bottom: 8px;
+`;
+
+export const PromiseContent = styled.div`
+  font-size: 13px;
+  line-height: 1.3;
+  color: #000;
+  font-weight: 400;
 `;

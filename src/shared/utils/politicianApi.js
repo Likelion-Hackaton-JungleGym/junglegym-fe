@@ -59,6 +59,64 @@ export const getPoliticianById = async (politicianId) => {
 };
 
 /**
+ * 정치인 발의법률안 조회 API
+ * @param {number} politicianId - 정치인 ID
+ * @param {number} page - 페이지 번호 (기본값: 1)
+ * @param {number} size - 페이지 크기 (기본값: 10)
+ * @returns {Promise<Object|null>} 발의법률안 정보 (없으면 null)
+ */
+export const getPoliticianBills = async (politicianId, page = 1, size = 10) => {
+  try {
+    console.log("정치인 발의법률안 조회 API 호출");
+    console.log(
+      "요청 URL:",
+      `${api.defaults.baseURL}/api/politicians/${politicianId}/bills?page=${page}&size=${size}`
+    );
+
+    const response = await api.get(
+      `/api/politicians/${politicianId}/bills?page=${page}&size=${size}`
+    );
+
+    console.log("정치인 발의법률안 API 응답:", response.data);
+
+    if (response.data.success) {
+      // 빈 배열이거나 데이터가 없으면 null 반환
+      if (
+        !response.data.data ||
+        !response.data.data.items ||
+        response.data.data.items.length === 0
+      ) {
+        console.log("발의법률안이 없습니다.");
+        return null;
+      }
+      return response.data.data;
+    } else {
+      // 404 등으로 발의법률안이 없는 경우 null 반환
+      if (response.data.code === 404) {
+        console.log("발의법률안이 없습니다.");
+        return null;
+      }
+      throw new Error(response.data.message || "정치인 발의법률안 조회 실패");
+    }
+  } catch (error) {
+    console.error("정치인 발의법률안 조회 오류:", error);
+
+    // 404 에러는 발의법률안이 없는 것으로 처리
+    if (error.response?.status === 404) {
+      console.log("발의법률안이 없습니다.");
+      return null;
+    }
+
+    // 서버 에러 시 에러를 그대로 던짐
+    if (error.response?.status === 500 || error.response?.status === 400) {
+      throw new Error("정치인 발의법률안 조회에 실패했습니다.");
+    }
+
+    throw error;
+  }
+};
+
+/**
  * 정치인 전과 기록 조회 API
  * @param {number} politicianId - 정치인 ID
  * @returns {Promise<Array|null>} 전과 기록 리스트 (없으면 null)
@@ -187,6 +245,160 @@ export const getPoliticianIssues = async (politicianId) => {
     // 서버 에러 시 에러를 그대로 던짐
     if (error.response?.status === 500 || error.response?.status === 400) {
       throw new Error("정치인 최근 이슈 조회에 실패했습니다.");
+    }
+
+    throw error;
+  }
+};
+
+/**
+ * 정치인 공약 사업 이행 현황 조회 API
+ * @param {number} politicianId - 정치인 ID
+ * @returns {Promise<Object|null>} 공약 사업 이행 현황 (없으면 null)
+ */
+export const getPoliticianPromises = async (politicianId) => {
+  try {
+    console.log("정치인 공약 사업 이행 현황 조회 API 호출");
+    console.log(
+      "요청 URL:",
+      `${api.defaults.baseURL}/api/politicians/${politicianId}/promises/summary`
+    );
+
+    const response = await api.get(`/api/politicians/${politicianId}/promises/summary`);
+
+    console.log("정치인 공약 사업 이행 현황 API 응답:", response.data);
+
+    if (response.data.success) {
+      return response.data.data;
+    } else {
+      throw new Error(response.data.message || "정치인 공약 사업 이행 현황 조회 실패");
+    }
+  } catch (error) {
+    console.error("정치인 공약 사업 이행 현황 조회 오류:", error);
+
+    // 404 에러는 공약 사업 이행 현황이 없는 것으로 처리
+    if (error.response?.status === 404) {
+      console.log("공약 사업 이행 현황이 없습니다.");
+      return null;
+    }
+
+    // 서버 에러 시 에러를 그대로 던짐
+    if (error.response?.status === 500 || error.response?.status === 400) {
+      throw new Error("정치인 공약 사업 이행 현황 조회에 실패했습니다.");
+    }
+
+    throw error;
+  }
+};
+
+/**
+ * 정치인 공약 외 활동 뉴스 조회 API
+ * @param {number} politicianId - 정치인 ID
+ * @returns {Promise<Array|null>} 공약 외 활동 뉴스 리스트 (없으면 null)
+ */
+export const getPoliticianActivities = async (politicianId) => {
+  try {
+    console.log("정치인 공약 외 활동 뉴스 조회 API 호출");
+    console.log("요청 URL:", `${api.defaults.baseURL}/api/politicians/${politicianId}/activities`);
+
+    const response = await api.get(`/api/politicians/${politicianId}/activities`);
+
+    console.log("정치인 공약 외 활동 뉴스 API 응답:", response.data);
+
+    if (response.data.success) {
+      return response.data.data;
+    } else {
+      throw new Error(response.data.message || "정치인 공약 외 활동 뉴스 조회 실패");
+    }
+  } catch (error) {
+    console.error("정치인 공약 외 활동 뉴스 조회 오류:", error);
+
+    // 404 에러는 공약 외 활동 뉴스가 없는 것으로 처리
+    if (error.response?.status === 404) {
+      console.log("공약 외 활동 뉴스가 없습니다.");
+      return null;
+    }
+
+    // 서버 에러 시 에러를 그대로 던짐
+    if (error.response?.status === 500 || error.response?.status === 400) {
+      throw new Error("정치인 공약 외 활동 뉴스 조회에 실패했습니다.");
+    }
+
+    throw error;
+  }
+};
+
+/**
+ * 정치인 공약 카테고리 목록 조회 API
+ * @param {number} politicianId - 정치인 ID
+ * @returns {Promise<Array|null>} 공약 카테고리 리스트 (없으면 null)
+ */
+export const getPoliticianPromiseCategories = async (politicianId) => {
+  try {
+    console.log("정치인 공약 카테고리 목록 조회 API 호출");
+    console.log(
+      "요청 URL:",
+      `${api.defaults.baseURL}/api/politicians/${politicianId}/promises/categories`
+    );
+
+    const response = await api.get(`/api/politicians/${politicianId}/promises/categories`);
+
+    console.log("정치인 공약 카테고리 목록 API 응답:", response.data);
+
+    if (response.data.success) {
+      return response.data.data;
+    } else {
+      throw new Error(response.data.message || "정치인 공약 카테고리 목록 조회 실패");
+    }
+  } catch (error) {
+    console.error("정치인 공약 카테고리 목록 조회 오류:", error);
+
+    // 404 에러는 공약 카테고리가 없는 것으로 처리
+    if (error.response?.status === 404) {
+      console.log("공약 카테고리가 없습니다.");
+      return null;
+    }
+
+    // 서버 에러 시 에러를 그대로 던짐
+    if (error.response?.status === 500 || error.response?.status === 400) {
+      throw new Error("정치인 공약 카테고리 목록 조회에 실패했습니다.");
+    }
+
+    throw error;
+  }
+};
+
+/**
+ * 공약 카테고리 상세 공약 목록 조회 API
+ * @param {number} categoryId - 카테고리 ID
+ * @returns {Promise<Array|null>} 상세 공약 리스트 (없으면 null)
+ */
+export const getCategoryPromises = async (categoryId) => {
+  try {
+    console.log("공약 카테고리 상세 공약 목록 조회 API 호출");
+    console.log("요청 URL:", `${api.defaults.baseURL}/api/categories/${categoryId}/promises`);
+
+    const response = await api.get(`/api/categories/${categoryId}/promises`);
+
+    console.log("공약 카테고리 상세 공약 목록 API 응답:", response.data);
+
+    if (response.data.success) {
+      return response.data.data;
+    } else {
+      throw new Error(response.data.message || "공약 카테고리 상세 공약 목록 조회 실패");
+    }
+  } catch (error) {
+    console.error("공약 카테고리 상세 공약 목록 조회 오류:", error);
+
+    // 404 에러는 상세 공약이 없는 것으로 처리
+    if (error.response?.status === 404) {
+      console.log("상세 공약이 없습니다.");
+      return null;
+    }
+
+    // 서버 에러 시 에러를 그대로 던짐
+    if (error.response?.status === 500 || error.response?.status === 400) {
+      throw new Error("공약 카테고리 상세 공약 목록 조회에 실패했습니다.");
     }
 
     throw error;

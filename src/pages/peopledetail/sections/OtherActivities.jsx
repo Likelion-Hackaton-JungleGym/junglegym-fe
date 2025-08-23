@@ -11,7 +11,13 @@ const OtherActivities = ({ activities }) => (
     <CardTitle>공약 외 활동</CardTitle>
     <ListContainer>
       {activities.map((activity, index) => (
-        <div key={index} style={{ borderBottom: '1px solid #eee', paddingBottom: '12px' }}>
+        <div 
+          key={index} 
+          style={{ 
+            borderBottom: index === activities.length - 1 ? 'none' : '1px solid #eee', 
+            paddingBottom: index === activities.length - 1 ? '0px' : '12px' 
+          }}
+        >
           <ItemText>{activity.title}</ItemText>
           <ItemLink 
             href={activity.link} 
