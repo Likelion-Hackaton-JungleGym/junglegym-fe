@@ -47,7 +47,7 @@ export default function FloatingButton({
       container?.removeEventListener("scroll", onScroll);
       if (needDoc) document.removeEventListener("scroll", onScroll);
     };
-  }, [targetId, threshold, isExcluded]);
+  }, [targetId, threshold, isExcluded, getContainer]);
 
   if (isExcluded) return null;
 
