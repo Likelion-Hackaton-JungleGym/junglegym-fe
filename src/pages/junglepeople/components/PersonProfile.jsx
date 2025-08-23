@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useSearchParams } from "react-router-dom";
 import styled from "styled-components";
 import { getPoliticianById } from "../../../shared/utils/politicianApi.js";
 import TooltipImg from "./profiles/img/TooltipButton.svg";
@@ -37,6 +37,7 @@ function normalizePolitician(apiData = {}) {
 
 export default function PersonProfile() {
   const { id } = useParams();
+  const [searchParams] = useSearchParams();
   const [politician, setPolitician] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -63,9 +64,12 @@ export default function PersonProfile() {
   }
 
   if (error && !politician) {
+    const currentRegion = searchParams.get('region');
+    const backLink = currentRegion ? `/junglepeople?region=${encodeURIComponent(currentRegion)}` : "/junglepeople";
+    
     return (
       <Empty>
-        존재하지 않는 인물이에요. <Link to="/junglepeople">뒤로가기</Link>
+        존재하지 않는 인물이에요. <Link to={backLink}>뒤로가기</Link>
       </Empty>
     );
   }

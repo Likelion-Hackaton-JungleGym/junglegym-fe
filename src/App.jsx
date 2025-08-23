@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import RootLayout from "./shared/layouts/RootLayout";
+import LandingPage from "./pages/LandingPage";
 import JungleTownPage from "./pages/jungletown/JungleTownPage";
 import JunglePeoplePage from "./pages/junglepeople/JunglePeoplePage";
 import JungleTalkPage from "./pages/jungletalk/JungleTalkPage";
@@ -13,6 +14,7 @@ export default function App() {
       <Routes>
         <Route path="/" element={<RootLayout />}>
           <Route index element={<JungleTownPage />} />
+          <Route path="/landing" element={<LandingPage />} />
           <Route path="/junglepeople" element={<JunglePeoplePage />} />
           <Route path="/junglepeople/:id" element={<PersonProfile />} />
 
