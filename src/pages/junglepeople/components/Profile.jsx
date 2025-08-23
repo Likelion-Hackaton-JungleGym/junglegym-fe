@@ -94,7 +94,8 @@ export default function Profile({ politicians = [], isLoading = false }) {
 
 /* ---------- styles ---------- */
 const Wrapper = styled.div`
-  margin: 30px 10px;
+  margin: 30px auto;
+  padding: 0 5px;
 `;
 
 const Grid = styled.div`
@@ -112,10 +113,9 @@ const Card = styled.article`
   border-radius: 10px;
   overflow: hidden;
   background: #fff;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
   display: flex;
   flex-direction: column;
-  border: 1px solid #d2d2d2;
+  border: 2px solid #d2d2d2;
 `;
 
 const Top = styled.div`
@@ -177,13 +177,13 @@ const Bottom = styled.div`
   background: #fff;
   text-align: center;
   width: 160px;
-  height: 60px;
-  padding: 12px;
+  height: 62px;
+  padding: 10px;
 `;
 
 const Name = styled.div`
-  font-size: 18px;
-  font-weight: 800;
+  font-size: 20px;
+  font-weight: 700;
   line-height: 1.2;
   color: #111;
 `;
@@ -191,5 +191,5 @@ const Name = styled.div`
 const Title = styled.div`
   margin-top: 3px;
   font-size: 12px;
-  color: #8e8e8e;
+  color: #797979;
 `;

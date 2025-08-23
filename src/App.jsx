@@ -18,7 +18,7 @@ export default function App() {
 
           <Route path="/jungletalk" element={<JungleTalkPage />} />
           <Route path="/junglesound" element={<JungleSoundPage />} />
-          <Route path="/junglesound/:id" element={<Newsletter />} />
+          <Route path="/junglesound/:newsletterId" element={<Newsletter />} />
         </Route>
       </Routes>
     </Router>

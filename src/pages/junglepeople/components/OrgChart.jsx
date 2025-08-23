@@ -22,6 +22,7 @@ border: 1px solid #D3D3D3;
 
 const Title = styled.div`
   font-size: 23px;
+  font-size: 23px;
   font-weight: 700;
   letter-spacing: -0.2px;
   margin-top: 50px;
@@ -29,7 +30,7 @@ const Title = styled.div`
 `;
 
 const Img = styled.img`
-  padding-top: 10px;
+  padding: 10px 0px;
   width: 100%;
   height: auto;
   cursor: pointer;

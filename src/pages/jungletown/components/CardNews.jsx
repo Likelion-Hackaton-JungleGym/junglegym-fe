@@ -1,49 +1,174 @@
-import { useState } from "react";
+import axios from "axios";
+import { useEffect, useMemo, useState } from "react";
 import styled from "styled-components";
-
-import CardNews1 from "../components/img/CardNews1.svg?url";
-import CardNews2 from "../components/img/CardNews2.svg?url";
-import CardNews3 from "../components/img/CardNews3.svg?url";
-import CardNews4 from "../components/img/CardNews4.svg?url";
-import CardNews5 from "../components/img/CardNews5.svg?url";
-
+import { getWeeklyNews } from "../../../shared/api/endpoints";
+import { ICON_MAP } from "./CardNewsData";
+import { CARD_MAP } from "./CardNewsData";
 import leftButton from "../components/img/leftButton.svg?url";
 import rightButton from "../components/img/rightButton.svg?url";
 
+function chooseIcon(category, key) {
+  const list = ICON_MAP[category] ?? [];
+  if (!list.length) return null;
+  let h = 0;
+  const s = String(key ?? "");
+  for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) | 0;
+  return list[Math.abs(h) % list.length];
+}
+
 export default function CardNews() {
-  const images = [CardNews1, CardNews2, CardNews3, CardNews4, CardNews5];
+  const [items, setItems] = useState([]);
   const [current, setCurrent] = useState(0);
+  const [expanded, setExpanded] = useState(false);
 
-  const prevIndex = (current - 1 + images.length) % images.length;
-  const nextIndex = (current + 1) % images.length;
+  useEffect(() => {
+    const ctrl = new AbortController();
+    (async () => {
+      try {
+        const json = await getWeeklyNews({ signal: ctrl.signal });
+        const list = Array.isArray(json?.data) ? json.data : [];
 
-  const prev = () => setCurrent((i) => (i === 0 ? images.length - 1 : i - 1));
-  const next = () => setCurrent((i) => (i === images.length - 1 ? 0 : i + 1));
+        const toNum = (v) => (typeof v === "number" ? v : parseInt(v, 10) || 0);
+        const sorted = list.slice().sort((a, b) => toNum(a.id) - toNum(b.id));
+        const mapped = sorted.map((it, i) => ({
+          id: it.id,
+          newsCategory: it.newsCategory,
+          title: it.title,
+          oneLineContent: it.oneLineContent,
+          summary: it.summary,
+          date: it.date,
+          link: it.link,
+          card: CARD_MAP[i + 1] ?? CARD_MAP[(i % 5) + 1],
+          mediaImgUrl: it.mediaImgUrl ?? null, // 그래프 이미지
+          media: it.media ?? null, // 나중에 백엔드가 아이콘 주면 우선
+        }));
+
+        setItems(mapped);
+        setCurrent(0);
+        setExpanded(false);
+      } catch (err) {
+        if (
+          axios.isCancel?.(err) ||
+          err?.code === "ERR_CANCELED" ||
+          err?.name === "CanceledError" ||
+          err?.message === "canceled"
+        ) {
+          return;
+        }
+
+        console.error(
+          "getWeeklyNews 실패:",
+          err.userMessage || err.message,
+          "| status:",
+          err.response?.status
+        );
+
+        setItems([]);
+      }
+    })();
+    return () => ctrl.abort();
+  }, []);
+
+  const len = items.length;
+  const item = items[current];
+  const prevIndex = (current - 1 + len) % Math.max(1, len || 1);
+  const nextIndex = (current + 1) % Math.max(1, len || 1);
+
+  const prev = () => {
+    if (!len) return;
+    setCurrent((i) => (i === 0 ? len - 1 : i - 1));
+    setExpanded(false);
+  };
+  const next = () => {
+    if (!len) return;
+    setCurrent((i) => (i === len - 1 ? 0 : i + 1));
+    setExpanded(false);
+  };
+
+  // 고정 랜덤 아이콘
+  const iconSrc = useMemo(() => (item ? chooseIcon(item.newsCategory, item.id) : null), [item]);
+
+  // 로딩/빈 상태
+  if (!len) {
+    return (
+      <Wrapper>
+        <Date>25년 8월 2주차</Date>
+        <Empty>뉴스를 불러오는 중...</Empty> //없거나 로딩중
+      </Wrapper>
+    );
+  }
 
   return (
     <Wrapper>
-      <Date>25년 8월 1주차</Date>
+      <Date>25년 8월 3주차</Date>
 
       <Viewport>
-        <PrevPeek>
-          <PeekImg src={images[prevIndex]} />
+        {/* 배경: 이전/다음 프리뷰 */}
+        <PrevPeek aria-hidden>
+          <PeekImg src={items[prevIndex]?.card} alt="" />
         </PrevPeek>
-        <NextPeek>
-          <PeekImg src={images[nextIndex]} />
+        <NextPeek aria-hidden>
+          <PeekImg src={items[nextIndex]?.card} alt="" />
         </NextPeek>
-        <Card>
-          <MainImg src={images[current]} alt={`card-${current + 1}`} />
+
+        {/* 카드 */}
+        <Card
+          role="group"
+          aria-roledescription="slide"
+          aria-label={`${current + 1} / ${len}`}
+          onClick={() => setExpanded((v) => !v)}
+        >
+          <MainImg src={item.card} alt="" />
+
+          {!expanded ? (
+            <CompactOverlay>
+              <IconWrapper>{!!iconSrc && <OverlayIcon src={iconSrc} alt="" />}</IconWrapper>
+              {item.title && <OverlayTitle>{item.title}</OverlayTitle>}
+              {item.oneLineContent && <OverlayDesc>{item.oneLineContent}</OverlayDesc>}
+            </CompactOverlay>
+          ) : (
+            <ExpandedOverlay>
+              {item.title && <OverlayTitle2>{item.title}</OverlayTitle2>}
+              {item.summary && <OverlayBody>{item.summary}</OverlayBody>}
+              <FooterRow>
+                <Source>{item.date && <span className="date">{item.date}</span>}</Source>
+
+                {item.link && (
+                  <ArticleBtn
+                    href={item.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    원문 기사 보기
+                  </ArticleBtn>
+                )}
+              </FooterRow>
+              {/* 그래프 */}
+              {item.mediaImgUrl && <GraphImg src={item.mediaImgUrl} alt="" />}
+            </ExpandedOverlay>
+          )}
         </Card>
 
+        {/* 화살표 & 점 */}
         <ArrowLeft onClick={prev} aria-label="이전">
           <ArrowIcon src={leftButton} alt="" />
         </ArrowLeft>
         <ArrowRight onClick={next} aria-label="다음">
           <ArrowIcon src={rightButton} alt="" />
         </ArrowRight>
+
         <Dots>
-          {images.map((_, i) => (
-            <Dot key={i} $active={i === current} onClick={() => setCurrent(i)} />
+          {items.map((_, i) => (
+            <Dot
+              key={i}
+              $active={i === current}
+              onClick={() => {
+                setCurrent(i);
+                setExpanded(false);
+              }}
+              aria-label={`${i + 1}번으로 이동`}
+            />
           ))}
         </Dots>
       </Viewport>
@@ -51,63 +176,57 @@ export default function CardNews() {
   );
 }
 
+/* ---------- styles (기존 유지) ---------- */
+const GUTTER = 7;
 const PEEK_WIDTH = 50;
-const GUTTER = 18;
 
 const Wrapper = styled.div`
-  margin-bottom: 55px;
   max-width: 420px;
   width: 100%;
-  margin-left: auto;
-  margin-right: auto;
+  margin: 0 0px 55px;
+  padding: 0px 0px;
+`;
+const Empty = styled.div`
+  color: #666;
+  text-align: center;
+  padding: 20px 0 40px;
 `;
 
 const Date = styled.div`
   color: #111;
   text-align: center;
-  font-size: 19px;
+  font-size: 17px;
   font-weight: 600;
-  padding: 10px;
+  padding: 15px 10px 10px;
 `;
 
 const Viewport = styled.div`
-  display: flex;
-  justify-content: center;
   position: relative;
-  width: 100%;
+  width: 350px;
   height: 320px;
   margin: 0 auto;
   border-radius: 16px;
-  overflow: hidden;
-`;
-
-const Card = styled.div`
-  position: absolute;
-  top: 0;
-  left: ${GUTTER}px;
-  right: ${GUTTER}px;
-  bottom: 0;
-  border-radius: 16px;
-  overflow: hidden;
-  z-index: 2;
-`;
-
-const MainImg = styled.img`
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
+  //overflow: hidden;
 `;
 
 const PeekBase = styled.div`
   position: absolute;
-  inset: 0;
   z-index: 1;
   pointer-events: none;
   transform: scale(0.9);
   transform-origin: center;
-  border-radius: 16px;
   overflow: hidden;
+  filter: blur(0.2px);
+  opacity: 0.92;
+`;
+
+const PrevPeek = styled(PeekBase)`
+  clip-path: inset(0 calc(100% - ${PEEK_WIDTH}px) 0 0);
+  left: -3%;
+`;
+const NextPeek = styled(PeekBase)`
+  clip-path: inset(0 0 0 calc(100% - ${PEEK_WIDTH}px));
+  right: -3%;
 `;
 
 const PeekImg = styled.img`
@@ -117,14 +236,125 @@ const PeekImg = styled.img`
   display: block;
 `;
 
-const PrevPeek = styled(PeekBase)`
-  clip-path: inset(0 calc(100% - ${PEEK_WIDTH}px) 0 0);
-  left: -3%;
+const Card = styled.div`
+  position: absolute;
+  top: 0;
+  left: ${GUTTER}px;
+  right: ${GUTTER}px;
+  border-radius: 16px;
+  bottom: 10px;
+  overflow: hidden;
+  z-index: 2;
+  cursor: pointer;
+  transform: scale(0.95);
+  box-shadow: 0px 10px 40px rgba(0, 0, 0, 0.1);
 `;
 
-const NextPeek = styled(PeekBase)`
-  clip-path: inset(0 0 0 calc(100% - ${PEEK_WIDTH}px));
-  right: -3%;
+const MainImg = styled.img`
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+`;
+
+const IconWrapper = styled.div`
+  width: 200px;
+  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+const CompactOverlay = styled.div`
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 0px 20px 40px;
+  color: #fff;
+  z-index: 3;
+  pointer-events: none;
+  gap: 6px;
+`;
+
+const OverlayIcon = styled.img`
+  width: 200px;
+  height: 200px;
+  z-index: 1;
+`;
+
+const OverlayTitle = styled.div`
+  font-size: 22px;
+  font-weight: 500;
+  color: #fff;
+  letter-spacing: -0.02em;
+
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  word-break: break-word;
+
+  line-height: 1.35;
+  max-width: 90%;
+  max-height: calc(2 * 1.35em);
+  margin-top: -20px; /* 필요하면 이렇게 올리기(레이아웃 반영) */
+  position: relative;
+  z-index: 2;
+`;
+
+const OverlayDesc = styled.div`
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.35;
+  opacity: 0.9;
+  max-width: 85%;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  z-index: 2;
+  transform: translateY(-10px);
+`;
+
+const ExpandedOverlay = styled.div`
+  position: absolute;
+  inset: 0;
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  text-align: left;
+  color: #fff;
+  z-index: 3;
+  pointer-events: none;
+  gap: 10px;
+`;
+
+const OverlayTitle2 = styled.div`
+  margin: 0 0 8px;
+  font-size: 21px;
+  font-weight: 500;
+  line-height: 1.3;
+  letter-spacing: -0.02em;
+  max-width: 90%;
+  white-space: pre-line;
+`;
+
+const OverlayBody = styled.p`
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.95);
+`;
+
+const GraphImg = styled.img`
+  align-self: center;
+  width: 92%;
+  max-width: 330px;
+  height: auto;
 `;
 
 const ArrowBase = styled.button`
@@ -135,7 +365,6 @@ const ArrowBase = styled.button`
   border: none;
   width: 36px;
   height: 36px;
-  box-shadow: none;
   cursor: pointer;
   z-index: 4;
   display: grid;
@@ -144,16 +373,22 @@ const ArrowBase = styled.button`
 `;
 
 const ArrowLeft = styled(ArrowBase)`
-  left: ${GUTTER - 10}px;
+  left: ${GUTTER - 8}px;
 `;
 const ArrowRight = styled(ArrowBase)`
-  right: ${GUTTER - 10}px;
+  right: ${GUTTER - 8}px;
+`;
+
+const ArrowIcon = styled.img`
+  width: 20px;
+  height: 20px;
+  display: block;
 `;
 
 const Dots = styled.div`
   position: absolute;
   display: flex;
-  bottom: 30px;
+  bottom: 38px;
   transform: translateX(-50%);
   left: 50%;
   justify-content: center;
@@ -162,18 +397,51 @@ const Dots = styled.div`
   z-index: 5;
 `;
 
-const ArrowIcon = styled.img`
-  width: 12px;
-  height: 12px;
-  display: block;
-`;
-
 const Dot = styled.button`
-  width: ${(p) => (p.$active ? 7 : 5)}px;
-  height: ${(p) => (p.$active ? 7 : 5)}px;
+  width: ${(p) => (p.$active ? 7 : 4)}px;
+  height: ${(p) => (p.$active ? 7 : 4)}px;
   border-radius: 50%;
   border: none;
   background: ${(p) => (p.$active ? "#FFFFFF" : "#e0e0e0")};
   cursor: pointer;
   transition: all 160ms ease;
+`;
+
+const FooterRow = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+`;
+
+const Source = styled.div`
+  display: flex;
+  gap: 8px;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.9);
+  .date {
+    opacity: 0.9;
+  }
+`;
+
+const ArticleBtn = styled.a`
+  pointer-events: auto;
+  display: inline-block;
+  padding: 5px 10px;
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  border-radius: 999px;
+  text-decoration: none;
+  font-size: 12px;
+  font-weight: 200;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(4px);
+  transition: background 120ms ease, transform 120ms ease;
+  &:hover {
+    background: rgba(255, 255, 255, 0.18);
+    transform: translateY(-1px);
+  }
+  &:active {
+    transform: translateY(0);
+  }
 `;

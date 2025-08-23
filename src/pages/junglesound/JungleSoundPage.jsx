@@ -13,18 +13,15 @@ export default function JungleSoundPage() {
         <br /> 지역 차이를 비교·질문하는 뉴스레터
       </SubText>
       <NewsPreviewWrapper>
-        <NewsPreview id="newsletter1" />
-        <NewsPreview id="newsletter2" />
-        <NewsPreview id="newsletter3" />
-        <NewsPreview id="newsletter4" />
-        <NewsPreview id="newsletter5" />
+        <NewsPreview />
       </NewsPreviewWrapper>
     </Wrapper>
   );
 }
 
 const Wrapper = styled.div`
-  margin: 20px;
+  padding: 10px 0px 10px 0px;
+  margin: 5px 20px;
 `;
 
 const HighlightText = styled.div`
@@ -37,6 +34,7 @@ const HighlightText = styled.div`
   font-weight: 700;
   padding-top: 20px;
   letter-spacing: -1px;
+  margin-bottom: 7px;
 `;
 
 const Highlight = styled.div`
@@ -48,7 +46,7 @@ const Highlight = styled.div`
   background: #e1e0ff;
   z-index: -1;
   border-radius: 2px;
-  transform: translateX(-50%);
+  transform: translate(-50%, 3px);
 `;
 
 const SubText = styled.p`
@@ -56,7 +54,7 @@ const SubText = styled.p`
   text-align: center;
   font-size: 15px;
   font-style: normal;
-  font-weight: 500;
+  font-weight: 400;
   letter-spacing: -0.3px;
   margin-bottom: 30px;
 `;

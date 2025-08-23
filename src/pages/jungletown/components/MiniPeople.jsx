@@ -66,7 +66,7 @@ export default function Minipeople() {
 }
 
 const Wrapper = styled.div`
-  margin: 10px;
+  margin: 10px 0px 10px 10px;
 `;
 
 const Text = styled.div`
@@ -86,12 +86,13 @@ const Plus = styled(Link)`
   color: #959595;
   font-size: 13px;
   text-decoration: none;
+  margin-right: 35px;
   cursor: pointer;
 `;
 
 const MiniPeople = styled.div`
   display: flex;
-  margin: 10px 0 50px;
+  margin: 12px 0 50px;
   &.scroll-container {
     display: flex;
     overflow-x: auto;
@@ -104,12 +105,12 @@ const MiniPeople = styled.div`
 
 const PeopleCard = styled.div`
   display: flex;
-  gap: 4%;
+  gap: 3.9%;
 `;
 
 const Person = styled.div`
   flex: 0 0 auto;
-  width: 90px;
+  width: 95px;
 `;
 
 const CardLink = styled(Link)`
@@ -125,13 +126,13 @@ const Img = styled.img`
 `;
 
 const Info = styled.div`
-  padding: 10px 2px 0px;
+  padding: 5px 2px 0px;
   text-align: left;
   background: transparent;
 `;
 
 const Name = styled.div`
-  font-size: 16px;
+  font-size: 17px;
   font-weight: 600;
   //line-height: 1.25;
   //letter-spacing: -0.2px;
@@ -142,7 +143,7 @@ const Name = styled.div`
 
 const Title = styled.div`
   margin-top: 4px;
-  font-size: 11px;
+  font-size: 12px;
   color: #8e8e8e;
   white-space: nowrap;
   overflow: hidden;

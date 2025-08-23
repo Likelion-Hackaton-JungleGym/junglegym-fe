@@ -210,7 +210,7 @@ const ProfileImg = styled.img`
   background-repeat: no-repeat;
 `;
 const Name = styled.div`
-  font-size: 30px;
+  font-size: 33px;
   font-weight: 700;
   margin: 10px 0 5px;
 `;
@@ -267,6 +267,7 @@ const TooltipText = styled.div`
   line-height: 1.3;
   text-align: left;
   white-space: pre-line;
+  margin: 6px;
 `;
 const Empty = styled.div`
   padding: 40px 16px;
