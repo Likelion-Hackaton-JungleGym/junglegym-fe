@@ -5,6 +5,7 @@ import { getDictionariesDetail } from "../../../shared/api/endpoints";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { DICTIONARY } from "../components/JungleDictionaryData";
+import xButton from "../components/img/xButton.svg";
 
 export default function JungleDictionary() {
   const [list, setList] = useState([]); // 전체 데이터
@@ -87,7 +88,7 @@ export default function JungleDictionary() {
             <ModalCard>
               {selected.bigCard && <ModalBg src={selected.bigCard} alt="" />}
               <CloseBtn onClick={() => setSelected(null)} aria-label="닫기">
-                ×
+                <img src={xButton} />
               </CloseBtn>
 
               <Top>
@@ -116,7 +117,7 @@ export default function JungleDictionary() {
 
 /* ---------- styles ---------- */
 const Wrapper = styled.div`
-  margin: 10px 0 10px 10px;
+  margin: 10px 0 10px 15px;
 `;
 
 const Text = styled.div``;
@@ -150,7 +151,6 @@ const Card = styled.article`
   border-radius: 10px;
   overflow: hidden;
   flex: 0 0 auto;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
   cursor: pointer;
 `;
 
@@ -179,7 +179,7 @@ const Body = styled.div`
   left: 0;
   right: 0;
   bottom: 0;
-  padding: 15px;
+  padding: 15px 15px 0px 15px;
   z-index: 1;
 `;
 
@@ -191,7 +191,7 @@ const IconBox = styled.div`
 const Icon = styled.img`
   width: 135px;
   height: 135px;
-  margin-top: 10px;
+  margin: 10px 0px;
 `;
 
 const CardBottom = styled.div`
@@ -213,8 +213,8 @@ const Pill = styled.div`
 
 const H3 = styled.h3`
   margin: 8px 5px 4px;
-  font-size: 17px;
-  font-weight: 700;
+  font-size: 18px;
+  font-weight: 600;
   color: #111;
 `;
 
@@ -248,7 +248,7 @@ const ModalCard = styled.div`
   height: 550px;
   overflow: hidden auto;
   border-radius: 13px;
-  padding: 20px 25px 10px;
+  padding: 10px 25px 10px;
   margin: 0px 10px;
   box-shadow: 0 16px 48px rgba(0, 0, 0, 0.2);
   background: transparent;
@@ -268,14 +268,15 @@ const ModalBg = styled.img`
 
 const CloseBtn = styled.button`
   position: absolute;
-  top: 10px;
+  top: 15px;
   right: 10px;
   width: 40px;
-  height: 40px;
+  height: 30px;
   border: 0;
   background: transparent;
   color: #7b7b7b;
-  font-size: 40px;
+  font-size: 20px;
+  font-weight: 100;
 
   line-height: 1;
   cursor: pointer;
@@ -293,6 +294,7 @@ const PillLg = styled.div`
   align-items: center;
   padding: 4px 14px;
   margin-top: 20px;
+  margin-left: -3px;
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.4);
   border: 1px solid rgba(0, 0, 0, 0.06);
@@ -303,8 +305,8 @@ const PillLg = styled.div`
 
 const ModalTitle = styled.h2`
   margin: 5px 0 2px;
-  font-size: 26px;
-  font-weight: 600;
+  font-size: 28px;
+  font-weight: 500;
   letter-spacing: -0.4px;
   color: #111;
   line-height: 1.3;
@@ -312,7 +314,7 @@ const ModalTitle = styled.h2`
 
 const ModalSub = styled.p`
   margin: 0 0 10px;
-  font-size: 15px;
+  font-size: 16px;
   color: #333;
   letter-spacing: -0.2px;
 `;
@@ -355,8 +357,7 @@ const IconCenter = styled.div`
   position: relative;
   width: 190px;
   z-index: 1;
-
-  margin: 7px 30px 0px 100px;
+  margin: 17px 30px 7px 100px;
 `;
 
 const IconImg = styled.img`
