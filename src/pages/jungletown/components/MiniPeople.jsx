@@ -66,7 +66,7 @@ export default function Minipeople() {
 }
 
 const Wrapper = styled.div`
-  margin: 10px 0px 10px 10px;
+  margin: 10px 0px 10px 15px;
 `;
 
 const Text = styled.div`

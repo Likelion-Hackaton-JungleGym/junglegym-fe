@@ -92,8 +92,8 @@ export default function CardNews() {
   if (!len) {
     return (
       <Wrapper>
-        <Date>25년 8월 2주차</Date>
-        <Empty>뉴스를 불러오는 중...</Empty> //없거나 로딩중
+        <Date>25년 8월 3주차</Date>
+        <Empty>뉴스를 불러오는 중...</Empty>
       </Wrapper>
     );
   }
@@ -183,7 +183,7 @@ const PEEK_WIDTH = 50;
 const Wrapper = styled.div`
   max-width: 420px;
   width: 100%;
-  margin: 0 0px 55px;
+  margin: 0px 0px 55px;
   padding: 0px 0px;
 `;
 const Empty = styled.div`
@@ -197,7 +197,7 @@ const Date = styled.div`
   text-align: center;
   font-size: 17px;
   font-weight: 600;
-  padding: 15px 10px 10px;
+  padding: 15px 10px 5px;
 `;
 
 const Viewport = styled.div`
@@ -257,14 +257,6 @@ const MainImg = styled.img`
   display: block;
 `;
 
-const IconWrapper = styled.div`
-  width: 200px;
-  height: 200px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
-
 const CompactOverlay = styled.div`
   position: absolute;
   inset: 0;
@@ -280,10 +272,20 @@ const CompactOverlay = styled.div`
   gap: 6px;
 `;
 
+const IconWrapper = styled.div`
+  width: 200px;
+  height: 200px;
+  display: flex;
+  padding: 0px 0px 10px;
+  //align-items: center;
+  justify-content: center;
+`;
+
 const OverlayIcon = styled.img`
   width: 200px;
   height: 200px;
   z-index: 1;
+  transform: translateY(-20px);
 `;
 
 const OverlayTitle = styled.div`

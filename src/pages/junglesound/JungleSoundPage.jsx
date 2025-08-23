@@ -20,7 +20,7 @@ export default function JungleSoundPage() {
 }
 
 const Wrapper = styled.div`
-  padding: 10px 0px 10px 0px;
+  padding: 20px 0px 10px 0px;
   margin: 5px 20px;
 `;
 
