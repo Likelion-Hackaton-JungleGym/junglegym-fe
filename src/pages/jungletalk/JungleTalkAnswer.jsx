@@ -12,13 +12,18 @@ import {
   SubTitle,
 } from "./JungleTalk.styles";
 import BackIcon from "../../assets/icons/BackIcon.svg";
-import LawImage1 from "../../assets/images/LawImage1.png";
-import LawImage2 from "../../assets/images/LawImage2.png";
-import LawImage3 from "../../assets/images/LawImage3.png";
-import LawImage4 from "../../assets/images/LawImage4.png";
+import LawImage1 from "../../assets/images/LawImage1.svg";
+import LawImage2 from "../../assets/images/LawImage2.svg";
+import LawImage3 from "../../assets/images/LawImage3.svg";
+import LawImage4 from "../../assets/images/LawImage4.svg";
+import LawImage5 from "../../assets/images/LawImage5.svg";
+import LawImage6 from "../../assets/images/LawImage6.svg";
+import LawImage7 from "../../assets/images/LawImage7.svg";
+import LawImage8 from "../../assets/images/LawImage8.svg";
+
 import OtherQuestion from "./OtherQuestion";
 
-const lawImages = [LawImage1, LawImage2, LawImage3, LawImage4];
+const lawImages = [LawImage1, LawImage2, LawImage3, LawImage4, LawImage5, LawImage6, LawImage7, LawImage8];
 
 const JungleTalkAnswer = ({
   question,

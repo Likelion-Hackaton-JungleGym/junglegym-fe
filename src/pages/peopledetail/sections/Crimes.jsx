@@ -19,7 +19,7 @@ const Crimes = ({ crimes }) => {
   if (!crimes || crimes.count === 0) {
     return (
       <Card>
-        <CardTitle>재산 정보</CardTitle>
+        <CardTitle>전과 기록</CardTitle>
         <EmptyInfo>
           <NoteSection>
             <img src={NoticeIcon} alt="Notice" />
@@ -39,12 +39,13 @@ const Crimes = ({ crimes }) => {
           style={{
             display: "inline-flex",
             alignItems: "center",
-            padding: "6px 12px",
+            padding: "4px 10px",
             borderRadius: 999,
             fontSize: 14,
-            fontWeight: 600,
-            color: "#ff4d4f",
-            background: "#ffecec",
+            fontWeight: 400,
+            color: "#FF2B38",
+            background: "#FFF1F2",
+            marginLeft: "5px",
           }}
         >
           총 {crimes.count}건
@@ -75,9 +76,9 @@ const Crimes = ({ crimes }) => {
             {/* 제목 */}
             <h1
               style={{
-                fontSize: 20,
+                fontSize: 18,
                 fontWeight: 600,
-                color: "#111",
+                color: "#1a1a1a",
                 lineHeight: 1.35,
                 margin: "0 0 12px",
               }}
@@ -86,7 +87,7 @@ const Crimes = ({ crimes }) => {
             </h1>
 
             {/* 벌금(붉은색 강조) */}
-            <Header style={{ margin: 0, color: "#d32f2f", fontSize: 16, fontWeight: 500 }}>
+            <Header style={{ margin: 0, color: "#FF2B38", fontSize: 14, fontWeight: 500 }}>
               {crime.penalty}
             </Header>
           </div>
@@ -99,7 +100,7 @@ const Crimes = ({ crimes }) => {
           <NoteIcon>
             <img src={NoticeIcon} alt="Notice" />
           </NoteIcon>
-          <span style={{ fontSize: 14, fontWeight: 600, color: "#666" }}>참고 사항</span>
+          <span style={{ fontSize: 15, fontWeight: 500, color: "#A7A7A7" }}>참고 사항</span>
         </div>
         <NoteText>
           후보자 본인이 제출한 소명서를 기준으로 합니다. 자세한 정보는 중앙선거관리위원회

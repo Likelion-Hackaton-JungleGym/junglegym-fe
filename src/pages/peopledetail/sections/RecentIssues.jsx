@@ -5,7 +5,13 @@ const RecentIssues = ({ issues }) => (
     <CardTitle>최근 이슈</CardTitle>
     <ListContainer>
       {issues.map((issue, index) => (
-        <div key={index} style={{ borderBottom: "1px solid #eee", paddingBottom: "15px" }}>
+        <div 
+          key={index} 
+          style={{ 
+            borderBottom: index === issues.length - 1 ? "none" : "1px solid #eee", 
+            paddingBottom: index === issues.length - 1 ? "0px" : "15px" 
+          }}
+        >
           <ItemText>{issue.title}</ItemText>
           <ItemLink 
             href={issue.link} 

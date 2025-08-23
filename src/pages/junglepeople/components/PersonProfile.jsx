@@ -10,7 +10,6 @@ import BlueParty from "./profiles/img/BlueParty.svg";
 import RedParty from "./profiles/img/RedParty.svg";
 import RoleIcon from "./profiles/img/RoleIcon.svg";
 
-
 function normalizePolitician(apiData = {}) {
   const d = apiData || {};
   const safe = (v) => (typeof v === "string" ? v.trim() : v ?? "");
@@ -27,7 +26,10 @@ function normalizePolitician(apiData = {}) {
     profileImg: safe(d.profileImg),
     military: safe(d.military),
     regionList: safe(d.regionText)
-      ? safe(d.regionText).split(",").map((s) => s.trim()).filter(Boolean)
+      ? safe(d.regionText)
+          .split(",")
+          .map((s) => s.trim())
+          .filter(Boolean)
       : [],
     careerSummary: safe(d.careerSummary),
   };
@@ -57,11 +59,7 @@ export default function PersonProfile() {
   }, [id]);
 
   if (isLoading) {
-    return (
-      <Empty>
-        정치인 정보를 불러오는 중...
-      </Empty>
-    );
+    return <Empty>정치인 정보를 불러오는 중...</Empty>;
   }
 
   if (error && !politician) {
@@ -74,11 +72,7 @@ export default function PersonProfile() {
 
   return (
     <>
-      {politician ? (
-        <ProfileView politician={politician} />
-      ) : (
-        <Empty>데이터가 없어요.</Empty>
-      )}
+      {politician ? <ProfileView politician={politician} /> : <Empty>데이터가 없어요.</Empty>}
       {/* 하단 상세 - 이미 가져온 politician 데이터 전달 */}
       <ProfileDetails politicianId={parseInt(id)} politician={politician} />
     </>
@@ -91,12 +85,12 @@ function ProfileView({ politician = {} }) {
   // 지역 정보 파싱 (regionText를 배열로 변환)
   const areas = Array.isArray(politician.regionList)
     ? politician.regionList
-    : (politician.regionText
-        ? String(politician.regionText)
-            .split(",")
-            .map((s) => s.trim())
-            .filter(Boolean)
-        : []);
+    : politician.regionText
+    ? String(politician.regionText)
+        .split(",")
+        .map((s) => s.trim())
+        .filter(Boolean)
+    : [];
 
   const getBgColor = (polyName) => {
     if (polyName?.includes("더불어민주당")) return "#4191E6";
@@ -112,6 +106,10 @@ function ProfileView({ politician = {} }) {
   };
 
   const partyIcon = getPartyIcon(politician.polyName);
+  
+  // 구청장, 시장인 경우 Tooltip 버튼 숨김
+  const shouldShowTooltip = !politician.roleName?.includes("구청장") && !politician.roleName?.includes("시장");
+  
   return (
     <Wrapper>
       <Card>
@@ -125,25 +123,25 @@ function ProfileView({ politician = {} }) {
           />
         </Top>
       </Card>
-             <Name>{politician.name}</Name>
-       <PartyWrapper>
-         {partyIcon && <PartyIcon src={partyIcon} alt="정당" />}
-       </PartyWrapper>
-       <PositionWrapper>
-         <PositionIcon src={RoleIcon} alt="직책" />
-         <PositionText>{politician.roleName || "직책"}</PositionText>
-        <TooltipWrapper>
-          <TooltipButton
-            src={TooltipImg}
-            alt="담당 지역 툴팁 열기"
-            onClick={() => setOpen((v) => !v)}
-          />
-          {open && (
-            <TooltipBox role="dialog" aria-label="담당 지역">
-              <TooltipText>{areas.map((a) => `• ${a}`).join("\n")}</TooltipText>
-            </TooltipBox>
-          )}
-        </TooltipWrapper>
+      <Name>{politician.name}</Name>
+      <PartyWrapper>{partyIcon && <PartyIcon src={partyIcon} alt="정당" />}</PartyWrapper>
+      <PositionWrapper>
+        <PositionIcon src={RoleIcon} alt="직책" />
+        <PositionText>{politician.roleName || "직책"}</PositionText>
+        {shouldShowTooltip && (
+          <TooltipWrapper>
+            <TooltipButton
+              src={TooltipImg}
+              alt="담당 지역 툴팁 열기"
+              onClick={() => setOpen((v) => !v)}
+            />
+            {open && (
+              <TooltipBox role="dialog" aria-label="담당 지역">
+                <TooltipText>{areas.map((a) => `• ${a}`).join("\n")}</TooltipText>
+              </TooltipBox>
+            )}
+          </TooltipWrapper>
+        )}
       </PositionWrapper>
     </Wrapper>
   );
@@ -153,7 +151,7 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 30px 20px;
+  padding: 60px 20px 0;
   font-family: Pretendard;
 `;
 
@@ -161,7 +159,6 @@ const Card = styled.article`
   border-radius: 10px;
   overflow: hidden;
   background: #fff;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
   display: flex;
   flex-direction: column;
   border: 1px solid #d2d2d2;
@@ -169,18 +166,53 @@ const Card = styled.article`
 
 const Top = styled.div`
   position: relative;
-  height: 184px;
+  height: 200px;
   background: ${(p) => p.$bg};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px 10px 0 0;
+  overflow: hidden;
 `;
 
 const ProfileImg = styled.img`
-  width: 160px;
-  height: auto;
+  width: 200px;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  border-radius: 10px 10px 0 0;
+  transition: transform 0.2s ease;
+
+  &:hover {
+    transform: scale(1.05);
+  }
+
+  /* 이미지가 없거나 로드 실패 시 배경색 표시 */
+  &:not([src]),
+  &[src=""],
+  &[src*="undefined"],
+  &[src*="null"] {
+    background-color: #f5f5f5;
+  }
+
+  /* 이미지 로딩 최적화 */
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+
+  /* 이미지가 배경을 완전히 채우도록 */
+  min-width: 100%;
+  min-height: 100%;
+
+  /* 강제로 배경을 채우도록 */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 `;
 const Name = styled.div`
   font-size: 30px;
   font-weight: 700;
-  margin: 5px;
+  margin: 10px 0 5px;
 `;
 const PartyWrapper = styled.div`
   display: flex;
@@ -192,53 +224,47 @@ const PartyWrapper = styled.div`
 const PartyIcon = styled.img`
   width: 100px;
   height: auto;
-  opacity: 0.6;
-`;
-
-const PartyText = styled.div`
-  font-size: 16px;
-  color: #666;
-  font-weight: 500;
 `;
 
 const PositionWrapper = styled.div`
   display: flex;
   align-items: center;
-  margin: 25px;
+  margin: 20px 0 25px;
   gap: 8px;
 `;
 const PositionIcon = styled.img`
   width: 20px;
   height: 20px;
-  opacity: 0.6;
 `;
 const PositionText = styled.div`
   font-size: 18px;
-  color: #666;
+  color: #000;
   font-weight: 500;
 `;
 const TooltipWrapper = styled.div`
   position: relative;
-  margin-left: 4px;
+  margin-left: 0px;
 `;
 const TooltipButton = styled.img`
+  position: absolute;
+  top: -7px;
   cursor: pointer;
 `;
 const TooltipBox = styled.div`
   position: absolute;
   top: 50%;
-  left: calc(100% + 8px);
+  left: calc(100% + 20px);
   transform: translateY(-50%);
-  width: 110px;
-  padding: 6px 10px;
-  background: #e0e0e0;
-  border-radius: 8px;
+  width: 90px;
+  padding: 9px 15px;
+  background: #f8f8fb;
+  border-radius: 10px;
   border: 1px dashed #8e8e8e;
 `;
 const TooltipText = styled.div`
-  font-size: 14px;
-  color: gray;
-  line-height: 1.5;
+  font-size: 12px;
+  color: #767676;
+  line-height: 1.3;
   text-align: left;
   white-space: pre-line;
 `;

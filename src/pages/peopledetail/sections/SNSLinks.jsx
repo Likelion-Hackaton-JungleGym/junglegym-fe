@@ -7,7 +7,7 @@ import {
 } from "../ProfileDetail.styles.js";
 import styled from "styled-components";
 
-import FacebookIcon from "@/assets/icons/InstagramIcon.svg";
+import FacebookIcon from "@/assets/icons/FacebookIcon.svg";
 import InstagramIcon from "@/assets/icons/InstagramIcon.svg";
 import BlogIcon from "@/assets/icons/BlogIcon.svg";
 import TwitterIcon from "@/assets/icons/TwitterIcon.svg";
