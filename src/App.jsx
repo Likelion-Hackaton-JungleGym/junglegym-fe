@@ -2,7 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import RootLayout from "./shared/layouts/RootLayout";
 import JungleTownPage from "./pages/jungletown/JungleTownPage";
 import JunglePeoplePage from "./pages/junglepeople/JunglePeoplePage";
-import JungleTalkPage from "./pages/jungletalk/JungletalkPage";
+import JungleTalkPage from "./pages/jungletalk/JungleTalkPage";
 import JungleSoundPage from "./pages/junglesound/JungleSoundPage";
 import PersonProfile from "./pages/junglepeople/components/PersonProfile";
 import Newsletter from "./pages/junglesound/components/Newsletter";
