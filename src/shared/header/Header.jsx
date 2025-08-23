@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import {
   LogoWrapper,
   LogoImg,
+  LogoLink,
   MapImg,
   TopWrapper,
   Nav,
@@ -75,7 +76,9 @@ export default function Header({ mode = "fixed" }) {
       <TopWrapper>
         <MapImg src={Map} alt="지도" />
         <LogoWrapper>
-          <LogoImg src={TextLogo} alt="로고" />
+          <LogoLink to="/">
+            <LogoImg src={TextLogo} alt="로고" />
+          </LogoLink>
         </LogoWrapper>
       </TopWrapper>
       <Nav>

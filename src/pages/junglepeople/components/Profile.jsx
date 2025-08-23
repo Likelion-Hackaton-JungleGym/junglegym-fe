@@ -5,7 +5,6 @@ import LoadingScreen from "../../../shared/components/LoadingScreen";
 import RedPartyWhite from "./img/redPartyWhite.svg";
 import BluePartyWhite from "./img/bluePartyWhite.svg";
 
-
 export default function Profile({ politicians = [], isLoading = false }) {
   // API 데이터를 새로운 UI 구조에 맞게 변환
   const people = politicians.map((politician) => {
@@ -17,14 +16,19 @@ export default function Profile({ politicians = [], isLoading = false }) {
     };
 
     const getBadge = (polyName) => {
-    if (polyName?.includes("더불어민주당")) return BluePartyWhite;
-    if (polyName?.includes("국민의힘")) return RedPartyWhite;
-    return;
-  };
+      if (polyName?.includes("더불어민주당")) return BluePartyWhite;
+      if (polyName?.includes("국민의힘")) return RedPartyWhite;
+      return;
+    };
 
     // 이미지 URL 검증 및 기본값 설정
     const getProfileImage = (profileImg) => {
-      if (!profileImg || profileImg === "" || profileImg.includes("undefined") || profileImg.includes("null")) {
+      if (
+        !profileImg ||
+        profileImg === "" ||
+        profileImg.includes("undefined") ||
+        profileImg.includes("null")
+      ) {
         return "/dummy-profile.jpg";
       }
       return profileImg;
@@ -58,7 +62,7 @@ export default function Profile({ politicians = [], isLoading = false }) {
             fontSize: "16px",
           }}
         >
-          정치인 정보를 준비 중입니다. 
+          정치인 정보를 준비 중입니다.
         </div>
       </Wrapper>
     );
@@ -72,8 +76,8 @@ export default function Profile({ politicians = [], isLoading = false }) {
             <Card>
               <Top $bg={p.bg}>
                 <Badge src={p.badge} alt="정당" />
-                <Person 
-                  src={p.cropPhoto} 
+                <Person
+                  src={p.cropPhoto}
                   alt={`${p.name}`}
                   onError={(e) => {
                     e.target.src = "/dummy-profile.jpg";
@@ -94,7 +98,7 @@ export default function Profile({ politicians = [], isLoading = false }) {
 
 /* ---------- styles ---------- */
 const Wrapper = styled.div`
-  margin: 50px auto 30px;
+  margin: 30px auto 30px;
   padding: 0 5px;
 `;
 
@@ -139,24 +143,27 @@ const Person = styled.img`
   display: block;
   border-radius: 10px 10px 0 0;
   transition: transform 0.2s ease;
-  
+
   &:hover {
     transform: scale(1.05);
   }
-  
+
   /* 이미지가 없거나 로드 실패 시 배경색 표시 */
-  &:not([src]), &[src=""], &[src*="undefined"], &[src*="null"] {
+  &:not([src]),
+  &[src=""],
+  &[src*="undefined"],
+  &[src*="null"] {
     background-color: #f5f5f5;
   }
-  
+
   /* 이미지 로딩 최적화 */
   image-rendering: -webkit-optimize-contrast;
   image-rendering: crisp-edges;
-  
+
   /* 이미지가 배경을 완전히 채우도록 */
   min-width: 100%;
   min-height: 100%;
-  
+
   /* 강제로 배경을 채우도록 */
   background-size: cover;
   background-position: center;
