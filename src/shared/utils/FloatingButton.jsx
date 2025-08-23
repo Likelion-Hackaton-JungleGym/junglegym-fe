@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useCallback } from "react";
 import { useLocation, matchPath } from "react-router-dom";
 import styled from "styled-components";
 import UpIcon from "../../assets/icons/floatingButton.svg";
@@ -22,7 +22,10 @@ export default function FloatingButton({
     [excludePaths, pathname]
   );
 
-  const getContainer = () => (targetId ? document.getElementById(targetId) : window);
+  const getContainer = useCallback(
+    () => (targetId ? document.getElementById(targetId) : window),
+    [targetId]
+  );
 
   useEffect(() => {
     if (isExcluded) return;
@@ -47,7 +50,7 @@ export default function FloatingButton({
       container?.removeEventListener("scroll", onScroll);
       if (needDoc) document.removeEventListener("scroll", onScroll);
     };
-  }, [targetId, threshold, isExcluded, getContainer]);
+  }, [threshold, isExcluded, getContainer]);
 
   if (isExcluded) return null;
 
