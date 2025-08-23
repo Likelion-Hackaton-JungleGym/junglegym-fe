@@ -46,5 +46,5 @@ const JungleTalkMain = ({ setStep, onQuestionClick, questions }) => {
 export default JungleTalkMain;
 
 const Mainwrapper = styled.div`
-  margin-top: 50px;
+  margin-top: 70px;
 `;

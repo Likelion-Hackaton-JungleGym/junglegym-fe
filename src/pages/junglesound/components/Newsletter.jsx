@@ -274,8 +274,8 @@ const PercentText = styled.div`
 `;
 
 const PercentImg = styled.img`
-  width: 350px;
-  height: 25px;
+  width: 340px;
+  height: auto;
   display: block;
   padding: 3px 10px 0px;
 `;
