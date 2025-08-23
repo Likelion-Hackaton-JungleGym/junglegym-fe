@@ -1,7 +1,16 @@
 import { useLocation } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
-import { LogoWrapper, LogoImg, Nav, NavItem, HeaderWrapper } from "./HeaderStyles";
+import {
+  LogoWrapper,
+  LogoImg,
+  MapImg,
+  TopWrapper,
+  Nav,
+  NavItem,
+  HeaderWrapper,
+} from "./HeaderStyles";
 import TextLogo from "../../assets/icons/TextLogo.svg";
+import Map from "../../assets/icons/mapImg.svg";
 
 export default function Header({ mode = "fixed" }) {
   const { pathname } = useLocation();
@@ -63,9 +72,12 @@ export default function Header({ mode = "fixed" }) {
 
   return (
     <HeaderWrapper $visible={mode === "hideOnScroll" ? visible : true}>
-      <LogoWrapper>
-        <LogoImg src={TextLogo} />
-      </LogoWrapper>
+      <TopWrapper>
+        <MapImg src={Map} alt="지도" />
+        <LogoWrapper>
+          <LogoImg src={TextLogo} alt="로고" />
+        </LogoWrapper>
+      </TopWrapper>
       <Nav>
         {menu.map((m) => (
           <NavItem key={m.path} to={m.path} className={isActive(pathname, m.path) ? "active" : ""}>

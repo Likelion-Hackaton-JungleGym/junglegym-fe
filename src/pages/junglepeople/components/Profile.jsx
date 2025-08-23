@@ -27,7 +27,7 @@ export default function Profile() {
 
 /* ---------- styles ---------- */
 const Wrapper = styled.div`
-  margin: 30px auto;
+  margin: 50px auto 30px;
   padding: 0 5px;
 `;
 

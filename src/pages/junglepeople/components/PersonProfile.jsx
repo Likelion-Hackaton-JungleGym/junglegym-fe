@@ -50,7 +50,7 @@ const Wrapper = styled.div`
   flex-direction: column;
   align-items: center;
   padding: 30px 20px;
-  margin-top: 25px;
+  margin-top: 45px;
   font-family: Pretendard;
 `;
 const ProfileImg = styled.img`
