@@ -17,6 +17,13 @@ export const LogoWrapper = styled.div`
   align-items: center;
 `;
 
+export const LogoLink = styled(Link)`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+`;
+
 export const MapImg = styled.img`
   height: 20px;
   background-color: #ffffff;
