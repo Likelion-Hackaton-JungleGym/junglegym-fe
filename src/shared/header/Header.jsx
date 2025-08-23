@@ -1,6 +1,7 @@
 import { useLocation } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
-import { Logo, Nav, NavItem, HeaderWrapper } from "./HeaderStyles";
+import { LogoWrapper, LogoImg, Nav, NavItem, HeaderWrapper } from "./HeaderStyles";
+import TextLogo from "../../assets/icons/TextLogo.svg";
 
 export default function Header({ mode = "fixed" }) {
   const { pathname } = useLocation();
@@ -62,7 +63,9 @@ export default function Header({ mode = "fixed" }) {
 
   return (
     <HeaderWrapper $visible={mode === "hideOnScroll" ? visible : true}>
-      <Logo>정글짐</Logo>
+      <LogoWrapper>
+        <LogoImg src={TextLogo} />
+      </LogoWrapper>
       <Nav>
         {menu.map((m) => (
           <NavItem key={m.path} to={m.path} className={isActive(pathname, m.path) ? "active" : ""}>

@@ -86,7 +86,7 @@ const Plus = styled(Link)`
   color: #959595;
   font-size: 13px;
   text-decoration: none;
-  margin-right: 20px;
+  margin-right: 35px;
   cursor: pointer;
 `;
 

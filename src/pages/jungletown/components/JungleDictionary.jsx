@@ -70,9 +70,11 @@ export default function JungleDictionary() {
             {it.hotRank && <Ribbon src={it.hotRank} alt="hot" />}
             <Body>
               <IconBox>{it.icon && <Icon src={it.icon} alt="" />}</IconBox>
-              <Pill>{it.category}</Pill>
-              <H3>{it.title}</H3>
-              <Sub>{it.subtitle}</Sub>
+              <CardBottom>
+                <Pill>{it.category}</Pill>
+                <H3>{it.title}</H3>
+                <Sub>{it.subtitle}</Sub>
+              </CardBottom>
             </Body>
           </Card>
         ))}
@@ -127,7 +129,7 @@ const Title = styled.div`
 
 const DictCards = styled.div`
   display: flex;
-  gap: 14px;
+  gap: 10px;
   margin-top: 10px;
   &.scroll-container {
     overflow-x: auto;
@@ -140,8 +142,11 @@ const DictCards = styled.div`
 
 const Card = styled.article`
   position: relative;
-  width: 188px;
-  height: 240px;
+  margin-bottom: 10px;
+  //width: 188px;
+  //height: 240px;
+  width: 200px;
+  height: 270px;
   border-radius: 10px;
   overflow: hidden;
   flex: 0 0 auto;
@@ -162,10 +167,11 @@ const Bg = styled.img`
 
 const Ribbon = styled.img`
   position: absolute;
-  top: 0;
+  top: -2px;
   right: 15px;
-  width: 40px;
+  width: 50px;
   z-index: 2;
+  box-shadow: 0 2px 4px grba(0, 0, 0, 0.15);
 `;
 
 const Body = styled.div`
@@ -181,10 +187,16 @@ const IconBox = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 6px;
 `;
 const Icon = styled.img`
-  width: 130px;
+  width: 135px;
+  height: 135px;
+  margin-top: 10px;
+`;
+
+const CardBottom = styled.div`
+  height: 80px;
+  margin: 10px 0px;
 `;
 
 const Pill = styled.div`
@@ -195,12 +207,12 @@ const Pill = styled.div`
   font-weight: 600;
   padding: 4px 10px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.4);
   color: #333;
 `;
 
 const H3 = styled.h3`
-  margin: 8px 0 4px;
+  margin: 8px 5px 4px;
   font-size: 17px;
   font-weight: 700;
   color: #111;
@@ -208,6 +220,7 @@ const H3 = styled.h3`
 
 const Sub = styled.p`
   font-size: 12px;
+  margin: 0px 5px 0px;
   color: #555;
   letter-spacing: -0.3px;
 `;
@@ -216,7 +229,7 @@ const Sub = styled.p`
 const Dim = styled.div`
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.45);
+  background: rgba(78, 78, 78, 0.5);
   backdrop-filter: blur(2px);
   z-index: 1000;
 `;
@@ -231,13 +244,14 @@ const Modal = styled.div`
 
 const ModalCard = styled.div`
   position: relative;
-  width: min(92vw, 360px);
-  max-height: 82vh;
-  overflow: auto;
-  border-radius: 16px;
-  padding: 18px 18px 20px;
-  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.22);
-  background: transparent; /* ✅ 이미지가 깔리므로 투명 */
+  width: 345px;
+  height: 550px;
+  overflow: hidden auto;
+  border-radius: 13px;
+  padding: 20px 25px 10px;
+  margin: 0px 10px;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.2);
+  background: transparent;
 `;
 
 const ModalBg = styled.img`
@@ -249,19 +263,20 @@ const ModalBg = styled.img`
   z-index: 0;
   pointer-events: none;
   user-select: none;
-  border-radius: 16px;
+  border-radius: 13px;
 `;
 
 const CloseBtn = styled.button`
   position: absolute;
   top: 10px;
-  right: 14px;
-  width: 32px;
-  height: 32px;
+  right: 10px;
+  width: 40px;
+  height: 40px;
   border: 0;
   background: transparent;
-  color: #6b6b6b;
-  font-size: 28px;
+  color: #7b7b7b;
+  font-size: 40px;
+
   line-height: 1;
   cursor: pointer;
   z-index: 2;
@@ -269,26 +284,27 @@ const CloseBtn = styled.button`
 
 const Top = styled.div`
   position: relative;
-  z-index: 1; /* 배경 위로 */
+  z-index: 1;
   margin-bottom: 8px;
 `;
 
 const PillLg = styled.div`
   display: inline-flex;
   align-items: center;
-  padding: 6px 12px;
+  padding: 4px 14px;
+  margin-top: 20px;
   border-radius: 999px;
-  background: #fff;
+  background: rgba(255, 255, 255, 0.4);
   border: 1px solid rgba(0, 0, 0, 0.06);
-  font-weight: 700;
+  font-weight: 500;
   font-size: 12px;
   color: #333;
 `;
 
 const ModalTitle = styled.h2`
-  margin: 10px 0 2px;
-  font-size: 22px;
-  font-weight: 800;
+  margin: 5px 0 2px;
+  font-size: 26px;
+  font-weight: 600;
   letter-spacing: -0.4px;
   color: #111;
   line-height: 1.3;
@@ -296,8 +312,8 @@ const ModalTitle = styled.h2`
 
 const ModalSub = styled.p`
   margin: 0 0 10px;
-  font-size: 13px;
-  color: #555;
+  font-size: 15px;
+  color: #333;
   letter-spacing: -0.2px;
 `;
 
@@ -337,13 +353,13 @@ const Desc = styled.div`
 
 const IconCenter = styled.div`
   position: relative;
-  z-index: 1; /* 배경 위로 */
-  display: flex;
-  justify-content: center;
-  margin: 6px 0 12px;
+  width: 190px;
+  z-index: 1;
+
+  margin: 7px 30px 0px 100px;
 `;
 
 const IconImg = styled.img`
-  width: 120px;
+  width: 180px;
   height: auto;
 `;

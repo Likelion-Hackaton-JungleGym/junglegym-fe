@@ -81,6 +81,17 @@ export default function Newsletter() {
   return <NewsletterView {...item} />;
 }
 
+/* --- 보정 유틸: 따옴표가 굵게 안 먹는 케이스 자동 수정 --- */
+const fixBoldQuotes = (s = "") =>
+  s
+    // 스마트 쿼트 ‘ ’
+    .replace(/\*\*‘(.+?)’\*\*/g, "‘**$1**’")
+    // 스마트 쿼트 “ ”
+    .replace(/\*\*“(.+?)”\*\*/g, "“**$1**”")
+    // 일반 따옴표 ' "
+    .replace(/\*\*'(.+?)'\*\*/g, "'**$1**'")
+    .replace(/\*\*"(.+?)"\*\*/g, '"**$1**"');
+
 const getYoutubeThumb = (link) => {
   const m = link?.match(/(?:v=|youtu\.be\/|shorts\/)([^?&#/]+)/);
   return m ? `https://img.youtube.com/vi/${m[1]}/hqdefault.jpg` : null;
@@ -103,6 +114,7 @@ function NewsletterView({
   thumbnailUrl,
 }) {
   const thumb = thumbnail || thumbnailUrl || getYoutubeThumb(link) || "/placeholder.png";
+  const md = (x) => fixBoldQuotes(x ?? "");
 
   return (
     <Wrapper>
@@ -136,6 +148,7 @@ function NewsletterView({
 
         {mediaImgUrl && (
           <PercentWrapper>
+            <PercentText>이슈를 다룬 채널의 정치 성향 분포</PercentText>
             <PercentImg src={mediaImgUrl} alt="미디어 로고" />
           </PercentWrapper>
         )}
@@ -145,14 +158,14 @@ function NewsletterView({
         {subtitle1 && <Subtitle1>{subtitle1}</Subtitle1>}
         {content1 && (
           <Md>
-            <ReactMarkdown remarkPlugins={[remarkGfm]}>{content1}</ReactMarkdown>
+            <ReactMarkdown remarkPlugins={[remarkGfm]}>{md(content1)}</ReactMarkdown>
           </Md>
         )}
 
         {subtitle2 && <Subtitle2>{subtitle2}</Subtitle2>}
         {content2 && (
           <Md>
-            <ReactMarkdown remarkPlugins={[remarkGfm]}>{content2}</ReactMarkdown>
+            <ReactMarkdown remarkPlugins={[remarkGfm]}>{md(content2)}</ReactMarkdown>
           </Md>
         )}
 
@@ -160,7 +173,7 @@ function NewsletterView({
         {titleQuestion && <TitleQuestion>{titleQuestion}</TitleQuestion>}
         {questionContent && (
           <Md>
-            <ReactMarkdown remarkPlugins={[remarkGfm]}>{questionContent}</ReactMarkdown>
+            <ReactMarkdown remarkPlugins={[remarkGfm]}>{md(questionContent)}</ReactMarkdown>
           </Md>
         )}
       </Bottom>
@@ -185,7 +198,7 @@ const BackButton = styled(Link)`
 
 const Top = styled.div`
   height: 120px;
-  border-bottom: 1px solid #e9e9e9;
+  border-bottom: 1.5px solid #dfdfdf;
   padding-left: 13px;
   display: flex;
   align-items: flex-end;
@@ -204,7 +217,7 @@ const Title = styled.div`
   font-size: 22px;
   font-weight: 600;
   color: #111;
-  margin: 10px 3px 6px 3px;
+  margin: 8px 3px 6px 3px;
 `;
 
 const Date = styled.div`
@@ -215,9 +228,9 @@ const Date = styled.div`
 `;
 
 const ThumbnailWrapper = styled.div`
-  background-color: #e6e5e5;
+  background-color: #f3f3f3;
   border-radius: 5px;
-  height: 170px;
+  height: 190px;
   margin: 0px 3px 14px 3px;
   overflow: hidden;
   position: relative;
@@ -247,15 +260,24 @@ const NewsLink = styled.img`
 `;
 
 const PercentWrapper = styled.div`
-  background-color: #d1d1d1;
+  background-color: #f3f3f3;
   border-radius: 8px;
   margin: 0px 3px 40px 3px;
   height: 70px;
+  border: 1px solid #e1e1e1;
+`;
+
+const PercentText = styled.div`
+  font-size: 14px;
+  margin: 3px;
+  padding: 10px 10px 0px;
 `;
 
 const PercentImg = styled.img`
-  width: 100%;
+  width: 350px;
+  height: 25px;
   display: block;
+  padding: 3px 10px 0px;
 `;
 
 const InTitle = styled.span`
@@ -292,6 +314,7 @@ const Md = styled.div`
   ul,
   ol {
     margin: 0 0 10px 18px;
+    line-height: 1.2;
   }
   strong {
     font-weight: 600;
@@ -308,7 +331,7 @@ const TodayQuestion = styled.div`
   font-size: 22px;
   font-weight: 500;
   color: #111;
-  margin: 0px 3px 6px 0px;
+  margin: 30px 3px 6px 0px;
   z-index: 0;
   padding-left: 3px;
 
@@ -329,7 +352,7 @@ const TodayQuestion = styled.div`
 
 const TitleQuestion = styled.div`
   position: relative;
-  font-size: 16px;
+  font-size: 17px;
   font-weight: 400;
   padding: 5px 5px 5px 16px;
   margin: 5px 3px;
@@ -343,9 +366,4 @@ const TitleQuestion = styled.div`
     width: 4px;
     background: #9290ff;
   }
-`;
-
-const QuestionContent = styled(Md)`
-  margin: 7px 10px 10px;
-  padding-left: 3px;
 `;
