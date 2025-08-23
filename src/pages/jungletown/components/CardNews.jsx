@@ -40,7 +40,7 @@ export default function CardNews() {
           link: it.link,
           card: CARD_MAP[i + 1] ?? CARD_MAP[(i % 5) + 1],
           mediaImgUrl: it.mediaImgUrl ?? null, // 그래프 이미지
-          media: it.media ?? null, // 나중에 백엔드가 아이콘 주면 우선
+          media: it.media,
         }));
 
         setItems(mapped);
@@ -131,21 +131,26 @@ export default function CardNews() {
               {item.title && <OverlayTitle2>{item.title}</OverlayTitle2>}
               {item.summary && <OverlayBody>{item.summary}</OverlayBody>}
               <FooterRow>
-                <Source>{item.date && <span className="date">{item.date}</span>}</Source>
-
-                {item.link && (
-                  <ArticleBtn
-                    href={item.link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={(e) => e.stopPropagation()}
-                  >
-                    원문 기사 보기
-                  </ArticleBtn>
-                )}
+                <FooterLeft>
+                  <Media>{item.media && <span className="media">{item.media}</span>}</Media>
+                  <Source>{item.date && <span className="date">{item.date}</span>}</Source>
+                </FooterLeft>
+                <FootrtRight>
+                  {item.link && (
+                    <ArticleBtn
+                      href={item.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      원문 기사 보기
+                    </ArticleBtn>
+                  )}
+                </FootrtRight>
               </FooterRow>
-              {/* 그래프 */}
-              {item.mediaImgUrl && <GraphImg src={item.mediaImgUrl} alt="" />}
+              <GraphWrapper>
+                {item.mediaImgUrl && <GraphImg src={item.mediaImgUrl} alt="" />}
+              </GraphWrapper>
             </ExpandedOverlay>
           )}
         </Card>
@@ -334,26 +339,32 @@ const ExpandedOverlay = styled.div`
 
 const OverlayTitle2 = styled.div`
   margin: 0 0 8px;
-  font-size: 21px;
+  font-size: 22px;
   font-weight: 500;
   line-height: 1.3;
   letter-spacing: -0.02em;
-  max-width: 90%;
+  max-width: 95%;
   white-space: pre-line;
 `;
 
 const OverlayBody = styled.p`
   margin: 0;
-  font-size: 12px; //글자 수 늘리고 글자 크기 보기
+  font-size: 14px;
   line-height: 1.5;
   color: rgba(255, 255, 255, 0.95);
 `;
 
 const GraphImg = styled.img`
   align-self: center;
-  width: 92%;
+  width: 100%;
   max-width: 330px;
   height: auto;
+  opacity: 0.9;
+`;
+
+const GraphWrapper = styled.div`
+  padding: 0px 0px 10px;
+  margin-top: 5px;
 `;
 
 const ArrowBase = styled.button`
@@ -411,7 +422,19 @@ const FooterRow = styled.div`
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  margin-top: 25px;
+  margin-top: 20px;
+`;
+
+const FooterLeft = styled.div`
+  display: flex;
+  gap: 5px;
+  margin-left: 1px;
+`;
+const FootrtRight = styled.div``;
+
+const Media = styled.div`
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.9);
 `;
 
 const Source = styled.div`
@@ -427,7 +450,7 @@ const Source = styled.div`
 const ArticleBtn = styled.a`
   pointer-events: auto;
   display: inline-block;
-  padding: 5px 10px;
+  padding: 3px 18px;
   border: 1px solid rgba(255, 255, 255, 0.85);
   border-radius: 999px;
   text-decoration: none;
