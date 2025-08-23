@@ -1,5 +1,6 @@
 import axios from "axios";
 
+
 // 올바른 API 도메인 설정
 const baseURL = (() => {
   const envUrl = (import.meta.env.VITE_API_BASE_URL || "").trim();
@@ -15,7 +16,9 @@ const baseURL = (() => {
   return "https://api.junglegym.kr"; // 또는 "http://localhost:8080"
 })();
 
+
 export const api = axios.create({
   baseURL,
   timeout: 10000,
 });
+

@@ -1,9 +1,21 @@
-import { api } from "../api/client";
+import { api } from "./client";
 import { DICTIONARY } from "../../pages/jungletown/components/JungleDictionaryData";
 
-/* ---------- JungleDictionary ---------- */
+/* ──────────────────────────────
+ * 공통 유틸
+ * ────────────────────────────── */
+const clean = (s) => (typeof s === "string" ? s.trim() : "");
+const youtubeThumb = (link) => {
+  const m = link?.match(/(?:v=|youtu\.be\/|shorts\/)([^?&#/]+)/);
+  return m ? `https://img.youtube.com/vi/${m[1]}/hqdefault.jpg` : null;
+};
 
-// 로컬 이미지 데이터를 객체로 변환 (id를 키로 사용)
+// API 응답 안전 추출
+const getData = (res) => res?.data?.data ?? res?.data ?? null;
+
+/* ──────────────────────────────
+ * 정글사전(JungleDictionary)
+ * ────────────────────────────── */
 const imageDataMap = DICTIONARY.reduce((acc, item) => {
   acc[item.id] = {
     miniCard: item.miniCard,
@@ -14,112 +26,61 @@ const imageDataMap = DICTIONARY.reduce((acc, item) => {
   return acc;
 }, {});
 
-// 데이터 합치는 함수
-const mergeDictionaryData = (apiData) => {
-  return apiData.map((item) => {
-    const imageData = imageDataMap[item.id] || {}; // id로 이미지 데이터 찾기
-    return {
-      id: item.id,
-      // API 데이터
-      category: item.keyword,
-      title: item.title,
-      subtitle: item.subtitle,
-      content: item.content, // content로 변경
-      desc: item.content, // 기존 호환성을 위해 desc도 유지
-      // 로컬 이미지 데이터
-      miniCard: imageData.miniCard || null,
-      bigCard: imageData.bigCard || null,
-      icon: imageData.icon || null,
-      hotRank: imageData.hotRank || null,
-    };
-  });
+const mergeDictionaryItem = (apiItem = {}) => {
+  const imageData = imageDataMap[apiItem.id] || {};
+  return {
+    id: apiItem.id,
+    category: apiItem.keyword,
+    title: apiItem.title,
+    subtitle: apiItem.subtitle,
+    content: apiItem.content,
+    desc: apiItem.content, // 호환용
+    miniCard: imageData.miniCard ?? null,
+    bigCard: imageData.bigCard ?? null,
+    icon: imageData.icon ?? null,
+    hotRank: imageData.hotRank ?? null,
+  };
 };
 
-export const getDictionaries = async () => {
-  try {
-    const response = await api.get("/dictionaries");
-    console.log("✅ 원본 API 응답:", response.data);
-    const rawData = response.data.data || [];
-    const mergedData = mergeDictionaryData(rawData);
-    console.log("✅ 합쳐진 데이터:", mergedData);
-    return mergedData;
-  } catch (error) {
-    console.error("사전 데이터 가져오기 실패:", error?.userMessage || error);
-    throw error;
-  }
-};
+export async function getDictionaries({ signal, params } = {}) {
+  const res = await api.get("/dictionaries", { signal, params });
+  const raw = Array.isArray(getData(res)) ? getData(res) : [];
+  return raw.map(mergeDictionaryItem);
+}
 
-export const getDictionariesDetail = async (dictionaryId) => {
-  try {
-    const response = await api.get(`/dictionaries/${dictionaryId}`);
-    console.log("✅ 상세 API 응답:", response.data);
-    const rawData = response.data.data || {};
-    const imageData = imageDataMap[rawData.id] || {};
-    const mergedData = {
-      id: rawData.id,
-      category: rawData.keyword,
-      title: rawData.title,
-      subtitle: rawData.subtitle,
-      content: rawData.content, // content로 변경
-      desc: rawData.content, // 기존 호환성을 위해 desc도 유지
-      miniCard: imageData.miniCard || null,
-      bigCard: imageData.bigCard || null,
-      icon: imageData.icon || null,
-      hotRank: imageData.hotRank || null,
-    };
-    console.log("✅ 합쳐진 상세 데이터:", mergedData);
-    return mergedData;
-  } catch (error) {
-    console.error("상세 데이터 가져오기 실패:", error?.userMessage || error);
-    throw error;
-  }
-};
+export async function getDictionariesDetail(dictionaryId, { signal } = {}) {
+  if (!dictionaryId) throw new Error("Invalid dictionaryId");
+  const res = await api.get(`/dictionaries/${dictionaryId}`, { signal });
+  const raw = getData(res) || {};
+  return mergeDictionaryItem(raw);
+}
 
-/* ---------- JungleSound (Newsletters) ---------- */
+/* ──────────────────────────────
+ * 정글사운드 (Newsletters)
+ * ────────────────────────────── */
+export async function getNewsletters({ signal, params } = {}) {
+  const res = await api.get("/regions/newsletters", { signal, params });
+  const arr = Array.isArray(getData(res)) ? getData(res) : [];
+  return arr.map((it) => ({
+    ...it,
+    id: it.newsletterId, // 라우팅 호환
+    thumbnail:
+      clean(it.thumbnailUrl) ||
+      clean(it.thumbnailImg) ||
+      youtubeThumb(clean(it.link)) ||
+      "/placeholder.png",
+    thumbnailUrl: clean(it.thumbnailUrl) || clean(it.thumbnailImg),
+  }));
+}
 
-const youtubeThumb = (link) => {
-  const m = link?.match(/(?:v=|youtu\.be\/|shorts\/)([^?&#/]+)/);
-  return m ? `https://img.youtube.com/vi/${m[1]}/hqdefault.jpg` : null;
-};
-
-const clean = (s) => (typeof s === "string" ? s.trim() : "");
-
-// 목록
-export const getNewsletters = async () => {
-  try {
-    const res = await api.get("/regions/newsletters");
-    console.log("📋 뉴스레터 목록 API 응답:", res?.data);
-
-    const arr = Array.isArray(res?.data?.data) ? res.data.data : [];
-
-    return arr.map((it) => ({
-      ...it,
-      id: it.newsletterId, // 라우팅 호환
-      thumbnail:
-        clean(it.thumbnailUrl) ||
-        clean(it.thumbnailImg) ||
-        youtubeThumb(clean(it.link)) ||
-        "/placeholder.png",
-    }));
-  } catch (error) {
-    console.error("뉴스레터 목록 실패:", error?.userMessage || error);
-    throw error;
-  }
-};
-
-// 상세 (검증된 엔드포인트 우선 + 목록 폴백)
-export const getNewsletterDetail = async (newsletterId) => {
+export async function getNewsletterDetail(newsletterId, { signal } = {}) {
   if (!newsletterId) throw new Error("Invalid newsletterId");
   const idStr = String(newsletterId);
 
-  console.log("🔍 뉴스레터 상세 요청 ID:", idStr, typeof idStr);
-
-  // 1차: 동작 확인된 엔드포인트
+  // 1차: 상세
   try {
-    const res = await api.get(`/newsletters/${idStr}`);
-    console.log("✅ 성공: /newsletters/:id", res?.data);
-    const raw = res?.data?.data;
-
+    const res = await api.get(`/newsletters/${idStr}`, { signal });
+    const raw = getData(res);
     if (raw) {
       return {
         ...raw,
@@ -133,51 +94,56 @@ export const getNewsletterDetail = async (newsletterId) => {
         thumbnailUrl: clean(raw.thumbnailUrl) || clean(raw.thumbnailImg),
       };
     }
-  } catch (e) {
-    console.log("❌ /newsletters/:id 실패, 목록 폴백 시도", e?.response?.status);
+  } catch {
+    // 무시 후 목록 폴백 시도
   }
 
   // 2차: 목록 폴백
-  try {
-    console.log("📍 목록에서 필터링 폴백");
-    const res = await api.get("/regions/newsletters");
-    const arr = Array.isArray(res?.data?.data) ? res.data.data : [];
-    const found = arr.find((it) => String(it.newsletterId || it.id) === idStr);
-
-    if (found) {
-      console.log("✅ 목록에서 찾음 (제한된 데이터):", found);
-      return {
-        ...found,
-        id: found.newsletterId || found.id || idStr,
-        newsletterId: found.newsletterId || found.id || idStr,
-        thumbnail:
-          clean(found.thumbnailUrl) ||
-          clean(found.thumbnailImg) ||
-          youtubeThumb(clean(found.link)) ||
-          "/placeholder.png",
-        thumbnailUrl: clean(found.thumbnailUrl) || clean(found.thumbnailImg),
-        // 목록에 없는 필드들은 빈 값
-        mediaImgUrl: found.mediaImgUrl ?? null,
-        inTitle: null,
-        subtitle1: null,
-        subtitle2: null,
-        content2: null,
-        todayQuestion: null,
-        titleQuestion: null,
-        questionContent: null,
-      };
-    }
-  } catch (fallbackErr) {
-    console.log("❌ 목록 폴백도 실패:", fallbackErr?.response?.status);
+  const list = await getNewsletters({ signal });
+  const found = list.find((it) => String(it.newsletterId || it.id) === idStr);
+  if (found) {
+    return {
+      ...found,
+      id: found.newsletterId || found.id || idStr,
+      newsletterId: found.newsletterId || found.id || idStr,
+      thumbnail:
+        clean(found.thumbnailUrl) ||
+        clean(found.thumbnailImg) ||
+        youtubeThumb(clean(found.link)) ||
+        "/placeholder.png",
+      thumbnailUrl: clean(found.thumbnailUrl) || clean(found.thumbnailImg),
+      // 상세에서만 있는 필드들 빈 값
+      mediaImgUrl: found.mediaImgUrl ?? null,
+      inTitle: null,
+      subtitle1: null,
+      subtitle2: null,
+      content2: null,
+      todayQuestion: null,
+      titleQuestion: null,
+      questionContent: null,
+    };
   }
 
-  console.error("❌ 모든 방법 실패");
   return null;
-};
+}
 
-// 지난주 뉴스 조회
+/* ──────────────────────────────
+ * 지난주 뉴스
+ * ────────────────────────────── */
 export async function getWeeklyNews({ signal, params } = {}) {
-  // params 필요하면 { regionId } 등 전달
   const res = await api.get("/regions/weeklynews", { signal, params });
   return res.data; // { success, code, message, data: [...] }
+}
+
+/* ──────────────────────────────
+ * 정글피플 / 정글톡 (예시)
+ * ────────────────────────────── */
+export async function getJunglePeople({ signal, params } = {}) {
+  const res = await api.get("/junglepeople", { signal, params });
+  return getData(res) ?? [];
+}
+
+export async function createJungleTalk(payload, { signal } = {}) {
+  const res = await api.post("/jungletalk", payload, { signal });
+  return res.data;
 }
