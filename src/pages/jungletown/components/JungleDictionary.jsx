@@ -28,10 +28,15 @@ export default function JungleDictionary() {
       })
       .catch((e) => {
         console.error("❌ 목록 API 실패:", e);
-        setList([]);
+        // 임시로 로컬 데이터만 사용
+        const assetMap = Object.fromEntries(DICTIONARY.map((d) => [String(d.id), d]));
+        const localData = DICTIONARY.map((item) => ({
+          ...item,
+          ...(assetMap[String(item.id)] || {}),
+        }));
+        setList(localData);
       });
   }, []);
-
   const handleCardClick = async (item) => {
     console.log("🔍 선택된 아이템:", item);
     setSelected(item);

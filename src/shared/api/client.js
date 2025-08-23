@@ -1,30 +1,21 @@
 import axios from "axios";
 
-// .env가 없거나 값이 비어있으면 자동으로 '/api' 사용
+// 올바른 API 도메인 설정
 const baseURL = (() => {
   const envUrl = (import.meta.env.VITE_API_BASE_URL || "").trim();
-  return envUrl || "/api";
+
+  if (envUrl) return envUrl;
+
+  // 프로덕션에서는 실제 API 도메인
+  if (import.meta.env.PROD) {
+    return "https://api.junglegym.kr";
+  }
+
+  // 개발환경에서는 로컬 또는 API 도메인
+  return "https://api.junglegym.kr"; // 또는 "http://localhost:8080"
 })();
 
 export const api = axios.create({
   baseURL,
   timeout: 10000,
 });
-
-api.interceptors.response.use(
-  (res) => res,
-  (err) => {
-    // ✅ 요청 취소는 사용자 메시지 부여/로그 대상에서 제외
-    if (
-      axios.isCancel?.(err) ||
-      err?.code === "ERR_CANCELED" ||
-      err?.name === "CanceledError" ||
-      String(err?.message).toLowerCase() === "canceled"
-    ) {
-      return Promise.reject(err);
-    }
-    const serverMsg = err?.response?.data?.message;
-    err.userMessage = serverMsg || "요청 처리 중 문제가 발생했습니다.";
-    return Promise.reject(err);
-  }
-);
