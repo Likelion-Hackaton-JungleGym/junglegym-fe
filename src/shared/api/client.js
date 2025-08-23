@@ -1,7 +1,13 @@
 import axios from "axios";
 
+// .env가 없거나 값이 비어있으면 자동으로 '/api' 사용
+const baseURL = (() => {
+  const envUrl = (import.meta.env.VITE_API_BASE_URL || "").trim();
+  return envUrl || "/api";
+})();
+
 export const api = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL,
+  baseURL,
   timeout: 10000,
 });
 
@@ -13,11 +19,12 @@ api.interceptors.response.use(
       axios.isCancel?.(err) ||
       err?.code === "ERR_CANCELED" ||
       err?.name === "CanceledError" ||
-      err?.message === "canceled"
+      String(err?.message).toLowerCase() === "canceled"
     ) {
       return Promise.reject(err);
     }
-    err.userMessage = err?.response?.data?.message || "요청 처리 중 문제가 발생했습니다.";
+    const serverMsg = err?.response?.data?.message;
+    err.userMessage = serverMsg || "요청 처리 중 문제가 발생했습니다.";
     return Promise.reject(err);
   }
 );
