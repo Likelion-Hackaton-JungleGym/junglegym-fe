@@ -77,10 +77,10 @@ export const CheckAnswerText = styled.div`
 
 export const FloatingButton = styled.button`
   position: fixed;
-  bottom: 24px;
+  bottom: 60px;
   left: 50%;
   transform: translateX(-50%);
-  width: 90%;
+  width: 336px;
   height: 55px;
   background: #7471f9;
   color: white;
@@ -90,7 +90,6 @@ export const FloatingButton = styled.button`
   padding: 14px;
   border-radius: 999px;
   z-index: 20;
-  cursor: pointer;
   transition: all 0.2s ease;
 `;
 

@@ -5,7 +5,8 @@ import LoadingScreen from "../../../shared/components/LoadingScreen";
 import RedPartyWhite from "./img/redPartyWhite.svg";
 import BluePartyWhite from "./img/bluePartyWhite.svg";
 
-export default function Profile({ politicians = [], isLoading = false }) {
+
+export default function Profile({ politicians = [], isLoading = false, selectedRegion }) {
   // API 데이터를 새로운 UI 구조에 맞게 변환
   const people = politicians.map((politician) => {
     // 정당에 따른 배경색 설정
@@ -62,7 +63,10 @@ export default function Profile({ politicians = [], isLoading = false }) {
             fontSize: "16px",
           }}
         >
-          정치인 정보를 준비 중입니다.
+          {selectedRegion 
+            ? `${selectedRegion}의 정치인 정보를 준비 중입니다.`
+            : "정치인 정보를 준비 중입니다."
+          }
         </div>
       </Wrapper>
     );

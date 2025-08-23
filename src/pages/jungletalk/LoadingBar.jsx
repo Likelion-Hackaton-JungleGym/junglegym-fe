@@ -89,23 +89,23 @@ const Wrapper = styled.div`
 `;
 
 const Img = styled.img`
-  width: 200px;
+  width: 145px;
   height: auto;
-  margin-bottom: 16px;
+  margin-bottom: 45px;
   user-select: none;
   -webkit-user-drag: none;
 `;
 
 const LoadingText = styled.p`
-  font-size: 16px;
-  font-weight: 500;
+  font-size: 22px;
+  font-weight: 600;
   color: #7471f9;
   margin: 8px 0 20px;
   text-align: center;
 `;
 
 const BarBg = styled.div`
-  width: min(720px, 80%);
+  width: min(720px, 70%);
   height: 8px;
   border-radius: 4px;
   background-color: rgba(116, 113, 249, 0.2);

@@ -17,12 +17,7 @@ const api = axios.create({
  */
 export const getPoliticianById = async (politicianId) => {
   try {
-    console.log("정치인 정보 조회 API 호출:", politicianId);
-    console.log("요청 URL:", `${api.defaults.baseURL}/api/politician/${politicianId}`);
-
     const response = await api.get(`/api/politician/${politicianId}`);
-
-    console.log("정치인 정보 API 응답:", response.data);
 
     if (response.data.success) {
       return response.data.data;
@@ -30,21 +25,9 @@ export const getPoliticianById = async (politicianId) => {
       throw new Error(response.data.message || "정치인 정보 조회 실패");
     }
   } catch (error) {
-    console.error("정치인 정보 조회 오류:", error);
-    console.error("에러 상세:", {
-      message: error.message,
-      status: error.response?.status,
-      statusText: error.response?.statusText,
-      data: error.response?.data,
-      config: error.config,
-    });
-
-    // 서버 에러 시 에러를 그대로 던짐
     if (error.response?.status === 500) {
       throw new Error("서버 내부 오류가 발생했습니다.");
     }
-
-    // 에러 타입별 처리
     if (error.code === "ERR_NETWORK") {
       throw new Error("네트워크 연결에 실패했습니다. 서버가 실행 중인지 확인해주세요.");
     }
@@ -53,7 +36,6 @@ export const getPoliticianById = async (politicianId) => {
     } else if (error.response?.status === 403) {
       throw new Error("접근이 거부되었습니다.");
     }
-
     throw error;
   }
 };
@@ -67,51 +49,32 @@ export const getPoliticianById = async (politicianId) => {
  */
 export const getPoliticianBills = async (politicianId, page = 1, size = 10) => {
   try {
-    console.log("정치인 발의법률안 조회 API 호출");
-    console.log(
-      "요청 URL:",
-      `${api.defaults.baseURL}/api/politicians/${politicianId}/bills?page=${page}&size=${size}`
-    );
-
     const response = await api.get(
       `/api/politicians/${politicianId}/bills?page=${page}&size=${size}`
     );
 
-    console.log("정치인 발의법률안 API 응답:", response.data);
-
     if (response.data.success) {
-      // 빈 배열이거나 데이터가 없으면 null 반환
       if (
         !response.data.data ||
         !response.data.data.items ||
         response.data.data.items.length === 0
       ) {
-        console.log("발의법률안이 없습니다.");
         return null;
       }
       return response.data.data;
     } else {
-      // 404 등으로 발의법률안이 없는 경우 null 반환
       if (response.data.code === 404) {
-        console.log("발의법률안이 없습니다.");
         return null;
       }
       throw new Error(response.data.message || "정치인 발의법률안 조회 실패");
     }
   } catch (error) {
-    console.error("정치인 발의법률안 조회 오류:", error);
-
-    // 404 에러는 발의법률안이 없는 것으로 처리
     if (error.response?.status === 404) {
-      console.log("발의법률안이 없습니다.");
       return null;
     }
-
-    // 서버 에러 시 에러를 그대로 던짐
     if (error.response?.status === 500 || error.response?.status === 400) {
       throw new Error("정치인 발의법률안 조회에 실패했습니다.");
     }
-
     throw error;
   }
 };
@@ -123,45 +86,26 @@ export const getPoliticianBills = async (politicianId, page = 1, size = 10) => {
  */
 export const getPoliticianCriminalRecord = async (politicianId) => {
   try {
-    console.log("정치인 전과 기록 조회 API 호출");
-    console.log(
-      "요청 URL:",
-      `${api.defaults.baseURL}/api/politician/${politicianId}/criminalRecord`
-    );
-
     const response = await api.get(`/api/politician/${politicianId}/criminalRecord`);
 
-    console.log("정치인 전과 기록 API 응답:", response.data);
-
     if (response.data.success) {
-      // 빈 배열이거나 데이터가 없으면 null 반환
       if (!response.data.data || response.data.data.length === 0) {
-        console.log("전과 기록이 없습니다.");
         return null;
       }
       return response.data.data;
     } else {
-      // 404 등으로 전과 기록이 없는 경우 null 반환
       if (response.data.code === 404) {
-        console.log("전과 기록이 없습니다.");
         return null;
       }
       throw new Error(response.data.message || "정치인 전과 기록 조회 실패");
     }
   } catch (error) {
-    console.error("정치인 전과 기록 조회 오류:", error);
-
-    // 404 에러는 전과 기록이 없는 것으로 처리
     if (error.response?.status === 404) {
-      console.log("전과 기록이 없습니다.");
       return null;
     }
-
-    // 서버 에러 시 에러를 그대로 던짐
     if (error.response?.status === 500 || error.response?.status === 400) {
       throw new Error("정치인 전과 기록 조회에 실패했습니다.");
     }
-
     throw error;
   }
 };
@@ -178,14 +122,12 @@ export const getPoliticianProperty = async (politicianId) => {
   } catch (error) {
     const status = error.response?.status;
     if (status === 404) {
-      // 데이터 없음 → 콘솔 소음 줄이고 null 반환
-      console.warn(`[property] 데이터 없음: id=${politicianId}`);
       return null;
     }
     if (status === 400 || status === 500) {
       throw new Error("정치인 재산 정보 조회에 실패했습니다.");
     }
-    throw error; // 네트워크 등 다른 케이스는 그대로
+    throw error;
   }
 };
 
@@ -196,12 +138,7 @@ export const getPoliticianProperty = async (politicianId) => {
  */
 export const getPoliticianHomepages = async (politicianId) => {
   try {
-    console.log("정치인 SNS/홈페이지 조회 API 호출");
-    console.log("요청 URL:", `${api.defaults.baseURL}/api/politician/${politicianId}/homepages`);
-
     const response = await api.get(`/api/politician/${politicianId}/homepages`);
-
-    console.log("정치인 SNS/홈페이지 API 응답:", response.data);
 
     if (response.data.success) {
       return response.data.data;
@@ -209,13 +146,9 @@ export const getPoliticianHomepages = async (politicianId) => {
       throw new Error(response.data.message || "정치인 SNS/홈페이지 조회 실패");
     }
   } catch (error) {
-    console.error("정치인 SNS/홈페이지 조회 오류:", error);
-
-    // 서버 에러 시 에러를 그대로 던짐
     if (error.response?.status === 500 || error.response?.status === 400) {
       throw new Error("정치인 SNS/홈페이지 조회에 실패했습니다.");
     }
-
     throw error;
   }
 };
@@ -227,12 +160,7 @@ export const getPoliticianHomepages = async (politicianId) => {
  */
 export const getPoliticianIssues = async (politicianId) => {
   try {
-    console.log("정치인 최근 이슈 조회 API 호출");
-    console.log("요청 URL:", `${api.defaults.baseURL}/api/politicians/${politicianId}/issues`);
-
     const response = await api.get(`/api/politicians/${politicianId}/issues`);
-
-    console.log("정치인 최근 이슈 API 응답:", response.data);
 
     if (response.data.success) {
       return response.data.data;
@@ -240,13 +168,9 @@ export const getPoliticianIssues = async (politicianId) => {
       throw new Error(response.data.message || "정치인 최근 이슈 조회 실패");
     }
   } catch (error) {
-    console.error("정치인 최근 이슈 조회 오류:", error);
-
-    // 서버 에러 시 에러를 그대로 던짐
     if (error.response?.status === 500 || error.response?.status === 400) {
       throw new Error("정치인 최근 이슈 조회에 실패했습니다.");
     }
-
     throw error;
   }
 };
@@ -258,15 +182,7 @@ export const getPoliticianIssues = async (politicianId) => {
  */
 export const getPoliticianPromises = async (politicianId) => {
   try {
-    console.log("정치인 공약 사업 이행 현황 조회 API 호출");
-    console.log(
-      "요청 URL:",
-      `${api.defaults.baseURL}/api/politicians/${politicianId}/promises/summary`
-    );
-
     const response = await api.get(`/api/politicians/${politicianId}/promises/summary`);
-
-    console.log("정치인 공약 사업 이행 현황 API 응답:", response.data);
 
     if (response.data.success) {
       return response.data.data;
@@ -274,19 +190,12 @@ export const getPoliticianPromises = async (politicianId) => {
       throw new Error(response.data.message || "정치인 공약 사업 이행 현황 조회 실패");
     }
   } catch (error) {
-    console.error("정치인 공약 사업 이행 현황 조회 오류:", error);
-
-    // 404 에러는 공약 사업 이행 현황이 없는 것으로 처리
     if (error.response?.status === 404) {
-      console.log("공약 사업 이행 현황이 없습니다.");
       return null;
     }
-
-    // 서버 에러 시 에러를 그대로 던짐
     if (error.response?.status === 500 || error.response?.status === 400) {
       throw new Error("정치인 공약 사업 이행 현황 조회에 실패했습니다.");
     }
-
     throw error;
   }
 };
@@ -298,12 +207,7 @@ export const getPoliticianPromises = async (politicianId) => {
  */
 export const getPoliticianActivities = async (politicianId) => {
   try {
-    console.log("정치인 공약 외 활동 뉴스 조회 API 호출");
-    console.log("요청 URL:", `${api.defaults.baseURL}/api/politicians/${politicianId}/activities`);
-
     const response = await api.get(`/api/politicians/${politicianId}/activities`);
-
-    console.log("정치인 공약 외 활동 뉴스 API 응답:", response.data);
 
     if (response.data.success) {
       return response.data.data;
@@ -311,19 +215,12 @@ export const getPoliticianActivities = async (politicianId) => {
       throw new Error(response.data.message || "정치인 공약 외 활동 뉴스 조회 실패");
     }
   } catch (error) {
-    console.error("정치인 공약 외 활동 뉴스 조회 오류:", error);
-
-    // 404 에러는 공약 외 활동 뉴스가 없는 것으로 처리
     if (error.response?.status === 404) {
-      console.log("공약 외 활동 뉴스가 없습니다.");
       return null;
     }
-
-    // 서버 에러 시 에러를 그대로 던짐
     if (error.response?.status === 500 || error.response?.status === 400) {
       throw new Error("정치인 공약 외 활동 뉴스 조회에 실패했습니다.");
     }
-
     throw error;
   }
 };
@@ -335,15 +232,7 @@ export const getPoliticianActivities = async (politicianId) => {
  */
 export const getPoliticianPromiseCategories = async (politicianId) => {
   try {
-    console.log("정치인 공약 카테고리 목록 조회 API 호출");
-    console.log(
-      "요청 URL:",
-      `${api.defaults.baseURL}/api/politicians/${politicianId}/promises/categories`
-    );
-
     const response = await api.get(`/api/politicians/${politicianId}/promises/categories`);
-
-    console.log("정치인 공약 카테고리 목록 API 응답:", response.data);
 
     if (response.data.success) {
       return response.data.data;
@@ -351,19 +240,12 @@ export const getPoliticianPromiseCategories = async (politicianId) => {
       throw new Error(response.data.message || "정치인 공약 카테고리 목록 조회 실패");
     }
   } catch (error) {
-    console.error("정치인 공약 카테고리 목록 조회 오류:", error);
-
-    // 404 에러는 공약 카테고리가 없는 것으로 처리
     if (error.response?.status === 404) {
-      console.log("공약 카테고리가 없습니다.");
       return null;
     }
-
-    // 서버 에러 시 에러를 그대로 던짐
     if (error.response?.status === 500 || error.response?.status === 400) {
       throw new Error("정치인 공약 카테고리 목록 조회에 실패했습니다.");
     }
-
     throw error;
   }
 };
@@ -375,12 +257,7 @@ export const getPoliticianPromiseCategories = async (politicianId) => {
  */
 export const getCategoryPromises = async (categoryId) => {
   try {
-    console.log("공약 카테고리 상세 공약 목록 조회 API 호출");
-    console.log("요청 URL:", `${api.defaults.baseURL}/api/categories/${categoryId}/promises`);
-
     const response = await api.get(`/api/categories/${categoryId}/promises`);
-
-    console.log("공약 카테고리 상세 공약 목록 API 응답:", response.data);
 
     if (response.data.success) {
       return response.data.data;
@@ -388,35 +265,78 @@ export const getCategoryPromises = async (categoryId) => {
       throw new Error(response.data.message || "공약 카테고리 상세 공약 목록 조회 실패");
     }
   } catch (error) {
-    console.error("공약 카테고리 상세 공약 목록 조회 오류:", error);
-
-    // 404 에러는 상세 공약이 없는 것으로 처리
     if (error.response?.status === 404) {
-      console.log("상세 공약이 없습니다.");
       return null;
     }
-
-    // 서버 에러 시 에러를 그대로 던짐
     if (error.response?.status === 500 || error.response?.status === 400) {
       throw new Error("공약 카테고리 상세 공약 목록 조회에 실패했습니다.");
     }
+    throw error;
+  }
+};
 
+/**
+ * 모든 지역구 목록 조회 API
+ * @returns {Promise<Array>} 지역구 목록
+ */
+export const getAllRegions = async () => {
+  try {
+    const response = await api.get(`/api/regions/politicians`);
+    
+    if (response.data.success) {
+      const politicians = response.data.data || [];
+      const regionSet = new Set();
+      
+      politicians.forEach(politician => {
+        if (politician.regionText) {
+          const regions = politician.regionText.split(',').map(r => r.trim());
+          regions.forEach(region => {
+            if (region) regionSet.add(region);
+          });
+        }
+        
+        if (politician.regionList && Array.isArray(politician.regionList)) {
+          politician.regionList.forEach(region => {
+            if (region) regionSet.add(region);
+          });
+        }
+      });
+      
+      const regions = Array.from(regionSet).sort();
+      
+      return regions.length > 0 ? regions : [
+        "종로구", "중구", "용산구", "성동구", "광진구", "동대문구", "중랑구", "성북구", 
+        "강북구", "도봉구", "노원구", "은평구", "서대문구", "마포구", "양천구", "강서구", 
+        "구로구", "금천구", "영등포구", "동작구", "관악구", "서초구", "강남구", "송파구", "강동구"
+      ];
+    } else {
+      throw new Error(response.data.message || "지역구 목록 조회 실패");
+    }
+  } catch (error) {
+    if (error.response?.status === 500 || error.response?.status === 400) {
+      return [
+        "종로구", "중구", "용산구", "성동구", "광진구", "동대문구", "중랑구", "성북구", 
+        "강북구", "도봉구", "노원구", "은평구", "서대문구", "마포구", "양천구", "강서구", 
+        "구로구", "금천구", "영등포구", "동작구", "관악구", "서초구", "강남구", "송파구", "강동구"
+      ];
+    }
     throw error;
   }
 };
 
 /**
  * 지역별 정치인 리스트 조회 API
+ * @param {string} regionName - 지역구명 (선택사항)
  * @returns {Promise<Array>} 정치인 리스트
  */
-export const getPoliticiansByRegion = async () => {
+export const getPoliticiansByRegion = async (regionName = '성북구') => {
   try {
-    console.log("지역별 정치인 리스트 조회 API 호출");
-    console.log("요청 URL:", `${api.defaults.baseURL}/api/regions/politicians`);
+    let url = `/api/regions/politicians`;
+    if (regionName) {
+      url += `?regionName=${encodeURIComponent(regionName)}`;
+    }
 
-    const response = await api.get(`/api/regions/politicians`);
-
-    console.log("지역별 정치인 리스트 API 응답:", response.data);
+    const response = await api.get(url);
 
     if (response.data.success) {
       return response.data.data;
@@ -424,13 +344,9 @@ export const getPoliticiansByRegion = async () => {
       throw new Error(response.data.message || "지역별 정치인 리스트 조회 실패");
     }
   } catch (error) {
-    console.error("지역별 정치인 리스트 조회 오류:", error);
-
-    // 서버 에러 시 에러를 그대로 던짐
     if (error.response?.status === 500 || error.response?.status === 400) {
       throw new Error("지역별 정치인 리스트 조회에 실패했습니다.");
     }
-
     throw error;
   }
 };
@@ -530,114 +446,6 @@ export const transformPoliticianData = (apiData) => {
   };
 };
 
-/**
- * 에러 처리를 위한 폴백 데이터 반환
- * @returns {Object} 기본 더미 데이터
- */
-export const getFallbackData = () => {
-  return {
-    basicInfo: {
-      birth: "1960.02.18",
-      ageSummary: "총 2선",
-      ageDetail1: "민선 7기",
-      ageDetail2: "민선 8기",
-      committee: "외교통일 위원회",
-      military: "육군 하사",
-    },
-    education: [
-      "고려대학교 정책대학원 행정학 석사",
-      "한국방송통신대학교 사회과학대학 행정학 학사",
-      "정읍제일고등학교",
-      "덕천초등학교",
-    ],
-    experience: [
-      "성북구의회 의원",
-      "국회사무처 보좌관",
-      "더불어민주당 서울시당",
-      "한성대학교 겸임교수",
-      "서울시구청장협의회 부회장",
-    ],
-    issues: [
-      { title: "성북복지재단 초대 이사장 윤재성씨 임명", link: "" },
-      { title: "소비쿠폰 현장 점검 나서며 민생 회복 강조", link: "" },
-      { title: "생활 현안 직접 점검, 현장행정 본격화", link: "" },
-    ],
-    sns: { facebook: "", instagram: "", blog: "", twitter: "" },
-    promiseProgress: {
-      completed: 22,
-      continued: 25,
-      normal: 30,
-      notImplemented: 30,
-      total: 77,
-    },
-    keyPromises: [
-      {
-        category: "복지",
-        text: "1인 가구를 위한 맞춤형 지원센터를 운영하겠습니다",
-        status: "normal",
-      },
-      {
-        category: "경제",
-        text: "청년 스마트 창업센터를 구축하고 창업 거리를 활성화하겠습니다",
-        status: "completed",
-      },
-      {
-        category: "환경",
-        text: "정릉천과 성북천을 생태하천으로 복원하겠습니다",
-        status: "continued",
-      },
-      {
-        category: "문화",
-        text: "문화예술교육센터를 설립해 모두가 참여하는 문화도시를 만들겠습니다",
-        status: "normal",
-      },
-      {
-        category: "안전",
-        text: "공공 CCTV 확대와 범죄 예방 시스템으로 일상을 더 안전하게 만들겠습니다",
-        status: "hold",
-      },
-    ],
-    otherActivities: [
-      { title: "세계 지방정부 기후총회 발표", link: "" },
-      { title: "'지자체 혁신평가' 대상 수상", link: "" },
-      { title: "현장 중심 민생행정 추구", link: "" },
-    ],
-    assets: {
-      total: "50.35억원",
-      debt: "13.8억원",
-      net: "36.55억원",
-      year: "2024",
-      details: ["예금 —", "부동산 —", "차량 —"],
-    },
-    crimes: {
-      count: 3,
-      items: [
-        { title: "무고 공무원자격사칭", penalty: "벌금 1,500,000원" },
-        { title: "도로교통법위반(음주운전)", penalty: "벌금 1,500,000원" },
-        { title: "공용물건손상 특수공무집행방해", penalty: "벌금 5,500,000원" },
-      ],
-    },
-    bills: [
-      {
-        title: "항공안전법 일부개정법률안",
-        date: "2025.08.01",
-        status: "대표발의",
-        mainProposer: "김와와",
-        coProposers: [
-          "이라라",
-          "박모모",
-          "최낭낭",
-          "윤명명",
-          "김흑흑",
-          "이라라",
-          "박모모",
-          "최냥냥",
-          "윤명명",
-          "김흑흑",
-        ],
-      },
-    ],
-  };
-};
+
 
 export default api;

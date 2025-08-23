@@ -68,7 +68,7 @@ const JungleTalkAnswer = ({
             <strong>정글챗</strong>
             <br />
           </SubTitle>
-          {(answer && answer.trim()) || ""}
+          {(answer && answer.trim().replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')) || ""}
         </AnswerText>
         <OtherQuestion
           title="다른 사람들의 질문"

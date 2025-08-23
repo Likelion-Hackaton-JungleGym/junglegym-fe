@@ -1,11 +1,13 @@
 import styled from "styled-components";
 
-export default function Title() {
+export default function Title({ selectedRegion }) {
+  const regionName = selectedRegion || "성북구";
+  
   return (
     <Wrapper>
       <BigTexts>
         <BigText>
-          성북구를
+          {regionName}를
           <Highlight />
         </BigText>
         <BigText>이루는 사람들</BigText>
