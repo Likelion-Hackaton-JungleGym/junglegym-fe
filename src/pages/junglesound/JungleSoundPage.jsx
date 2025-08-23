@@ -20,8 +20,8 @@ export default function JungleSoundPage() {
 }
 
 const Wrapper = styled.div`
-  padding: 10px 0px 10px 0px;
-  margin: 5px 20px;
+  padding: 20px 0px 10px 0px;
+  margin: 25px 20px 5px 20px;
 `;
 
 const HighlightText = styled.div`
@@ -33,7 +33,7 @@ const HighlightText = styled.div`
   font-style: normal;
   font-weight: 700;
   padding-top: 20px;
-  letter-spacing: -1px;
+  letter-spacing: -0.5px;
   margin-bottom: 7px;
 `;
 

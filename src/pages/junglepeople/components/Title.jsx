@@ -34,7 +34,7 @@ const BigText = styled.div`
   text-align: center;
   font-style: normal;
   font-weight: 700;
-  margin: -5px;
+  margin: -3px;
   font-size: 27px;
   letter-spacing: -0.5px;
 `;
@@ -56,7 +56,7 @@ const SubText = styled.p`
   text-align: center;
   font-size: 15px;
   font-style: normal;
-  font-weight: 500;
+  font-weight: 400;
   letter-spacing: -0.2px;
   margin: 10px;
 `;

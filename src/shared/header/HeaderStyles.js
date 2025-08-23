@@ -3,14 +3,32 @@ import { Link } from "react-router-dom";
 
 export const LogoImg = styled.img`
   height: 30px;
-  background: transparent;
+  background-color: #ffffff;
 `;
+
 export const LogoWrapper = styled.div`
-  padding: 20px;
-  height: 80px;
+  position: absolute;
+  left: 50%;
+  top: 65%;
+  transform: translate(-50%, -50%);
+  height: 30px;
   display: flex;
   justify-content: center;
   align-items: center;
+`;
+
+export const MapImg = styled.img`
+  height: 20px;
+  background-color: #ffffff;
+`;
+
+export const TopWrapper = styled.div`
+  position: relative;
+  height: 110px;
+  display: flex;
+  align-items: center;
+  padding-left: 30px;
+  padding-top: 32px;
 `;
 
 export const Nav = styled.nav`
@@ -50,10 +68,8 @@ export const HeaderWrapper = styled.header`
   position: fixed;
   width: 390px;
   top: 0;
-  //left: 0;
-  //right: 0;
   z-index: 100;
-  background-color: white;
+  background-color: #ffffff;
   transform: ${({ $visible }) => ($visible ? "translateY(0)" : "translateY(-100%)")};
   transition: transform 0.25s ease;
 `;

@@ -152,7 +152,9 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 60px 20px 0;
+  padding: 30px 20px;
+  margin-top: 45px;
+ // padding: 60px 20px 0;
   font-family: Pretendard;
 `;
 

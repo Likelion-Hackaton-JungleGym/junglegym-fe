@@ -3,12 +3,11 @@ import orgchartImg from "../../../assets/images/OrgChart.svg";
 
 export default function OrgChart() {
   return (
-    <>
-      <Title>성북구 조직도</Title>
-      <Wrapper>
-        <Img src={orgchartImg} />
-      </Wrapper>
-    </>
+    <Wrapper>
+      <Title>정글관계도</Title>
+      <Img src={orgchartImg} />
+    </Wrapper>
+
   );
 }
 

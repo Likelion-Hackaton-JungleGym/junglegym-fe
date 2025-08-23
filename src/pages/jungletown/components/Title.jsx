@@ -7,13 +7,14 @@ export default function Title() {
         동네 한 바퀴
         <Highlight />
       </HighlightText>
-      <SubText>우리 동네, 지금 꼭 알아야 할 이슈 5가지!</SubText>
+      <SubText>우리 동네, 지금 꼭 알아야 할 이슈 5가지! </SubText>
+      <SubText>카드를 눌러 빠르게 확인해보세요</SubText>
     </Wrapper>
   );
 }
 
 const Wrapper = styled.div`
-  padding: 20px;
+  padding: 20px 20px 5px;
 `;
 
 const HighlightText = styled.div`
@@ -25,6 +26,7 @@ const HighlightText = styled.div`
   font-style: normal;
   font-weight: 700;
   padding-top: 15px;
+  margin-bottom: 10px;
   letter-spacing: -1px;
 `;
 
@@ -47,6 +49,6 @@ const SubText = styled.p`
   font-size: 15px;
   font-style: normal;
   font-weight: 400;
-  margin-top: 5px;
   letter-spacing: -0.2px;
+  margin-top: 2px;
 `;
