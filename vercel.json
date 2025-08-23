@@ -1,3 +1,9 @@
 {
-  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
+  "rewrites": [
+    { "source": "/api/(.*)", "destination": "https://api.junglegym.kr/$1" },
+    { "source": "/junglepeople", "destination": "https://api.junglegym.kr/junglepeople" },
+    { "source": "/jungletalk", "destination": "https://api.junglegym.kr/jungletalk" },
+    { "source": "/junglesound", "destination": "https://api.junglegym.kr/junglesound" },
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
 }
