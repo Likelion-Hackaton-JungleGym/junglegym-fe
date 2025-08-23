@@ -258,7 +258,8 @@ const MainImg = styled.img`
 `;
 
 const IconWrapper = styled.div`
-  width: 140px;
+  width: 200px;
+  height: 200px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -282,17 +283,27 @@ const CompactOverlay = styled.div`
 const OverlayIcon = styled.img`
   width: 200px;
   height: 200px;
+  z-index: 1;
 `;
 
 const OverlayTitle = styled.div`
   font-size: 22px;
   font-weight: 500;
-  line-height: 1.3;
+  color: #fff;
   letter-spacing: -0.02em;
-  max-width: 100%;
-  white-space: pre-line;
+
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  word-break: break-word;
+
+  line-height: 1.35;
+  max-width: 90%;
+  max-height: calc(2 * 1.35em);
+  margin-top: -20px; /* 필요하면 이렇게 올리기(레이아웃 반영) */
+  position: relative;
   z-index: 2;
-  transform: translateY(-10px);
 `;
 
 const OverlayDesc = styled.div`
