@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 export const LogoImg = styled.img`
   height: 30px;
-  background-color: #ffffff;
+  background: transparent;
 `;
 
 export const LogoWrapper = styled.div`
@@ -26,7 +26,7 @@ export const LogoLink = styled(Link)`
 
 export const MapImg = styled.img`
   height: 20px;
-  background-color: #ffffff;
+  background: transparent;
 `;
 
 export const TopWrapper = styled.div`
@@ -35,7 +35,7 @@ export const TopWrapper = styled.div`
   display: flex;
   align-items: center;
   padding-left: 30px;
-  padding-top: 32px;
+  padding-top: 40px;
 `;
 
 export const Nav = styled.nav`

@@ -3,13 +3,15 @@ import styled from "styled-components";
 import Title from "./components/Title";
 import Profile from "./components/Profile";
 import OrgChart from "./components/OrgChart";
-import { useOutletContext } from "react-router-dom";
+import { useOutletContext, useSearchParams } from "react-router-dom";
 import { getPoliticiansByRegion } from "../../shared/utils/politicianApi.js";
 
 export default function JunglePeoplePage() {
   const { setHeaderMode } = useOutletContext();
+  const [searchParams] = useSearchParams();
   const [politicians, setPoliticians] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const selectedRegion = searchParams.get('region') || '성북구';
 
   useEffect(() => {
     setHeaderMode("hideOnScroll");
@@ -19,8 +21,8 @@ export default function JunglePeoplePage() {
   useEffect(() => {
     const fetchPoliticians = async () => {
       try {
-        console.log('지역별 정치인 리스트 조회 시작');
-        const data = await getPoliticiansByRegion(); // regionName 파라미터 제거
+        console.log('지역별 정치인 리스트 조회 시작', { selectedRegion });
+        const data = await getPoliticiansByRegion(selectedRegion);
         console.log('지역별 정치인 리스트:', data);
         setPoliticians(data);
       } catch (err) {
@@ -32,12 +34,14 @@ export default function JunglePeoplePage() {
     };
 
     fetchPoliticians();
-  }, []);
+  }, [selectedRegion]);
+
+
 
   return (
     <Wrapper>
-      {!isLoading && <Title />}
-      <Profile politicians={politicians} isLoading={isLoading} />
+      {!isLoading && <Title selectedRegion={selectedRegion} />}
+      <Profile politicians={politicians} isLoading={isLoading} selectedRegion={selectedRegion} />
       {!isLoading && <OrgChart />}
     </Wrapper>
   );
