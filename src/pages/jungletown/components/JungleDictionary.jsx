@@ -4,6 +4,7 @@ import { getDictionaries } from "../../../shared/api/endpoints";
 import { getDictionariesDetail } from "../../../shared/api/endpoints";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import remarkBreaks from "remark-breaks"; // 줄바꿈을 위해 필요
 import { DICTIONARY } from "../components/JungleDictionaryData";
 import xButton from "../components/img/xButton.svg";
 
@@ -58,6 +59,8 @@ export default function JungleDictionary() {
     return () => window.removeEventListener("keydown", onKey);
   }, []);
 
+  // remarkBreaks 플러그인 사용으로 formatContent 함수 불필요
+
   return (
     <Wrapper>
       <Text>
@@ -103,8 +106,11 @@ export default function JungleDictionary() {
                 </IconCenter>
               )}
               <Desc>
-                <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                  {selectedDetail?.desc || selected.desc}
+                <ReactMarkdown remarkPlugins={[remarkGfm, remarkBreaks]}>
+                  {selectedDetail?.content ||
+                    selected.content ||
+                    selectedDetail?.desc ||
+                    selected.desc}
                 </ReactMarkdown>
               </Desc>
             </ModalCard>
@@ -135,9 +141,12 @@ const DictCards = styled.div`
   &.scroll-container {
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
+    /* 스크롤바 숨기기 */
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE/Edge */
   }
   &.scroll-container::-webkit-scrollbar {
-    height: 0;
+    display: none; /* Chrome, Safari, Opera */
   }
 `;
 

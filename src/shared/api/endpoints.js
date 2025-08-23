@@ -24,7 +24,8 @@ const mergeDictionaryData = (apiData) => {
       category: item.keyword,
       title: item.title,
       subtitle: item.subtitle,
-      desc: item.content,
+      content: item.content, // content로 변경
+      desc: item.content, // 기존 호환성을 위해 desc도 유지
       // 로컬 이미지 데이터
       miniCard: imageData.miniCard || null,
       bigCard: imageData.bigCard || null,
@@ -59,7 +60,8 @@ export const getDictionariesDetail = async (dictionaryId) => {
       category: rawData.keyword,
       title: rawData.title,
       subtitle: rawData.subtitle,
-      desc: rawData.content,
+      content: rawData.content, // content로 변경
+      desc: rawData.content, // 기존 호환성을 위해 desc도 유지
       miniCard: imageData.miniCard || null,
       bigCard: imageData.bigCard || null,
       icon: imageData.icon || null,
