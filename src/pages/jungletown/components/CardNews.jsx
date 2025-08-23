@@ -276,16 +276,14 @@ const IconWrapper = styled.div`
   width: 200px;
   height: 200px;
   display: flex;
-  padding: 0px 0px 10px;
-  //align-items: center;
   justify-content: center;
 `;
 
 const OverlayIcon = styled.img`
-  width: 200px;
+  width: 230px;
   height: 200px;
   z-index: 1;
-  transform: translateY(-20px);
+  transform: translateY(-10px);
 `;
 
 const OverlayTitle = styled.div`
@@ -413,6 +411,7 @@ const FooterRow = styled.div`
   align-items: center;
   justify-content: space-between;
   gap: 12px;
+  margin-top: 25px;
 `;
 
 const Source = styled.div`
