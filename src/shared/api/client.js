@@ -1,20 +1,19 @@
 import axios from "axios";
 
-// .env가 없거나 값이 비어있으면 자동으로 '/api' 사용
-const baseURL = (() => {
-  const envUrl = (import.meta.env.VITE_API_BASE_URL || "").trim();
-  return envUrl || "/api";
-})();
+// 환경변수가 있으면 그걸 쓰고, 없으면 '/api' 프록시 사용
+const baseURL = import.meta.env.VITE_API_BASE_URL || "/api";
 
 export const api = axios.create({
   baseURL,
   timeout: 10000,
 });
 
+// 디버깅용 (배포 후 콘솔에서 확인)
+console.log("[API] baseURL =", api.defaults.baseURL);
+
 api.interceptors.response.use(
   (res) => res,
   (err) => {
-    // ✅ 요청 취소는 사용자 메시지 부여/로그 대상에서 제외
     if (
       axios.isCancel?.(err) ||
       err?.code === "ERR_CANCELED" ||
