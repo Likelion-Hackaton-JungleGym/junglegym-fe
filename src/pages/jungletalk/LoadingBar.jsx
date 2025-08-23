@@ -74,12 +74,17 @@ const LoadingBar = ({
 export default LoadingBar;
 
 const Wrapper = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  /* 화면 전체 기준 중앙 정렬, 상단 오프셋 있으면 그만큼 줄이기 */
-  min-height: ${({ $offsetTop }) => ($offsetTop ? `calc(100vh - ${$offsetTop}px)` : "100vh")};
+  background-color: rgba(255, 255, 255, 0.95);
+  z-index: 9999;
   padding: 16px;
 `;
 

@@ -61,42 +61,51 @@ const JungleTalkPage = () => {
   const handleSubmit = async () => {
     const q = question.trim();
     if (!q) return;
+    console.log("[handleSubmit] 시작", { question: q, isPrivate });
     setFromOthers(false);
     setIsAnswerLoading(true);
-    setStep(2);
     try {
       const data = await askJungleTalkAI(q, { privated: isPrivate });
+      console.log("[handleSubmit] API 응답 성공", data);
       setAnswer(data?.answer ?? "");
       setLawText(data?.constitution ?? "");
-      setStep(3);
     } catch (e) {
-      console.log("[ask error]", e?.response?.data || e.message);
+      console.log("[handleSubmit] API 에러", e?.response?.data || e.message);
       alert("답변을 가져오는 중 문제가 발생했어요. 잠시 후 다시 시도해주세요.");
       setStep(1);
     } finally {
-      setIsAnswerLoading(false);
+      // 로딩 상태를 조금 더 유지하여 사용자가 로딩 화면을 볼 수 있도록 함
+      setTimeout(() => {
+        setIsAnswerLoading(false);
+        setStep(3);
+      }, 1000);
     }
   };
 
   const openAnswer = async (q) => {
     const qq = String(q || "").trim();
     if (!qq) return;
+    console.log("[openAnswer] 시작", { question: qq });
     setQuestion(qq);
     setFromOthers(true);
     setIsAnswerLoading(true);
     setAnswer("");
     setLawText("");
-    setStep(3);
     try {
       const data = await askJungleTalkAI(qq, { privated: false });
+      console.log("[openAnswer] API 응답 성공", data);
       setAnswer(data?.answer ?? "");
       setLawText(data?.constitution ?? "");
     } catch (e) {
-      console.log("[ask error]", e?.response?.data || e.message);
+      console.log("[openAnswer] API 에러", e?.response?.data || e.message);
       alert("답변을 불러오지 못했어요. 잠시 후 다시 시도해주세요.");
       setStep(1);
     } finally {
-      setIsAnswerLoading(false);
+      // 로딩 상태를 조금 더 유지하여 사용자가 로딩 화면을 볼 수 있도록 함
+      setTimeout(() => {
+        setIsAnswerLoading(false);
+        setStep(3);
+      }, 1000);
     }
   };
 
@@ -107,39 +116,31 @@ const JungleTalkPage = () => {
       )}
 
       {step === 2 && (
-        <>
-          {isAnswerLoading ? (
-            <LoadingBar />
-          ) : (
-            <JungleTalkQuestion
-              question={question}
-              setQuestion={setQuestion}
-              isPrivate={isPrivate}
-              setIsPrivate={setIsPrivate}
-              setStep={setStep}
-              handleSubmit={handleSubmit}
-            />
-          )}
-        </>
+        <JungleTalkQuestion
+          question={question}
+          setQuestion={setQuestion}
+          isPrivate={isPrivate}
+          setIsPrivate={setIsPrivate}
+          setStep={setStep}
+          handleSubmit={handleSubmit}
+        />
+      )}
+
+      {isAnswerLoading && (
+        <LoadingBar durationMs={5000} />
       )}
 
       {step === 3 && (
-        <>
-          {isAnswerLoading ? (
-            <LoadingBar />
-          ) : (
-            <JungleTalkAnswer
-              question={question}
-              answer={answer}
-              lawText={lawText}
-              setStep={setStep}
-              fromOthers={fromOthers}
-              dummyQuestions={questionsForUI}
-              onOtherClick={openAnswer}
-              isLoading={isAnswerLoading}
-            />
-          )}
-        </>
+        <JungleTalkAnswer
+          question={question}
+          answer={answer}
+          lawText={lawText}
+          setStep={setStep}
+          fromOthers={fromOthers}
+          dummyQuestions={questionsForUI}
+          onOtherClick={openAnswer}
+          isLoading={isAnswerLoading}
+        />
       )}
     </>
   );

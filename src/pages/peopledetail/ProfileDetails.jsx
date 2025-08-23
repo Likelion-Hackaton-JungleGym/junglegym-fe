@@ -343,7 +343,7 @@ export default function ProfileDetails({ politicianId, politician }) {
       detailLink: bill.detailLink || "",
       
       // 뒷면 데이터 (상세 정보)
-      category: bill.result || "정보", // result 값 (법안 처리 결과)
+      category: bill.result || "아직 미확정", // result 값이 null이면 '아직 미확정'으로 표시
       link: bill.detailLink || "",
       details: bill.summaryContent ? bill.summaryContent.split('\n').filter(line => line.trim()) : []
     }));

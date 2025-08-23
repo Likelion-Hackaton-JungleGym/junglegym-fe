@@ -45,7 +45,7 @@ const Bills = ({ bills = [], totalPages = 1, currentPage = 1, onPageChange }) =>
     bills.forEach((bill, i) => {
       // API 데이터에서 상세 정보 추출
       const backData = {
-        category: bill.category || "정보",
+        category: bill.category || "아직 미확정",
         link: bill.link || "",
         details: bill.details || [],
       };
@@ -194,7 +194,7 @@ const Bills = ({ bills = [], totalPages = 1, currentPage = 1, onPageChange }) =>
                             padding: "5px 10px",
                           }}
                         >
-                          {back.category || back.status || ""}
+                          {back.category || back.status || "아직 미확정"}
                         </span>
 
                         {back.link && (

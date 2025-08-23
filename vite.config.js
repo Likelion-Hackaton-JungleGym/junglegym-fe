@@ -6,10 +6,9 @@ export default defineConfig({
   server: {
     proxy: {
       "/api": {
-        target: "https://api.junglegym.kr",
+        target: "https://junglegym.kr",
         changeOrigin: true,
-        secure: true,
-        // rewrite 제거해서 /api/dictionaries 그대로 유지
+        secure: false
       },
     },
   },
