@@ -1,5 +1,5 @@
 #root {
-  max-width: 1280px;
+  max-width: 100%; /* 디바이스 폭에 맞추기 */
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
@@ -11,9 +11,11 @@
   will-change: filter;
   transition: filter 300ms;
 }
+
 .logo:hover {
   filter: drop-shadow(0 0 2em #646cffaa);
 }
+
 .logo.react:hover {
   filter: drop-shadow(0 0 2em #61dafbaa);
 }
@@ -39,4 +41,20 @@
 
 .read-the-docs {
   color: #888;
+}
+
+/* 📱 아이폰 14 프로 (390px 이하) 전용 스타일 */
+@media screen and (max-width: 390px) {
+  #root {
+    padding: 1rem; /* 모바일에서 패딩 줄이기 */
+  }
+
+  .logo {
+    height: 4em;
+    padding: 1em;
+  }
+
+  .card {
+    padding: 1em;
+  }
 }

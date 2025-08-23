@@ -1,22 +1,34 @@
 import styled from "styled-components";
-//import Title from "./components/Title";
-//import CardNews from "./components/CardNews";
-//import MiniPeople from "./components/MiniPeople";
-//import JungleDictionary from "./components/JungleDictionary";
+import Title from "./components/Title";
+import CardNews from "./components/CardNews";
+import MiniPeople from "./components/MiniPeople";
+import JungleDictionary from "./components/JungleDictionary";
 
 export default function JungleTownPage() {
   return (
     <Wrapper>
-      <p>동네 한 바퀴</p>
-      {/*<Title />
+      <MarginBox1>
+        <Title />
+      </MarginBox1>
       <CardNews />
-      <MiniPeople />
-      <JungleDictionary /> */}
+      <MarginBox2>
+        <MiniPeople />
+        <JungleDictionary />
+      </MarginBox2>
     </Wrapper>
   );
 }
 
 const Wrapper = styled.div`
-  background-color: skyblue;
+  margin-top: 25px;
 `;
-//확인용 임시 컬러. 나중에 바꿀 것
+
+const MarginBox1 = styled.div`
+  padding: 10px;
+  margin: 5px;
+`;
+
+const MarginBox2 = styled.div`
+  padding: -10px;
+  margin: 0px -15px 10px 10px;
+`;
