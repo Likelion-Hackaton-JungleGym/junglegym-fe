@@ -4,7 +4,7 @@ import orgchartImg from "./img/OrgChart.svg";
 export default function OrgChart() {
   return (
     <Wrapper>
-      <Title>성북구 조직도</Title>
+      <Title>정글관계도</Title>
       <Img src={orgchartImg} />
     </Wrapper>
   );

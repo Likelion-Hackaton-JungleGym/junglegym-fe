@@ -176,7 +176,7 @@ export default function CardNews() {
   );
 }
 
-/* ---------- styles (기존 유지) ---------- */
+/* ---------- styles ---------- */
 const GUTTER = 7;
 const PEEK_WIDTH = 50;
 
@@ -301,7 +301,7 @@ const OverlayTitle = styled.div`
   line-height: 1.35;
   max-width: 90%;
   max-height: calc(2 * 1.35em);
-  margin-top: -20px; /* 필요하면 이렇게 올리기(레이아웃 반영) */
+  margin-top: -30px; /* 필요하면 올리기 */
   position: relative;
   z-index: 2;
 `;
@@ -316,7 +316,6 @@ const OverlayDesc = styled.div`
   -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
   z-index: 2;
-  transform: translateY(-10px);
 `;
 
 const ExpandedOverlay = styled.div`
@@ -345,7 +344,7 @@ const OverlayTitle2 = styled.div`
 
 const OverlayBody = styled.p`
   margin: 0;
-  font-size: 12px;
+  font-size: 12px; //글자 수 늘리고 글자 크기 보기
   line-height: 1.5;
   color: rgba(255, 255, 255, 0.95);
 `;
