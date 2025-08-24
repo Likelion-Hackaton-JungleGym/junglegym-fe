@@ -124,6 +124,7 @@ const Card = styled.article`
   display: flex;
   flex-direction: column;
   border: 2px solid #d2d2d2;
+  height: 230px;
 `;
 
 const Top = styled.div`
@@ -193,8 +194,8 @@ const Bottom = styled.div`
 `;
 
 const Name = styled.div`
-  font-size: 20px;
-  font-weight: 700;
+  font-size: 22px;
+  font-weight: 600;
   line-height: 1.2;
   color: #111;
 `;

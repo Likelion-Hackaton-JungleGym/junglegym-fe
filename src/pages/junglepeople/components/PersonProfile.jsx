@@ -263,7 +263,7 @@ const TooltipBox = styled.div`
   left: calc(100% + 20px);
   transform: translateY(-50%);
   width: 90px;
-  padding: 9px 15px;
+  padding: 9px 9px;
   background: #f8f8fb;
   border-radius: 10px;
   border: 1px dashed #8e8e8e;

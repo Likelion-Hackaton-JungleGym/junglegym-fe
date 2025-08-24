@@ -35,6 +35,7 @@ const JungleTalkMain = ({ setStep, onQuestionClick, questions }) => {
             title="다른 사람들의 궁금증"
             questions={questions}
             onClick={(i, q) => onQuestionClick?.(q)}
+            variant="card"
           />
           <FloatingButton onClick={() => setStep(2)}>+ 질문하기</FloatingButton>
         </Section>

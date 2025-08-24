@@ -6,9 +6,14 @@ export default defineConfig({
   server: {
     proxy: {
       "/api": {
-        target: "https://junglegym.kr",
+        target: "https://www.junglegym.kr",
         changeOrigin: true,
-        secure: false
+        secure: false,
+        headers: {
+          'Host': 'www.junglegym.kr',
+          'Origin': 'https://www.junglegym.kr',
+          'Referer': 'https://www.junglegym.kr'
+        }
       },
     },
   },

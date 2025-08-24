@@ -80,6 +80,7 @@ const JungleTalkAnswer = ({
             onOtherClick?.(q);
           }}
           disabled={loading}
+          variant="list"
         />
       </WhiteContainer>
     </Container>

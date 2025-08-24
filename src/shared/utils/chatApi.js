@@ -4,9 +4,21 @@ import api from "./api";
 export async function getChats({ limit = 10 } = {}) {
   console.log("[getChats] 요청 시작", { limit });
   try {
-    const res = await api.get("/api/chat", { params: { limit } });
-    console.log("[getChats] 응답 도착", res.status, res.data);
-    const data = res?.data;
+    // 직접 API 호출
+    const res = await fetch(`https://www.junglegym.kr/api/chat?limit=${limit}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      }
+    });
+    
+    if (!res.ok) {
+      throw new Error(`HTTP error! status: ${res.status}`);
+    }
+    
+    const data = await res.json();
+    console.log("[getChats] 응답 도착", res.status, data);
     const list = Array.isArray(data?.data) ? data.data : [];
     return { raw: data, list };
   } catch (error) {
@@ -27,13 +39,23 @@ export async function getChats({ limit = 10 } = {}) {
 export async function askJungleTalkAI(question, { privated = false } = {}) {
   console.log("[askJungleTalkAI] 요청 시작", { question, privated });
   try {
-    const res = await api.post(
-      "/api/chat",
-      { question, privated },
-      { headers: { "Content-Type": "application/json", Accept: "application/json" } }
-    );
-    console.log("[askJungleTalkAI] 응답 도착", res.status, res.data);
-    return res?.data?.data; // { question, answer, constitution }
+    // 직접 API 호출
+    const res = await fetch('https://www.junglegym.kr/api/chat', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      body: JSON.stringify({ question, privated })
+    });
+    
+    if (!res.ok) {
+      throw new Error(`HTTP error! status: ${res.status}`);
+    }
+    
+    const data = await res.json();
+    console.log("[askJungleTalkAI] 응답 도착", res.status, data);
+    return data?.data; // { question, answer, constitution }
   } catch (error) {
     console.log("[askJungleTalkAI] 서버 연결 실패, 더미 데이터 사용", error.message);
     // 백엔드 서버 다운 시 더미 데이터 반환

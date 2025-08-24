@@ -73,6 +73,7 @@ export const CheckAnswerText = styled.div`
   display: flex;
   align-items: center;
   gap: 4px;
+  margin-top: 4px;
 `;
 
 export const FloatingButton = styled.button`
@@ -224,4 +225,40 @@ export const Highlight = styled.div`
   background: #e1e0ff;
   z-index: -1;
   border-radius: 2px;
+`;
+
+export const OtherQuestionContainer = styled.div`
+  background: #ffffff;
+  border-radius: 12px;
+  border: 1px solid #e0e0e0;
+  overflow: hidden;
+`;
+
+export const QuestionItem = styled.div`
+  padding: 16px 20px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  
+  &:hover {
+    background-color: #f8f9fa;
+  }
+`;
+
+export const QuestionDivider = styled.div`
+  height: 1px;
+  background-color: #e0e0e0;
+  margin: 0 20px;
+`;
+
+export const QuestionCount = styled.div`
+  width: 24px;
+  height: 24px;
+  background: #7471f9;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 600;
 `;

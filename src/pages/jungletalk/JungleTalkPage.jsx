@@ -39,13 +39,18 @@ const JungleTalkPage = () => {
   useEffect(() => {
     const load = async () => {
       try {
+        console.log("[JungleTalkPage] API 호출 시작");
         const { list } = await getChats({ limit: 10 });
+        console.log("[JungleTalkPage] API 응답", list);
         const onlyQuestions = list
           .map((v) => v?.question)
           .filter((q) => typeof q === "string" && q.trim().length > 0);
+        console.log("[JungleTalkPage] 필터링된 질문들", onlyQuestions);
         setLatestQuestions(onlyQuestions);
       } catch (e) {
-        console.log("[getChats error]", e?.response?.data || e.message);
+        console.log("[JungleTalkPage] API 호출 실패", e?.response?.data || e.message);
+        // API 실패 시 더미 데이터 사용
+        setLatestQuestions([]);
       }
     };
 
@@ -71,8 +76,9 @@ const JungleTalkPage = () => {
       setLawText(data?.constitution ?? "");
     } catch (e) {
       console.log("[handleSubmit] API 에러", e?.response?.data || e.message);
-      alert("답변을 가져오는 중 문제가 발생했어요. 잠시 후 다시 시도해주세요.");
-      setStep(1);
+      // 에러 발생 시 기본 답변 설정
+      setAnswer("죄송합니다. 현재 서버에 일시적인 문제가 있어 답변을 제공할 수 없습니다. 잠시 후 다시 시도해주세요.");
+      setLawText("서버 연결 문제로 관련 법 조항을 불러올 수 없습니다.");
     } finally {
       // 로딩 상태를 조금 더 유지하여 사용자가 로딩 화면을 볼 수 있도록 함
       setTimeout(() => {
@@ -98,8 +104,9 @@ const JungleTalkPage = () => {
       setLawText(data?.constitution ?? "");
     } catch (e) {
       console.log("[openAnswer] API 에러", e?.response?.data || e.message);
-      alert("답변을 불러오지 못했어요. 잠시 후 다시 시도해주세요.");
-      setStep(1);
+      // 에러 발생 시 기본 답변 설정
+      setAnswer("죄송합니다. 현재 서버에 일시적인 문제가 있어 답변을 제공할 수 없습니다. 잠시 후 다시 시도해주세요.");
+      setLawText("서버 연결 문제로 관련 법 조항을 불러올 수 없습니다.");
     } finally {
       // 로딩 상태를 조금 더 유지하여 사용자가 로딩 화면을 볼 수 있도록 함
       setTimeout(() => {

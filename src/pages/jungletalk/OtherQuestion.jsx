@@ -1,7 +1,26 @@
 import React from "react";
-import { SubTitle, QuestionList, QuestionCard, QuestionText, CheckAnswerText } from "./JungleTalk.styles";
+import { 
+  SubTitle, 
+  QuestionList,
+  QuestionCard,
+  OtherQuestionContainer, 
+  QuestionItem,
+  QuestionText, 
+  CheckAnswerText,
+  QuestionDivider,
+  QuestionCount
+} from "./JungleTalk.styles";
+import styled from "styled-components";
 
-const OtherQuestion = ({ title, questions, onClick, showCheckAnswer = false }) => {
+const ListQuestionText = styled.div`
+  font-size: 15px;
+  font-weight: 600;
+  color: #000;
+  line-height: 1.4;
+  margin-bottom: 8px;
+`;
+
+const OtherQuestion = ({ title, questions, onClick, showCheckAnswer = false, variant = "card" }) => {
   const defaultQuestions = [
     "비례대표와 지역갑을은 어떻게 다른건가요?",
     "국회의원은 몇 명이고, 다 뭐 하는 사람들이에요?",
@@ -13,26 +32,51 @@ const OtherQuestion = ({ title, questions, onClick, showCheckAnswer = false }) =
     "안녕하세용",
     "배고파용",
     "너무졸리당"
-
   ];
 
   const displayQuestions = questions || defaultQuestions;
 
+  // step1 (메인) - 카드 형식
+  if (variant === "card") {
+    return (
+      <>
+        <SubTitle>{title}</SubTitle>
+        <QuestionList>
+          {displayQuestions.map((question, i) => (
+            <QuestionCard key={i} onClick={() => onClick?.(i, question)}>
+              <div>
+                <QuestionText>{question}</QuestionText>
+                {showCheckAnswer && (
+                  <CheckAnswerText>답변을 확인해보세요 {'>'}</CheckAnswerText>
+                )}
+              </div>
+            </QuestionCard>
+          ))}
+        </QuestionList>
+      </>
+    );
+  }
+
+  // step3 (답변 화면) - 리스트 형식
   return (
     <>
-      <SubTitle>{title}</SubTitle>
-      <QuestionList>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+        <SubTitle>{title}</SubTitle>
+        <QuestionCount>1</QuestionCount>
+      </div>
+      <OtherQuestionContainer>
         {displayQuestions.map((question, i) => (
-          <QuestionCard key={i} onClick={() => onClick?.(i, question)}>
-            <div>
-              <QuestionText>{question}</QuestionText>
+          <React.Fragment key={i}>
+            <QuestionItem onClick={() => onClick?.(i, question)}>
+              <ListQuestionText>{question}</ListQuestionText>
               {showCheckAnswer && (
                 <CheckAnswerText>답변을 확인해보세요 {'>'}</CheckAnswerText>
               )}
-            </div>
-          </QuestionCard>
+            </QuestionItem>
+            {i < displayQuestions.length - 1 && <QuestionDivider />}
+          </React.Fragment>
         ))}
-      </QuestionList>
+      </OtherQuestionContainer>
     </>
   );
 };
