@@ -11,9 +11,9 @@ import leftButton from "../components/img/leftButton.svg?url";
 import rightButton from "../components/img/rightButton.svg?url";
 
 /* ---------- utils ---------- */
-function truncateText(str = "", max = 105) {
+function truncateText(str = "", max = 32) {
   if (str.length <= max) return str;
-  return str.slice(0, max) + "…";
+  return str.slice(0, max) + "…"; //점점점대신 뭔가 바꾸고 싶음
 }
 
 function chooseIcon(category, key) {
@@ -157,8 +157,8 @@ export default function CardNews({ regions }) {
           ) : (
             <ExpandedOverlay>
               <RegionChip>{item.region}</RegionChip>
-              {item.title && <OverlayTitle2>{item.title}</OverlayTitle2>}
-              {item.summary && <OverlayBody>{truncateText(item.summary, 105)}</OverlayBody>}
+              {item.title && <OverlayTitle2>{truncateText(item.title, 32)}</OverlayTitle2>}
+              {item.summary && <OverlayBody>{item.summary}</OverlayBody>}
               <BottomStack>
                 <GraphWrapper>
                   {item.mediaImgUrl && (
@@ -301,7 +301,7 @@ const CompactOverlay = styled.div`
   align-items: center;
   justify-content: flex-end;
   text-align: center;
-  padding: 0 20px 50px;
+  padding: 0 20px 45px;
   color: #fff;
   z-index: 3;
   pointer-events: none;
@@ -481,7 +481,7 @@ const Source = styled.div`
 const ArticleBtn = styled.a`
   pointer-events: auto;
   display: inline-block;
-  padding: 3px 18px;
+  padding: 2.5px 16px;
   border: 1px solid rgba(255, 255, 255, 0.85);
   border-radius: 999px;
   text-decoration: none;
