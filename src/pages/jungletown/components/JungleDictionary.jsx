@@ -163,18 +163,14 @@ const Card = styled.article`
   position: relative;
   margin-bottom: 10px;
   width: clamp(150px, 42vw, 200px);
-  aspect-ratio: 200 / 270; /* 높이 자동 */
-
   border-radius: 10px;
-  overflow: hidden;
   flex: 0 0 auto;
   cursor: pointer;
 `;
 
 const Bg = styled.img`
-  position: absolute; //색으로 바꾸기
+  position: absolute;
   inset: 0;
-
   width: 100%;
   height: 100%;
   object-fit: cover;
