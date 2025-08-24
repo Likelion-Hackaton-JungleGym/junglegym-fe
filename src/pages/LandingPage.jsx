@@ -140,7 +140,6 @@ const Container = styled.div`
 
 const Header = styled.div`
   padding: 10px;
-  padding-top: 45px;
   display: flex;
   align-items: center;
 `;
