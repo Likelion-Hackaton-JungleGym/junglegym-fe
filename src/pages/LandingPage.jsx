@@ -201,7 +201,7 @@ const Content = styled.div`
 const Title = styled.h1`
   position: relative;
   display: inline-block;
-  margin-top: 20px;
+  margin-top: 10px;
   margin-bottom: 8px;
   width: fit-content;
 `;

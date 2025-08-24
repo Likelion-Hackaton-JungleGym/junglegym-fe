@@ -9,17 +9,16 @@ import BluePartyWhite from "./img/bluePartyWhite.svg";
 export default function Profile({ politicians = [], isLoading = false, selectedRegion }) {
   // API 데이터를 새로운 UI 구조에 맞게 변환
   const people = politicians.map((politician) => {
-    // 정당에 따른 배경색 설정
-    const getBgColor = (polyName) => {
-      if (polyName?.includes("더불어민주당")) return "#4191E6";
-      if (polyName?.includes("국민의힘")) return "#F8575E";
-      return "#f5f5f5"; // 기본값
-    };
-
     const getBadge = (polyName) => {
       if (polyName?.includes("더불어민주당")) return BluePartyWhite;
       if (polyName?.includes("국민의힘")) return RedPartyWhite;
       return;
+    };
+
+    const getBorderColor = (polyName) => {
+      if (polyName?.includes("더불어민주당")) return "#4191E6";
+      if (polyName?.includes("국민의힘")) return "#F8575E";
+      return "#fff"; // 기본값
     };
 
     // 이미지 URL 검증 및 기본값 설정
@@ -42,7 +41,7 @@ export default function Profile({ politicians = [], isLoading = false, selectedR
       title: politician.roleName,
       cropPhoto: getProfileImage(politician.profileImg),
       badge: getBadge(politician.polyName),
-      bg: getBgColor(politician.polyName),
+      borderColor: getBorderColor(politician.polyName),
     };
   });
 
@@ -78,7 +77,7 @@ export default function Profile({ politicians = [], isLoading = false, selectedR
         {people.map((p) => (
           <CardLink to={p.path} key={p.id} aria-label={`${p.name} 상세`}>
             <Card>
-              <Top $bg={p.bg}>
+              <Top $borderColor={p.borderColor}>
                 <Badge src={p.badge} alt="정당" />
                 <Person
                   src={p.cropPhoto}
@@ -130,8 +129,9 @@ const Card = styled.article`
 const Top = styled.div`
   position: relative;
   height: 200px;
-  background: ${(p) => p.$bg};
+  background: #f5f5f5;
   border-radius: 10px 10px 0 0;
+  border-bottom: 3px solid ${(p) => p.$borderColor};
   overflow: hidden;
   display: flex;
   align-items: center;
