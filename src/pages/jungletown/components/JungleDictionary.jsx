@@ -260,6 +260,7 @@ const Modal = styled.div`
   place-items: center;
   z-index: 1001;
   padding: 12px;
+  margin-top: 30px;
 `;
 
 const ModalCard = styled.div`
