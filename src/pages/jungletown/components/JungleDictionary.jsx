@@ -8,6 +8,9 @@ import remarkBreaks from "remark-breaks"; // 줄바꿈을 위해 필요
 import { DICTIONARY } from "../components/JungleDictionaryData";
 import xButton from "../components/img/xButton.svg";
 
+const HEADER_H = 80;
+//const R2 = "only screen and (max-width: 390px)";
+
 export default function JungleDictionary() {
   const [list, setList] = useState([]); // 전체 데이터
   const [selected, setSelected] = useState(null);
@@ -127,8 +130,6 @@ export default function JungleDictionary() {
 }
 
 /* ---------- styles ---------- */
-
-const HEADER_H = 80; // 실제 헤더 높이에 맞춰 조절
 
 const Wrapper = styled.div`
   margin: 10px 0 10px 0px;
