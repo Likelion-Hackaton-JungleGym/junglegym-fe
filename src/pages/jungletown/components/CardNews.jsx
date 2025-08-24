@@ -249,7 +249,7 @@ const PeekBase = styled.div`
   position: absolute;
   z-index: 1;
   pointer-events: none;
-  transform: scale(0.9);
+  transform: scale(0.93);
   transform-origin: center;
   overflow: hidden;
   filter: blur(0.2px);
@@ -258,11 +258,13 @@ const PeekBase = styled.div`
 
 const PrevPeek = styled(PeekBase)`
   clip-path: inset(0 calc(100% - ${PEEK_WIDTH}px) 0 0);
-  left: -3%;
+  left: -2%;
+  bottom: 3%;
 `;
 const NextPeek = styled(PeekBase)`
   clip-path: inset(0 0 0 calc(100% - ${PEEK_WIDTH}px));
-  right: -3%;
+  right: -2%;
+  bottom: 3%;
 `;
 
 const PeekImg = styled.img`
@@ -278,7 +280,7 @@ const Card = styled.div`
   left: ${GUTTER}px;
   right: ${GUTTER}px;
   border-radius: 16px;
-  bottom: 10px;
+  //  bottom: 10px;
   overflow: hidden;
   z-index: 2;
   cursor: pointer;
