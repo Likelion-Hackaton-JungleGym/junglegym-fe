@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useOutletContext, useSearchParams } from "react-router-dom";
 import styled from "styled-components";
-import LandingImage from "../assets/images/Landing.svg";
+//import LandingImage from "../assets/images/Landing.svg";
+//import LandingIcon from "../assets/icons/LandingIcon2.jpg";
+import LandingIcon from "../assets/icons/LandingIcon2.svg";
+import LandingMap from "../assets/icons/LandingMap.svg";
+
 import BackArrowIcon from "../assets/icons/BackArrowIcon.svg";
 import ArrowDownIcon from "../assets/icons/ArrowDownIcon.svg";
 import { getAllRegions } from "../shared/utils/politicianApi.js";
@@ -117,7 +121,8 @@ const LandingPage = () => {
         </Subtitle>
 
         <ImageContainer>
-          <LandingImg src={LandingImage} alt="랜딩 페이지" />
+          <LandingMapImg src={LandingMap} alt="랜딩 페이지 지도" />
+          <LandingIconImg src={LandingIcon} alt="랜딩 페이지 캐릭터" />
         </ImageContainer>
       </Content>
 
@@ -232,17 +237,28 @@ const StrongText = styled.span`
 `;
 
 const ImageContainer = styled.div`
+  position: relative; /* 절대배치 기준 */
   width: 100%;
-  max-width: 310px;
+  max-width: 360px; /* 필요시 조정 */
   margin-left: 3px;
-  display: flex;
-  justify-content: center;
 `;
 
-const LandingImg = styled.img`
+const LandingMapImg = styled.img`
   width: 100%;
   height: auto;
-  display: block;
+  display: block; /* 여백 제거 */
+  z-index: 1; /* 아래쪽 레이어 */
+  margin-bottom: 50px;
+`;
+
+const LandingIconImg = styled.img`
+  position: absolute; /* 지도 위에 겹치기 */
+  bottom: 0px; /* 위치 미세조정 */
+  width: 35%; /* 아이콘 크기 (반응형) */
+  height: auto;
+  z-index: 2; /* 지도보다 위 */
+  pointer-events: none; /* 클릭 방해 안 하도록(선택) */
+  /* 필요하면 살짝 띄우기: transform: translate(0, 6px); */
 `;
 
 const DistrictSelector = styled.div`
