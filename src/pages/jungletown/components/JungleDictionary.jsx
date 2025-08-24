@@ -128,7 +128,7 @@ export default function JungleDictionary() {
 
 /* ---------- styles ---------- */
 const Wrapper = styled.div`
-  margin: 10px 0 10px 15px;
+  margin: 10px 0 10px 0px;
 `;
 
 const Text = styled.div``;

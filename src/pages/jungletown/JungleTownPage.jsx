@@ -21,6 +21,7 @@ export default function JungleTownPage() {
 
 const Wrapper = styled.div`
   margin-top: 25px;
+  padding: 20px;
 `;
 
 const MarginBox1 = styled.div`
