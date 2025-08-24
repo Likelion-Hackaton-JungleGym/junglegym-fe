@@ -1,6 +1,7 @@
 import React from "react";
 import { 
   SubTitle, 
+  SectionTitle,
   QuestionList,
   QuestionCard,
   OtherQuestionContainer, 
@@ -18,6 +19,11 @@ const ListQuestionText = styled.div`
   color: #000;
   line-height: 1.4;
   margin-bottom: 8px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 const OtherQuestion = ({ title, questions, onClick, showCheckAnswer = false, variant = "card" }) => {
@@ -40,7 +46,7 @@ const OtherQuestion = ({ title, questions, onClick, showCheckAnswer = false, var
   if (variant === "card") {
     return (
       <>
-        <SubTitle>{title}</SubTitle>
+        <SectionTitle>{title}</SectionTitle>
         <QuestionList>
           {displayQuestions.map((question, i) => (
             <QuestionCard key={i} onClick={() => onClick?.(i, question)}>
@@ -61,7 +67,7 @@ const OtherQuestion = ({ title, questions, onClick, showCheckAnswer = false, var
   return (
     <>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-        <SubTitle>{title}</SubTitle>
+        <SectionTitle>{title}</SectionTitle>
       </div>
       <OtherQuestionContainer>
         {displayQuestions.map((question, i) => (

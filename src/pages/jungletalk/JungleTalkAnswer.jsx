@@ -10,8 +10,11 @@ import {
   AnswerText,
   AbsoluteBackButton,
   SubTitle,
+  Title,
+  Highlight,
 } from "./JungleTalk.styles";
 import BackIcon from "../../assets/icons/BackIcon.svg";
+import RectangleIcon from "../../assets/icons/Rectangle.svg";
 import LawImage1 from "../../assets/images/LawImage1.svg";
 import LawImage2 from "../../assets/images/LawImage2.svg";
 import LawImage3 from "../../assets/images/LawImage3.svg";
@@ -22,8 +25,18 @@ import LawImage7 from "../../assets/images/LawImage7.svg";
 import LawImage8 from "../../assets/images/LawImage8.svg";
 
 import OtherQuestion from "./OtherQuestion";
+import { CardTitle } from "../../../src/pages/peopledetail/ProfileDetail.styles.js";
 
-const lawImages = [LawImage1, LawImage2, LawImage3, LawImage4, LawImage5, LawImage6, LawImage7, LawImage8];
+const lawImages = [
+  LawImage1,
+  LawImage2,
+  LawImage3,
+  LawImage4,
+  LawImage5,
+  LawImage6,
+  LawImage7,
+  LawImage8,
+];
 
 const JungleTalkAnswer = ({
   question,
@@ -51,24 +64,41 @@ const JungleTalkAnswer = ({
     <Container className="answerHeader">
       <TopImageWrapper $bg={randomImage}>
         <AbsoluteBackButton onClick={() => setStep(1)}>
-          <img src={BackIcon} alt="뒤로가기" />
+          <img src={BackIcon} alt="뒤로가기" style={{ filter: "brightness(0) invert(1)" }} />
         </AbsoluteBackButton>
-        <OverlayText>{(lawText && lawText.trim()) || ""}</OverlayText>
+        <OverlayText>
+          {(lawText &&
+            lawText
+              .trim()
+              .replace(/([^.!?]+[.!?])(?!\d)/g, "$1\n")
+              .replace(/(제\d+조)/g, "$1\n")
+              .replace(/\n+/g, "\n")
+              .trim()) ||
+            ""}
+        </OverlayText>
       </TopImageWrapper>
       <WhiteContainer>
         <MyQuestion>
-          <SubTitle>
-            <strong>{fromOthers ? "다른 이의 질문" : "나의 질문"}</strong>
-            <br />
-          </SubTitle>
-          {(question && question.trim()) || ""}
+          <div>
+            <CardTitle style={{ marginLeft: "5px" }}>
+              {fromOthers ? "다른 이의 질문" : "나의 질문"}
+            </CardTitle>
+          </div>
+          <div style={{ display: "flex", alignItems: "flex-start", gap: "3px" }}>
+            <img
+              src={RectangleIcon}
+              alt=""
+              style={{ width: "10px", height: "16px", marginTop: "4px", flexShrink: 0 }}
+            />
+            {(question && question.trim()) || ""}
+          </div>
         </MyQuestion>
+
+        <div>
+          <CardTitle style={{ marginLeft: "5px" }}>정글챗</CardTitle>
+        </div>
         <AnswerText>
-          <SubTitle>
-            <strong>정글챗</strong>
-            <br />
-          </SubTitle>
-          {(answer && answer.trim().replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')) || ""}
+          {(answer && answer.trim().replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")) || ""}
         </AnswerText>
         <OtherQuestion
           title="다른 사람들의 질문"

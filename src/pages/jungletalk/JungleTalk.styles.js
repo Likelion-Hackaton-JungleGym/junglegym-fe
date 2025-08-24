@@ -37,6 +37,22 @@ export const SubTitle = styled.h3`
   font-size: 19px;
   font-weight: 700;
   margin-bottom: 10px;
+  
+  /* 텍스트 뒤에 라이트 퍼플 형광펜 효과 */
+  display: inline-block;
+  background-image: linear-gradient(#edebff, #edebff);
+  background-position: 0 70%;
+  background-size: 100% 12px;
+  background-repeat: no-repeat;
+  padding: 0 2px;
+`;
+
+export const SectionTitle = styled.h3`
+  font-size: 19px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  margin-left: 10px;
+  margin-top: 20px;
 `;
 
 export const QuestionList = styled.div`
@@ -214,26 +230,31 @@ export const WhiteContainer = styled.div`
 
 export const MyQuestion = styled.div`
   margin-top: 8px;
-  font-size: 15px;
-  line-height: 1.5;
+  font-size: 14px;
+  color: #000;
+  font-weight: 400;
+  line-height: 1.4;
+  margin-right: 10px;
+  margin-bottom: 20px;
 `;
 
 export const AnswerText = styled.div`
-  margin-top: 24px;
-  font-size: 15px;
-  line-height: 1.6;
-  margin-bottom: 24px;
+  font-size: 14px;
+  line-height: 1.4;
+  margin: 3px 10px 20px;
+  color: #000;
+  font-weight: 400;
 `;
 
 export const Highlight = styled.div`
   position: absolute;
   bottom: 2px;
-  width: 100px;
   left: -6px;
   height: 13px;
   background: #e1e0ff;
   z-index: -1;
   border-radius: 2px;
+  width: calc(100% + 12px);
 `;
 
 export const OtherQuestionContainer = styled.div`
@@ -241,7 +262,7 @@ export const OtherQuestionContainer = styled.div`
   border-radius: 12px;
   border: 1px solid #e0e0e0;
   overflow: hidden;
-  margin: 0 15px 0;
+  margin: 0 8px 0;
 `;
 
 export const QuestionItem = styled.div`
