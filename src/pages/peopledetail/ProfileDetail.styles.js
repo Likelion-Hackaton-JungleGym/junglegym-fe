@@ -83,7 +83,7 @@ export const Row = styled.div`
 // 공통 아이콘 스타일
 export const InfoIcon = styled.span`
   width: 18px;
-  height: auto;
+  height: 18px;
   flex-shrink: 0;
   display: inline-flex;
   align-items: center;
@@ -95,6 +95,7 @@ export const InfoIcon = styled.span`
     width: 100%;
     height: 100%;
     display: block;
+    object-fit: contain;
   }
 `;
 
