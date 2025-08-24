@@ -8,7 +8,8 @@ import leftButton from "../components/img/leftButton.svg?url";
 import rightButton from "../components/img/rightButton.svg?url";
 
 function chooseIcon(category, key) {
-  const list = ICON_MAP[category] ?? [];
+  const c = String(category || "").trim();
+  const list = ICON_MAP[c] ?? [];
   if (!list.length) return null;
   let h = 0;
   const s = String(key ?? "");
@@ -45,8 +46,8 @@ export default function CardNews() {
           summary: it.summary,
           date: it.date,
           link: it.link,
-          card: CARD_MAP[i + 1] ?? CARD_MAP[(i % 5) + 1],
-          mediaImgUrl: it.mediaImgUrl ?? null,
+          card: CARD_MAP[i + 1] ?? CARD_MAP[(i % 6) + 1],
+          mediaImgUrl: it.mediaImgUrl,
           media: it.media,
         }));
 
@@ -124,7 +125,7 @@ export default function CardNews() {
           aria-label={`${current + 1} / ${len}`}
           onClick={() => setExpanded((v) => !v)}
         >
-          <MainImg src={item.card} alt="" />
+          <MainImg src={item.card} alt="" loading="lazy" decoding="async" />
 
           {!expanded ? (
             <CompactOverlay>
@@ -155,7 +156,9 @@ export default function CardNews() {
                 </FootrtRight>
               </FooterRow>
               <GraphWrapper>
-                {item.mediaImgUrl && <GraphImg src={item.mediaImgUrl} alt="" />}
+                {item.mediaImgUrl && (
+                  <GraphImg src={item.mediaImgUrl} alt="" loading="lazy" decoding="async" />
+                )}
               </GraphWrapper>
             </ExpandedOverlay>
           )}
@@ -328,7 +331,7 @@ const OverlayDesc = styled.div`
 const ExpandedOverlay = styled.div`
   position: absolute;
   inset: 0;
-  padding: 18px 20px;
+  padding: 25px 25px;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -366,7 +369,7 @@ const GraphImg = styled.img`
 
 const GraphWrapper = styled.div`
   padding: 0px 0px 10px;
-  margin-top: 5px;
+  //margin-top: 5px;
 `;
 
 const ArrowBase = styled.button`
@@ -421,16 +424,16 @@ const Dot = styled.button`
 
 const FooterRow = styled.div`
   display: flex;
-  align-items: center;
   justify-content: space-between;
   gap: 12px;
-  margin-top: 20px;
+  // margin-top: 30px;
 `;
 
 const FooterLeft = styled.div`
   display: flex;
   gap: 5px;
   margin-left: 1px;
+  align-items: center;
 `;
 const FootrtRight = styled.div``;
 
