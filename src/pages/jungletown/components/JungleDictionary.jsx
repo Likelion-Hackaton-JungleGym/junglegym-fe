@@ -127,6 +127,9 @@ export default function JungleDictionary() {
 }
 
 /* ---------- styles ---------- */
+
+const HEADER_H = 80; // 실제 헤더 높이에 맞춰 조절
+
 const Wrapper = styled.div`
   margin: 10px 0 10px 0px;
 `;
@@ -246,7 +249,6 @@ const Sub = styled.p`
 /* ===== Modal ===== */
 const Dim = styled.div`
   position: fixed;
-
   top: calc(env(safe-area-inset-top) + ${HEADER_H}px);
   right: 0;
   bottom: 0;
@@ -255,11 +257,14 @@ const Dim = styled.div`
   backdrop-filter: blur(2px);
   z-index: 1000;
 `;
-const HEADER_H = 80; // 실제 헤더 높이에 맞춰 조절
+
 const Modal = styled.div`
   position: fixed;
   /* 상단을 헤더 + 안전영역만큼 비워두고, 남은 영역에서 중앙정렬 */
-  inset: calc(env(safe-area-inset-top) + ${HEADER_H}px) 0 0 0;
+  top: calc(env(safe-area-inset-top) + ${HEADER_H}px);
+  right: 0;
+  bottom: 0;
+  left: 0;
   display: grid;
   place-items: center;
   z-index: 1001;
@@ -271,13 +276,14 @@ const ModalCard = styled.div`
   width: min(345px, 100%);
   max-width: 100%;
   height: auto;
-  max-height: calc(100dvh - (env(safe-area-inset-top) + ${HEADER_H}px) - 24px);
+
   overflow: hidden auto;
   border-radius: 13px;
   padding: clamp(10px, 2.5vw, 18px) clamp(16px, 4vw, 24px);
   margin: 0px 10px;
   box-shadow: 0 16px 48px rgba(0, 0, 0, 0.2);
   background: transparent;
+  max-height: calc(100dvh - (env(safe-area-inset-top) + ${HEADER_H}px) - 24px);
 `;
 
 const ModalBg = styled.img`
