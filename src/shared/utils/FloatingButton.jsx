@@ -89,7 +89,8 @@ export default function FloatingButton({
 
 const Fab = styled.button`
   position: fixed;
-  right: ${({ $right }) => toLen($right)};
+  left: 315px;
+  //  right: ${({ $right }) => toLen($right)};
   bottom: calc(${({ $bottom }) => toLen($bottom)} + env(safe-area-inset-bottom));
   width: ${({ $size }) => `${$size}px`};
   height: ${({ $size }) => `${$size}px`};
