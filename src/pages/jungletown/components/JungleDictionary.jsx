@@ -158,10 +158,9 @@ const DictCards = styled.div`
 const Card = styled.article`
   position: relative;
   margin-bottom: 10px;
-  //width: 188px;
-  //height: 240px;
-  width: 200px;
-  height: 270px;
+  width: clamp(150px, 42vw, 200px);
+  aspect-ratio: 200 / 270; /* 높이 자동 */
+
   border-radius: 10px;
   overflow: hidden;
   flex: 0 0 auto;
@@ -183,9 +182,8 @@ const Ribbon = styled.img`
   position: absolute;
   top: -2px;
   right: 15px;
-  width: 50px;
+  width: clamp(36px, 12vw, 50px);
   z-index: 2;
-  box-shadow: 0 2px 4px grba(0, 0, 0, 0.15);
 `;
 
 const Body = styled.div`
@@ -195,6 +193,9 @@ const Body = styled.div`
   bottom: 0;
   padding: 15px 15px 0px 15px;
   z-index: 1;
+  @media (max-width: 390px) {
+    padding: 12px;
+  }
 `;
 
 const IconBox = styled.div`
@@ -203,8 +204,8 @@ const IconBox = styled.div`
   align-items: center;
 `;
 const Icon = styled.img`
-  width: 135px;
-  height: 135px;
+  width: clamp(96px, 33vw, 135px);
+  height: auto;
   margin: 10px 0px;
 `;
 
@@ -223,6 +224,9 @@ const Pill = styled.div`
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.4);
   color: #333;
+  @media (max-width: 390px) {
+    font-size: 11px;
+  }
 `;
 
 const H3 = styled.h3`
@@ -254,15 +258,18 @@ const Modal = styled.div`
   display: grid;
   place-items: center;
   z-index: 1001;
+  padding: 12px;
 `;
 
 const ModalCard = styled.div`
-  position: relative;
-  width: 345px;
-  height: 550px;
+  position: relative; //필요한지 체크 필요
+  width: min(345px, 100%);
+  max-width: 100%;
+  height: auto;
+  max-height: calc(100dvh - 24px);
   overflow: hidden auto;
   border-radius: 13px;
-  padding: 10px 25px 10px;
+  padding: clamp(10px, 2.5vw, 18px) clamp(16px, 4vw, 24px);
   margin: 0px 10px;
   box-shadow: 0 16px 48px rgba(0, 0, 0, 0.2);
   background: transparent;
@@ -284,14 +291,13 @@ const CloseBtn = styled.button`
   position: absolute;
   top: 15px;
   right: 10px;
-  width: 40px;
-  height: 30px;
+  width: 44px; /* 터치 타겟 44px 이상 */
+  height: 44px;
   border: 0;
   background: transparent;
   color: #7b7b7b;
   font-size: 20px;
   font-weight: 100;
-
   line-height: 1;
   cursor: pointer;
   z-index: 2;
@@ -319,7 +325,7 @@ const PillLg = styled.div`
 
 const ModalTitle = styled.h2`
   margin: 5px 0 2px;
-  font-size: 28px;
+  font-size: clamp(18px, 6vw, 24px);
   font-weight: 500;
   letter-spacing: -0.4px;
   color: #111;
@@ -328,7 +334,7 @@ const ModalTitle = styled.h2`
 
 const ModalSub = styled.p`
   margin: 0 0 10px;
-  font-size: 16px;
+  font-size: clamp(13px, 4.5vw, 16px);
   color: #333;
   letter-spacing: -0.2px;
 `;
@@ -337,11 +343,11 @@ const Desc = styled.div`
   position: relative;
   z-index: 1;
   margin: 0;
-  font-size: 13px;
+  font-size: clamp(12px, 3.8vw, 14px);
+  max-height: min(56dvh, 480px);
   line-height: 1.6;
   letter-spacing: -0.2px;
   color: #222;
-  max-height: 42vh;
   overflow: auto;
   padding-right: 2px;
   /* 마크다운 기본 요소 약간 정리 */
@@ -369,12 +375,14 @@ const Desc = styled.div`
 
 const IconCenter = styled.div`
   position: relative;
-  width: 190px;
+  width: 100%;
   z-index: 1;
-  margin: 17px 30px 7px 100px;
+  display: flex;
+  justify-content: center;
+  margin: 12px 0 4px;
 `;
 
 const IconImg = styled.img`
-  width: 180px;
+  width: clamp(110px, 42vw, 180px);
   height: auto;
 `;
