@@ -12,7 +12,7 @@ export const Container = styled.div`
 `;
 
 export const Section = styled.section`
-  margin-top: 35px;
+  margin-top: -30px;
   margin-bottom: 20px;
   padding: 0 30px;
 `;
