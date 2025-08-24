@@ -15,6 +15,26 @@ import Pagination from "./Pagination.jsx";
 const Bills = ({ bills = [], totalPages = 1, currentPage = 1, onPageChange }) => {
   const [flipped, setFlipped] = useState({});
 
+  // 각 법안의 상세 정보를 뒷면 데이터로 사용
+  const backMap = useMemo(() => {
+    const map = new Map();
+    bills.forEach((bill, i) => {
+      // API 데이터에서 상세 정보 추출
+      const backData = {
+        category: bill.category || "아직 미확정",
+        link: bill.link || "",
+        details: bill.details || [],
+      };
+      map.set(i, backData);
+    });
+    return map;
+  }, [bills]);
+
+  const handlePageChange = (page) => {
+    onPageChange(page);
+    setFlipped({}); // 페이지 변경 시 모든 카드를 앞면으로
+  };
+
   // 발의법률안이 없을 때 처리
   if (!bills || bills.length === 0) {
     return (
@@ -34,26 +54,6 @@ const Bills = ({ bills = [], totalPages = 1, currentPage = 1, onPageChange }) =>
     );
   }
 
-  const handlePageChange = (page) => {
-    onPageChange(page);
-    setFlipped({}); // 페이지 변경 시 모든 카드를 앞면으로
-  };
-
-  // 각 법안의 상세 정보를 뒷면 데이터로 사용
-  const backMap = useMemo(() => {
-    const map = new Map();
-    bills.forEach((bill, i) => {
-      // API 데이터에서 상세 정보 추출
-      const backData = {
-        category: bill.category || "아직 미확정",
-        link: bill.link || "",
-        details: bill.details || [],
-      };
-      map.set(i, backData);
-    });
-    return map;
-  }, [bills]);
-
   const toggleFlip = (idx) => setFlipped((p) => ({ ...p, [idx]: !p[idx] }));
   const onKeyToggle = (e, idx) => {
     if (e.key === "Enter" || e.key === " ") {
@@ -64,7 +64,7 @@ const Bills = ({ bills = [], totalPages = 1, currentPage = 1, onPageChange }) =>
 
   return (
     <>
-      <ListContainer style={{ gap: 16 }}>
+      <ListContainer style={{ gap: 24 }}>
         {bills.map((bill, index) => {
           const isFlipped = !!flipped[index];
           const back = backMap.get(index); // 뒷면에 쓸 nextBills 데이터(없으면 null)
@@ -79,12 +79,9 @@ const Bills = ({ bills = [], totalPages = 1, currentPage = 1, onPageChange }) =>
                 style={{
                   position: "relative",
                   borderRadius: 12,
-                  height: "100%",
-                  transformStyle: "preserve-3d",
-                  transform: isFlipped ? "rotateY(180deg)" : "rotateY(0deg)",
-                  transition: "transform 0.4s ease-in-out",
                   cursor: "pointer",
-                  willChange: "transform",
+                  minHeight: "120px",
+                  height: "100%",
                 }}
               >
                 {/* FRONT: bills */}
@@ -95,8 +92,12 @@ const Bills = ({ bills = [], totalPages = 1, currentPage = 1, onPageChange }) =>
                     borderRadius: 15,
                     background: "#fff",
                     padding: 20,
-                    backfaceVisibility: "hidden",
-                    WebkitBackfaceVisibility: "hidden",
+                    opacity: isFlipped ? 0 : 1,
+                    transition: "opacity 0.6s ease-in-out",
+                    pointerEvents: isFlipped ? "none" : "auto",
+                    zIndex: isFlipped ? 1 : 2,
+                    display: "flex",
+                    flexDirection: "column",
                   }}
                 >
                   <div
@@ -139,12 +140,10 @@ const Bills = ({ bills = [], totalPages = 1, currentPage = 1, onPageChange }) =>
                       </span>
                       <Arrow
                         style={{
-                          transform: isFlipped ? "rotate(90deg)" : "rotate(0deg)",
-                          transition: "transform 0.2s",
                           marginTop: "2px",
                         }}
                       >
-                        <img src={NextIcon} alt="뒤집기" />
+                        <img src={NextIcon} alt="상세보기" />
                       </Arrow>
                     </div>
                   </div>
@@ -169,13 +168,15 @@ const Bills = ({ bills = [], totalPages = 1, currentPage = 1, onPageChange }) =>
                     borderRadius: 12,
                     background: "#746F89",
                     padding: "20px 20px",
-                    backfaceVisibility: "hidden",
-                    WebkitBackfaceVisibility: "hidden",
-                    transform: "rotateY(180deg)",
+                    opacity: isFlipped ? 1 : 0,
+                    transition: "opacity 0.6s ease-in-out",
+                    pointerEvents: isFlipped ? "auto" : "none",
                     display: "flex",
                     flexDirection: "column",
                     justifyContent: "center",
                     gap: 8,
+                    zIndex: isFlipped ? 2 : 1,
+                    minHeight: "120px",
                   }}
                 >
                   {/* back 데이터가 있을 때만 표시, 없으면 간단 안내 */}
@@ -227,8 +228,8 @@ const Bills = ({ bills = [], totalPages = 1, currentPage = 1, onPageChange }) =>
                           {(back.details ?? []).map((d, i) => (
                             <li key={i} style={{ color: "#fff", fontSize: 13, marginBottom: 6 }}>
                               {d.replace(/^[•·\s]+/, "")}
-          </li>
-        ))}
+                            </li>
+                          ))}
                         </ul>
                       </div>
                     </>

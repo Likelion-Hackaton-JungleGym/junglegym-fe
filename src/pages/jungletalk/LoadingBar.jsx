@@ -77,13 +77,13 @@ const Wrapper = styled.div`
   position: fixed;
   top: 0;
   left: 0;
-  width: 100vw;
-  height: 100vh;
+  width: 390px;
+  height: 844px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-color: rgba(255, 255, 255, 0.95);
+  background-color: #fff;
   z-index: 9999;
   padding: 16px;
 `;
@@ -105,7 +105,7 @@ const LoadingText = styled.p`
 `;
 
 const BarBg = styled.div`
-  width: min(720px, 70%);
+  width: 250px;
   height: 8px;
   border-radius: 4px;
   background-color: rgba(116, 113, 249, 0.2);

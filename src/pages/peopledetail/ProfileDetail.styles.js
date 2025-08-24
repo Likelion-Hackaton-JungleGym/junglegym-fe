@@ -281,7 +281,7 @@ export const TableElement = styled.table`
 
 export const TableRow = styled.div`
   display: flex;
-  border-bottom: 1px solid #eee;
+  border-bottom: 0.5px solid #eee;
 
   &:last-child {
     border-bottom: none;
@@ -302,10 +302,6 @@ export const TableCell = styled.div`
 // HTML table 엘리먼트용 행과 셀 스타일
 export const TableRowElement = styled.tr`
   border-bottom: 0.5px solid #000;
-
-  &:last-child {
-    border-bottom: none;
-  }
 `;
 
 export const SectionRowElement = styled.tr`
@@ -472,11 +468,17 @@ export const ProposerName = styled.span`
   font-weight: 400;
 `;
 
-export const ProposerNames = styled.span`
+export const ProposerNames = styled.div`
   font-size: 13px;
   color: #000;
   font-weight: 400;
   flex: 1;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-break: break-all;
 `;
 
 // 값 기본은 작게(이미 있음). 아래는 상황별 variant
@@ -509,6 +511,7 @@ export const SummaryStrong = styled.div`
 // 공약 사업 이행 현황 스타일
 export const ProgressSection = styled.div`
   margin-bottom: 32px;
+  margin-top: 10px;
 `;
 
 export const ProgressTitle = styled.h3`
@@ -529,7 +532,7 @@ export const ProgressHeader = styled.div`
   display: flex;
   justify-content: row;
   align-items: center;
-  margin-bottom: 15px;
+  margin-bottom: 10px;
 `;
 
 export const ProgressBars = styled.div`
@@ -576,11 +579,11 @@ export const TableTitle = styled.h3`
   font-size: 16px;
   font-weight: 600;
   color: #000;
-  margin: 0 0 15px 0;
+  margin: 0 0 10px 0;
 `;
 
 export const TableContainer = styled.div`
-  border-bottom: 0.5px solid #000;
+  border-bottom: 0.5 solid #000;
   border-top: 0.5px solid #000;
   overflow: hidden;
 `;
@@ -601,11 +604,14 @@ export const TableHeader = styled.th`
 
 // 핵심 공약 스타일
 export const CategoryItem = styled.div`
-  border-bottom: 1px solid #e0e0e0;
   border-radius: 8px;
-  margin-bottom: 12px;
   overflow: hidden;
+`;
 
+export const CategoryDivider = styled.div`
+  height: 1px;
+  background-color: #e0e0e0;
+  margin: 0 30px;
 `;
 
 export const CategoryHeader = styled.div`
@@ -614,7 +620,6 @@ export const CategoryHeader = styled.div`
   align-items: center;
   padding: 16px;
   background-color: #fff;
-  cursor: pointer;
   transition: background-color 0.2s ease;
 
 `;
@@ -623,7 +628,7 @@ export const CategoryTitle = styled.h4`
   font-size: 15px;
   font-weight: 700;
   color: #7471F9;
-  margin: 0 0 5px 0;
+  margin: 0 0 8px 0;
   padding: 0 15px;
 `;
 
@@ -631,13 +636,13 @@ export const CategorySummary = styled.p`
   font-size: 14px;
   font-weight: 500;
   color: #000;
-  margin: 0;
+  margin-right: 5px;
   line-height: 1.4;
   padding: 0 15px;
 `;
 
 export const CategoryContent = styled.div`
-  padding: 16px;
+  padding: 22px 16px;
   border-top: 1px solid #e0e0e0;
   background-color: #F3F2F7;
 `;
@@ -646,12 +651,14 @@ export const CategoryArrow = styled.span`
   font-size: 12px;
   color: #606060;
   transition: transform 0.2s ease;
+  margin-right: 15px;
+  margin-bottom: 8px;
 `;
 
 export const DetailPromises = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
 `;
 
 export const PromiseCard = styled.div`
@@ -663,9 +670,6 @@ export const PromiseCard = styled.div`
 `;
 
 export const PromiseCardFront = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
   width: 100%;
   height: 100%;
   backface-visibility: hidden;
@@ -703,16 +707,106 @@ export const PromiseNumber = styled.div`
 
 export const PromiseStatus = styled.span`
   display: inline-block;
-  padding: 4px 8px;
-  border-radius: 4px;
-  font-size: 12px;
+  padding: 2px 10px;
+  width: fit-content;
+  border-radius: 9px;
+  font-size: 11px;
   font-weight: 500;
-  margin-bottom: 8px;
+  margin: 0;
 `;
 
 export const PromiseContent = styled.div`
   font-size: 13px;
-  line-height: 1.3;
+  line-height: 130%;
   color: #000;
+  font-weight: 300;
+`;
+
+// 3D 카드 컨테이너
+export const Card3DContainer = styled.div`
+  perspective: 1200px;
+`;
+
+export const Card3DWrapper = styled.div`
+  position: relative;
+  border-radius: 10px;
+  min-height: 80px;
+  transform-style: preserve-3d;
+  transform: ${props => props.$isFlipped ? "rotateY(180deg)" : "rotateY(0deg)"};
+  transition: transform 0.4s ease-in-out;
+  cursor: ${props => props.$hasGoal ? "pointer" : "default"};
+  will-change: transform;
+`;
+
+// 카드 앞면
+export const CardFront = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border: 1px solid #D2D2D2;
+  border-radius: 10px;
+  background: #fff;
+  padding: 10px 15px;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  align-items: center;
+`;
+
+// 카드 뒷면
+export const CardBack = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border: 1px solid #D2D2D2;
+  border-radius: 10px;
+  background: #746F89;
+  padding: 10px 15px;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transform: rotateY(180deg);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+`;
+
+// 카드 내용 컨테이너
+export const CardContentContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+`;
+
+export const CardContentRow = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 12px;
+`;
+
+// 뒷면 내용
+export const BackContent = styled.div``;
+
+export const BackTitle = styled.div`
+  font-size: 12px;
   font-weight: 400;
+  margin-bottom: 0px;
+  color: #000;
+`;
+
+export const BackText = styled.div`
+  color: #2F2E34;
+  font-size: 14px;
+  line-height: 1.5;
+`;
+
+// 빈 상태 메시지
+export const EmptyMessage = styled.div`
+  text-align: center;
+  padding: 20px;
+  color: #666;
 `;

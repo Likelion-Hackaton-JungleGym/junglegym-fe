@@ -98,7 +98,7 @@ const JungleTalkPage = () => {
     setAnswer("");
     setLawText("");
     try {
-      const data = await askJungleTalkAI(qq, { privated: false });
+      const data = await askJungleTalkAI(qq, { privated: true });
       console.log("[openAnswer] API 응답 성공", data);
       setAnswer(data?.answer ?? "");
       setLawText(data?.constitution ?? "");

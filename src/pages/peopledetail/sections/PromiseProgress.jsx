@@ -19,6 +19,7 @@ import {
   TableHeader,
   SubtotalRowElement,
   SectionRowElement,
+  CardTitle,
 } from "../ProfileDetail.styles.js";
 
 const COLS = ["20%", "30%", "30%"];
@@ -27,7 +28,7 @@ const PromiseProgress = ({ promiseData }) => {
   if (!promiseData) {
     return (
       <Container>
-        <Title>공약 사업 이행 현황</Title>
+        <CardTitle>공약 사업 이행 현황</CardTitle>
         <div style={{ textAlign: "center", padding: "40px 0", color: "#666" }}>
           아직 등록된 정보가 없어요
         </div>
@@ -69,7 +70,7 @@ const PromiseProgress = ({ promiseData }) => {
 
   return (
     <Container>
-      <Title>공약 사업 이행 현황</Title>
+      <CardTitle>공약 사업 이행 현황</CardTitle>
 
       {/* 공약이행 완료도 섹션 */}
       <ProgressSection>

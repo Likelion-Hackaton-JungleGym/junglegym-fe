@@ -52,7 +52,7 @@ export const QuestionCard = styled.div`
   background: #ffffff;
   display: flex;
   align-items: center;
-  padding: 0 16px;
+  padding: 13px 16px;
   border-radius: 10px;
   border: 1px solid #d2d2d2;
   font-size: 15px;
@@ -67,6 +67,11 @@ export const QuestionText = styled.div`
   color: #000;
   line-height: 1.4;
   margin-bottom: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 export const CheckAnswerText = styled.div`
@@ -81,16 +86,17 @@ export const CheckAnswerText = styled.div`
 export const FloatingButton = styled.button`
   position: fixed;
   bottom: 30px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 336px;
+  left: 30px;
+  width: 330px;
   height: 55px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background: #7471f9;
   color: white;
   font-size: 18px;
   font-weight: 600;
   border: none;
-  padding: 14px;
   border-radius: 999px;
   z-index: 20;
   transition: all 0.2s ease;
