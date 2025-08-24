@@ -8,7 +8,7 @@ import remarkBreaks from "remark-breaks"; // 줄바꿈을 위해 필요
 import { DICTIONARY } from "../components/JungleDictionaryData";
 import xButton from "../components/img/xButton.svg";
 
-const HEADER_H = 80;
+const HEADER_H = 130; //127
 //const R2 = "only screen and (max-width: 390px)";
 
 export default function JungleDictionary() {
