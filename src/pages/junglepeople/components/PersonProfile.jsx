@@ -263,19 +263,20 @@ const TooltipBox = styled.div`
   top: 50%;
   left: calc(100% + 20px);
   transform: translateY(-50%);
-  width: 90px;
-  padding: 9px 7px;
+  width: 80px;
+  padding: 3px 3px 3px 3px;
   background: #f8f8fb;
   border-radius: 10px;
   border: 1px dashed #8e8e8e;
 `;
 const TooltipText = styled.div`
-  font-size: 12px;
+  font-size: 11px;
   color: #767676;
   line-height: 1.3;
   text-align: left;
   white-space: pre-line;
-  margin: 5px;
+  margin: 2px 2px 2px 2px;
+
 `;
 const Empty = styled.div`
   padding: 40px 16px;
