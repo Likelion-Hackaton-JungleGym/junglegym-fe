@@ -12,33 +12,39 @@ const LandingPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [selectedDistrict, setSelectedDistrict] = useState("성북구");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [districts, setDistricts] = useState([
-    "종로구",
-    "중구",
-    "용산구",
-    "성동구",
-    "광진구",
-    "동대문구",
-    "중랑구",
-    "성북구",
-    "강북구",
-    "도봉구",
-    "노원구",
-    "은평구",
-    "서대문구",
-    "마포구",
-    "양천구",
-    "강서구",
-    "구로구",
-    "금천구",
-    "영등포구",
-    "동작구",
-    "관악구",
-    "서초구",
-    "강남구",
-    "송파구",
-    "강동구",
-  ]);
+  const sortKo = (arr = []) =>
+    [...new Set(arr.map((s) => String(s).trim()).filter(Boolean))].sort((a, b) =>
+      a.localeCompare(b, "ko")
+    );
+  const [districts, setDistricts] = useState(
+    sortKo([
+      "종로구",
+      "중구",
+      "용산구",
+      "성동구",
+      "광진구",
+      "동대문구",
+      "중랑구",
+      "성북구",
+      "강북구",
+      "도봉구",
+      "노원구",
+      "은평구",
+      "서대문구",
+      "마포구",
+      "양천구",
+      "강서구",
+      "구로구",
+      "금천구",
+      "영등포구",
+      "동작구",
+      "관악구",
+      "서초구",
+      "강남구",
+      "송파구",
+      "강동구",
+    ])
+  );
   const [isLoadingDistricts, setIsLoadingDistricts] = useState(true);
 
   useEffect(() => {
@@ -67,7 +73,9 @@ const LandingPage = () => {
         console.log("지역구 목록 조회 시작");
         const regions = await getAllRegions();
         console.log("지역구 목록:", regions);
-        setDistricts(regions);
+        const sorted = sortKo(regions);
+        setDistricts(sorted);
+        setSelectedDistrict((cur) => (sorted.includes(cur) ? cur : sorted[0] ?? cur));
       } catch (err) {
         console.error("지역구 목록 조회 실패:", err);
         // 기본 지역구 목록 유지
