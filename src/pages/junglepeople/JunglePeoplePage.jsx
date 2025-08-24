@@ -41,5 +41,5 @@ export default function JunglePeoplePage() {
 
 const Wrapper = styled.div`
   padding: 20px;
-  margin-top: 30px;
+  margin-top: 13px;
 `;

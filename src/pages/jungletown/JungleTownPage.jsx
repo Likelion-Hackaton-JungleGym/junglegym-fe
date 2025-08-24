@@ -20,7 +20,7 @@ export default function JungleTownPage() {
 }
 
 const Wrapper = styled.div`
-  //margin-top: 25px;
+  margin-top: -20px;
   padding: 20px;
 `;
 

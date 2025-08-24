@@ -27,15 +27,15 @@ export const LogoLink = styled(Link)`
 export const MapImg = styled.img`
   height: 20px;
   background: transparent;
+  margin-top: 3px;
 `;
 
 export const TopWrapper = styled.div`
   position: relative;
-  height: 90px;
+  height: 80px;
   display: flex;
   align-items: center;
   padding-left: 30px;
-  //padding-top: 20px;
 `;
 
 export const Nav = styled.nav`
