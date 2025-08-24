@@ -8,7 +8,7 @@ import remarkBreaks from "remark-breaks"; // 줄바꿈을 위해 필요
 import { DICTIONARY } from "../components/JungleDictionaryData";
 import xButton from "../components/img/xButton.svg";
 
-const HEADER_H = 160; //실제 헤더길이 127
+const HEADER_H = 130; //실제 헤더길이 127
 //const R2 = "only screen and (max-width: 390px)";
 
 export default function JungleDictionary() {
@@ -172,8 +172,9 @@ const Card = styled.article`
 `;
 
 const Bg = styled.img`
-  position: absolute;
+  position: absolute; //색으로 바꾸기
   inset: 0;
+
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -254,7 +255,6 @@ const Dim = styled.div`
   right: 0;
   bottom: 0;
   left: 0;
-  background: rgba(78, 78, 78, 0.5);
   backdrop-filter: blur(2px);
   z-index: 1000;
 `;
@@ -267,6 +267,7 @@ const Modal = styled.div`
   align-content: start;
   z-index: 1001;
   padding: calc(env(safe-area-inset-top) + ${HEADER_H}px) 12px 12px;
+  overflow: auto;
 `;
 
 const ModalCard = styled.div`
@@ -274,14 +275,11 @@ const ModalCard = styled.div`
   width: min(345px, 100%);
   max-width: 100%;
   height: auto;
-
-  overflow: hidden auto;
   border-radius: 13px;
   padding: clamp(10px, 2.5vw, 18px) clamp(16px, 4vw, 24px);
   margin: 0px 10px;
   box-shadow: 0 16px 48px rgba(0, 0, 0, 0.2);
   background: transparent;
-  max-height: calc(100dvh - (env(safe-area-inset-top) + ${HEADER_H}px) - 24px);
 `;
 
 const ModalBg = styled.img`
