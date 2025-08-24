@@ -13,9 +13,31 @@ const LandingPage = () => {
   const [selectedDistrict, setSelectedDistrict] = useState("성북구");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [districts, setDistricts] = useState([
-    "종로구", "중구", "용산구", "성동구", "광진구", "동대문구", "중랑구", "성북구", 
-    "강북구", "도봉구", "노원구", "은평구", "서대문구", "마포구", "양천구", "강서구", 
-    "구로구", "금천구", "영등포구", "동작구", "관악구", "서초구", "강남구", "송파구", "강동구"
+    "종로구",
+    "중구",
+    "용산구",
+    "성동구",
+    "광진구",
+    "동대문구",
+    "중랑구",
+    "성북구",
+    "강북구",
+    "도봉구",
+    "노원구",
+    "은평구",
+    "서대문구",
+    "마포구",
+    "양천구",
+    "강서구",
+    "구로구",
+    "금천구",
+    "영등포구",
+    "동작구",
+    "관악구",
+    "서초구",
+    "강남구",
+    "송파구",
+    "강동구",
   ]);
   const [isLoadingDistricts, setIsLoadingDistricts] = useState(true);
 
@@ -26,12 +48,12 @@ const LandingPage = () => {
 
   // URL 파라미터에서 지역구 정보 읽기
   useEffect(() => {
-    const regionFromUrl = searchParams.get('region');
+    const regionFromUrl = searchParams.get("region");
     if (regionFromUrl) {
       setSelectedDistrict(regionFromUrl);
     } else {
       // URL에 없으면 sessionStorage에서 읽기
-      const regionFromStorage = sessionStorage.getItem('selectedRegion');
+      const regionFromStorage = sessionStorage.getItem("selectedRegion");
       if (regionFromStorage) {
         setSelectedDistrict(regionFromStorage);
       }
@@ -42,12 +64,12 @@ const LandingPage = () => {
   useEffect(() => {
     const fetchDistricts = async () => {
       try {
-        console.log('지역구 목록 조회 시작');
+        console.log("지역구 목록 조회 시작");
         const regions = await getAllRegions();
-        console.log('지역구 목록:', regions);
+        console.log("지역구 목록:", regions);
         setDistricts(regions);
       } catch (err) {
-        console.error('지역구 목록 조회 실패:', err);
+        console.error("지역구 목록 조회 실패:", err);
         // 기본 지역구 목록 유지
       } finally {
         setIsLoadingDistricts(false);
@@ -60,15 +82,15 @@ const LandingPage = () => {
   const handleDistrictSelect = (district) => {
     setSelectedDistrict(district);
     setIsDropdownOpen(false);
-    
+
     // URL 파라미터 업데이트
     setSearchParams({ region: district });
-    
+
     // sessionStorage에 지역구 정보 저장
-    sessionStorage.setItem('selectedRegion', district);
-    
+    sessionStorage.setItem("selectedRegion", district);
+
     // 지역구별 페이지로 이동 (URL 파라미터로 지역구 정보 전달)
-    navigate(`/junglepeople?region=${encodeURIComponent(district)}`);
+    navigate(`/?region=${encodeURIComponent(district)}`);
   };
 
   return (
@@ -95,7 +117,7 @@ const LandingPage = () => {
       </Content>
 
       <DistrictSelector>
-                <DropdownButton onClick={() => setIsDropdownOpen(!isDropdownOpen)} $isOpen={isDropdownOpen}>
+        <DropdownButton onClick={() => setIsDropdownOpen(!isDropdownOpen)} $isOpen={isDropdownOpen}>
           <span style={{ color: isDropdownOpen ? "#7471f9" : "#a7a7a7" }}>
             {isLoadingDistricts ? "로딩 중..." : selectedDistrict}
           </span>

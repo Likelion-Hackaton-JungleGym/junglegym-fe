@@ -1,70 +1,121 @@
 import styled from "styled-components";
-import { Link } from "react-router-dom";
-import leeseungro from "../components/img/leeseungro.svg";
-import kimyungbae from "../components/img/kimyungbae.svg";
-import kimnamgeun from "../components/img/kimnamgeun.svg";
-import ohsehun from "../components/img/ohsehun.svg";
+import { Link, useSearchParams } from "react-router-dom";
+import { useEffect, useMemo, useState } from "react";
+import { getPoliticiansByRegion } from "../../../shared/utils/politicianApi";
 
-const people = [
-  {
-    id: "leeseungro",
-    path: "/junglepeople/leeseungro",
-    name: "이승로",
-    title: "성북구청장",
-    photo: leeseungro,
-  },
-  {
-    id: "kimyungbae",
-    path: "/junglepeople/kimyungbae",
-    name: "김영배",
-    title: "성북구갑",
-    photo: kimyungbae,
-  },
-  {
-    id: "kimnamgeun",
-    path: "/junglepeople/kimnamgeun",
-    name: "김남근",
-    title: "성북구을",
-    photo: kimnamgeun,
-  },
-  {
-    id: "ohsehun",
-    path: "/junglepeople/ohsehun",
-    name: "오세훈",
-    title: "서울특별시장",
-    photo: ohsehun,
-  },
-];
+const DEFAULT_REGION = "성북구";
 
-export default function Minipeople() {
+// UI용 정규화 (API 필드명이 바뀌어도 안전하게 매핑)
+const normalizePeople = (arr = []) =>
+  arr.map((p) => ({
+    id: p.id ?? p.politicianId ?? p.slug ?? String(p.name ?? ""),
+    slug: p.slug ?? p.id ?? p.politicianId ?? String(p.name ?? ""),
+    name: p.name ?? p.politicianName ?? p.koreanName ?? "",
+    title: p.roleName || p.polyName || p.regionName || "",
+    photo: p.profileImg || p.photoUrl || p.imageUrl || null,
+  }));
+
+const getInitials = (name = "") => String(name).trim().slice(0, 2);
+
+export default function MiniPeople({ region: propRegion }) {
+  const [searchParams] = useSearchParams();
+
+  // URL > props > sessionStorage > 기본값
+  const region = useMemo(() => {
+    const fromUrl = searchParams.get("region");
+    if (fromUrl) return decodeURIComponent(fromUrl);
+    if (propRegion) return propRegion;
+    return sessionStorage.getItem("selectedRegion") || DEFAULT_REGION;
+  }, [propRegion, searchParams]);
+
+  const [people, setPeople] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // AbortController 사용 (0단계 패치 적용 시)
+    const ctrl = typeof AbortController !== "undefined" ? new AbortController() : null;
+    setLoading(true);
+
+    (async () => {
+      try {
+        const raw = await getPoliticiansByRegion(
+          region,
+          ctrl ? { signal: ctrl.signal } : undefined
+        );
+        setPeople(normalizePeople(Array.isArray(raw) ? raw : []));
+      } catch (e) {
+        // 0단계 패치 안 했거나, 네트워크 취소 아닌 에러
+        if (
+          e?.name === "CanceledError" ||
+          e?.code === "ERR_CANCELED" ||
+          e?.message === "canceled"
+        ) {
+          // 무시
+        } else {
+          console.error("[MiniPeople] fetch 실패:", e);
+          setPeople([]);
+        }
+      } finally {
+        setLoading(false);
+      }
+    })();
+
+    return () => ctrl?.abort?.();
+  }, [region]);
+
+  const getPersonPath = (p) => `/junglepeople/${encodeURIComponent(p.id ?? p.slug)}`;
+
   return (
     <Wrapper>
       <Text>
         <PageTitle>정글 사람들</PageTitle>
-        <Plus to="/junglepeople">
+        <Plus to={`/junglepeople?region=${encodeURIComponent(region)}`}>
           <p>{`전체보기 >`}</p>
         </Plus>
       </Text>
 
-      <MiniPeople className="scroll-container">
+      <MiniPeopleWrap className="scroll-container">
         <PeopleCard>
-          {people.map((p) => (
-            <Person key={p.id}>
-              <CardLink to={p.path}>
-                <Img src={p.photo} alt={`${p.name} 사진`} />
+          {loading ? (
+            Array.from({ length: 4 }).map((_, i) => (
+              <Person key={`skeleton-${i}`}>
+                <Skeleton />
                 <Info>
-                  <Name>{p.name}</Name>
-                  <Title>{p.title}</Title>
+                  <Name style={{ background: "#f3f3f3", height: 18, borderRadius: 4 }} />
+                  <Title
+                    style={{ background: "#f6f6f6", height: 14, borderRadius: 4, marginTop: 6 }}
+                  />
                 </Info>
-              </CardLink>
-            </Person>
-          ))}
+              </Person>
+            ))
+          ) : people.length === 0 ? (
+            <Empty>선택한 지역의 인물 정보가 없어요.</Empty>
+          ) : (
+            people.map((p) => (
+              <Person key={`${region}-${p.id}`}>
+                <CardLink to={`${getPersonPath(p)}?region=${encodeURIComponent(region)}`}>
+                  {p.photo ? (
+                    <Img src={p.photo} alt={`${p.name} 사진`} />
+                  ) : (
+                    <AvatarFallback aria-label={`${p.name} 사진 없음`}>
+                      {getInitials(p.name)}
+                    </AvatarFallback>
+                  )}
+                  <Info>
+                    <Name title={p.name}>{p.name}</Name>
+                    <Title title={p.title}>{p.title}</Title>
+                  </Info>
+                </CardLink>
+              </Person>
+            ))
+          )}
         </PeopleCard>
-      </MiniPeople>
+      </MiniPeopleWrap>
     </Wrapper>
   );
 }
 
+/* ---------- styles ---------- */
 const Wrapper = styled.div`
   margin: 10px 0px 10px 0px;
 `;
@@ -90,7 +141,7 @@ const Plus = styled(Link)`
   cursor: pointer;
 `;
 
-const MiniPeople = styled.div`
+const MiniPeopleWrap = styled.div`
   display: flex;
   margin: 12px 0 50px;
   &.scroll-container {
@@ -123,6 +174,22 @@ const Img = styled.img`
   width: 105%;
   display: block;
   cursor: pointer;
+  border-radius: 8px;
+  object-fit: cover;
+  aspect-ratio: 1 / 1;
+`;
+
+const AvatarFallback = styled.div`
+  width: 105%;
+  aspect-ratio: 1 / 1;
+  display: grid;
+  place-items: center;
+  border-radius: 8px;
+  background: #f0f1f5;
+  color: #555;
+  font-weight: 700;
+  font-size: 18px;
+  user-select: none;
 `;
 
 const Info = styled.div`
@@ -134,8 +201,6 @@ const Info = styled.div`
 const Name = styled.div`
   font-size: 17px;
   font-weight: 600;
-  //line-height: 1.25;
-  //letter-spacing: -0.2px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -148,4 +213,26 @@ const Title = styled.div`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+`;
+
+const Skeleton = styled.div`
+  width: 105%;
+  aspect-ratio: 1 / 1;
+  border-radius: 8px;
+  background: linear-gradient(90deg, #f2f2f2 25%, #f7f7f7 37%, #f2f2f2 63%);
+  background-size: 400% 100%;
+  animation: shimmer 1.2s ease-in-out infinite;
+  @keyframes shimmer {
+    0% {
+      background-position: 100% 0;
+    }
+    100% {
+      background-position: -100% 0;
+    }
+  }
+`;
+
+const Empty = styled.div`
+  color: #999;
+  padding: 10px 4px;
 `;

@@ -1,12 +1,16 @@
 import axios from "axios";
 import { useEffect, useMemo, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import styled from "styled-components";
-import { getWeeklyNews } from "../../../shared/api/endpoints";
+// 🔁 새 API 유틸
+import { getWeeklyNewsByRegion } from "../../../shared/utils/newsApi";
+
 import { ICON_MAP } from "./CardNewsData";
 import { CARD_MAP } from "./CardNewsData";
 import leftButton from "../components/img/leftButton.svg?url";
 import rightButton from "../components/img/rightButton.svg?url";
 
+/* ---------- utils ---------- */
 function chooseIcon(category, key) {
   const c = String(category || "").trim();
   const list = ICON_MAP[c] ?? [];
@@ -16,39 +20,43 @@ function chooseIcon(category, key) {
   for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) | 0;
   return list[Math.abs(h) % list.length];
 }
+const buildKey = (region, it) =>
+  `${region}__${it?.id ?? ""}__${it?.link ?? ""}__${it?.title ?? ""}`;
 
-export default function CardNews() {
+/* ---------- component ---------- */
+const DEFAULT_REGION = "성북구";
+
+export default function CardNews({ regions }) {
+  const [searchParams] = useSearchParams();
+
+  // URL > props(배열/문자열) > sessionStorage > 기본값
+  const region = useMemo(() => {
+    const fromUrl = searchParams.get("region");
+    if (fromUrl) return decodeURIComponent(fromUrl);
+    if (Array.isArray(regions) && regions[0]) return regions[0];
+    if (typeof regions === "string" && regions) return regions;
+    return sessionStorage.getItem("selectedRegion") || DEFAULT_REGION;
+  }, [regions, searchParams]);
+
   const [items, setItems] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [current, setCurrent] = useState(0);
   const [expanded, setExpanded] = useState(false);
-
-  // ✅ 기본 지역 (필요하면 props나 전역 상태로 치환하기 쉬움)
-  const DEFAULT_REGION = "성북구";
 
   useEffect(() => {
     const ctrl = new AbortController();
     (async () => {
       try {
-        // ✅ regionName 파라미터를 함께 전달
-        const json = await getWeeklyNews({
-          signal: ctrl.signal,
-          params: { regionName: DEFAULT_REGION },
-        });
+        setLoading(true);
+        console.log("[CardNews] fetch start:", region);
+        const list = await getWeeklyNewsByRegion(region, { signal: ctrl.signal });
 
-        const list = Array.isArray(json?.data) ? json.data : [];
-        const toNum = (v) => (typeof v === "number" ? v : parseInt(v, 10) || 0);
-        const sorted = list.slice().sort((a, b) => toNum(a.id) - toNum(b.id));
-        const mapped = sorted.map((it, i) => ({
-          id: it.id,
-          newsCategory: it.newsCategory,
-          title: it.title,
-          oneLineContent: it.oneLineContent,
-          summary: it.summary,
-          date: it.date,
-          link: it.link,
-          card: CARD_MAP[i + 1] ?? CARD_MAP[(i % 6) + 1],
-          mediaImgUrl: it.mediaImgUrl,
-          media: it.media,
+        // 카드 매핑 + 안정 키 + 지역 표시
+        const mapped = list.map((it, i) => ({
+          region,
+          key: buildKey(region, it),
+          ...it,
+          card: CARD_MAP[(i % 6) + 1], // 1~6 반복
         }));
 
         setItems(mapped);
@@ -63,26 +71,26 @@ export default function CardNews() {
         ) {
           return;
         }
-
-        // ✅ 상태코드/본문 함께 출력
         console.error(
-          "getWeeklyNews 실패:",
+          `[CardNews] getWeeklyNewsByRegion 실패(${region}):`,
           err.userMessage || err.message,
           "| status:",
           err.response?.status,
           "| body:",
           err.response?.data
         );
-
         setItems([]);
+      } finally {
+        setLoading(false);
       }
     })();
     return () => ctrl.abort();
-  }, []); // DEFAULT_REGION을 바꿔서 재호출하고 싶다면 deps에 추가
+  }, [region]);
 
   const len = items.length;
   const item = items[current];
-  const prevIndex = (current - 1 + len) % Math.max(1, len || 1);
+
+  const prevIndex = (current - 1 + Math.max(1, len)) % Math.max(1, len || 1);
   const nextIndex = (current + 1) % Math.max(1, len || 1);
 
   const prev = () => {
@@ -96,13 +104,20 @@ export default function CardNews() {
     setExpanded(false);
   };
 
-  const iconSrc = useMemo(() => (item ? chooseIcon(item.newsCategory, item.id) : null), [item]);
-
-  if (!len) {
+  const iconSrc = useMemo(() => (item ? chooseIcon(item.newsCategory, item.key) : null), [item]);
+  if (loading) {
     return (
       <Wrapper>
         <Date>25년 8월 3주차</Date>
         <Empty>뉴스를 불러오는 중...</Empty>
+      </Wrapper>
+    );
+  }
+  if (!len) {
+    return (
+      <Wrapper>
+        <Date>25년 8월 3주차</Date>
+        <Empty>이 지역의 주간 뉴스가 없어요.</Empty>
       </Wrapper>
     );
   }
@@ -129,12 +144,14 @@ export default function CardNews() {
 
           {!expanded ? (
             <CompactOverlay>
+              <RegionChip>{item.region}</RegionChip>
               <IconWrapper>{!!iconSrc && <OverlayIcon src={iconSrc} alt="" />}</IconWrapper>
               {item.title && <OverlayTitle>{item.title}</OverlayTitle>}
               {item.oneLineContent && <OverlayDesc>{item.oneLineContent}</OverlayDesc>}
             </CompactOverlay>
           ) : (
             <ExpandedOverlay>
+              <RegionChip>{item.region}</RegionChip>
               {item.title && <OverlayTitle2>{item.title}</OverlayTitle2>}
               {item.summary && <OverlayBody>{item.summary}</OverlayBody>}
               <FooterRow>
@@ -189,7 +206,7 @@ export default function CardNews() {
   );
 }
 
-/* ---------- styles ---------- */
+/* ---------- styles (기존 그대로) ---------- */
 const GUTTER = 7;
 const PEEK_WIDTH = 50;
 
@@ -284,6 +301,19 @@ const CompactOverlay = styled.div`
   gap: 6px;
 `;
 
+const RegionChip = styled.span`
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  padding: 4px 10px;
+  font-size: 11px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.35);
+  color: #fff;
+  pointer-events: none;
+  z-index: 4;
+`;
+
 const IconWrapper = styled.div`
   width: 200px;
   height: 200px;
@@ -369,7 +399,6 @@ const GraphImg = styled.img`
 
 const GraphWrapper = styled.div`
   padding: 0px 0px 10px;
-  //margin-top: 5px;
 `;
 
 const ArrowBase = styled.button`
@@ -426,7 +455,6 @@ const FooterRow = styled.div`
   display: flex;
   justify-content: space-between;
   gap: 12px;
-  // margin-top: 30px;
 `;
 
 const FooterLeft = styled.div`
