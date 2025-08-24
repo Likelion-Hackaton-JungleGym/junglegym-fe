@@ -10,9 +10,8 @@ import {
   NavItem,
   HeaderWrapper,
 } from "./HeaderStyles";
-//import TextLogo from "../../assets/icons/TextLogo.svg";
+import TextLogo from "../../assets/icons/TextLogo.jpg";
 import Map from "../../assets/icons/mapImg.svg";
-import TextLogo from "../../assets/icons/해커톤로고-03.jpg";
 
 export default function Header({ mode = "fixed" }) {
   const { pathname } = useLocation();
