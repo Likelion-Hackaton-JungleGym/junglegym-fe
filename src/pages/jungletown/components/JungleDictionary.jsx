@@ -188,12 +188,9 @@ const Ribbon = styled.img`
 `;
 
 const Body = styled.div`
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  padding: 15px 15px 0px 15px;
+  position: relative; /* 일반 흐름 */
   z-index: 1;
+  padding: 15px 15px 12px 15px;
   @media (max-width: 390px) {
     padding: 12px;
   }
@@ -211,7 +208,7 @@ const Icon = styled.img`
 `;
 
 const CardBottom = styled.div`
-  height: 80px;
+  min-height: 60px; //80??
   margin: 10px 0px;
 `;
 
@@ -350,7 +347,7 @@ const Desc = styled.div`
   line-height: 1.6;
   letter-spacing: -0.2px;
   color: #222;
-  overflow: auto;
+  //overflow: auto;
   padding-right: 2px;
   /* 마크다운 기본 요소 약간 정리 */
   & h1,
