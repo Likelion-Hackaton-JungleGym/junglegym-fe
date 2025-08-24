@@ -13,6 +13,7 @@ const normalizePeople = (arr = []) =>
     name: p.name ?? p.politicianName ?? p.koreanName ?? "",
     title: p.roleName || p.polyName || p.regionName || "",
     photo: p.profileImg || p.photoUrl || p.imageUrl || null,
+    polyName: p.polyName || p.partyName || p.party || "", // 정당 정보 추가
   }));
 
 const getInitials = (name = "") => String(name).trim().slice(0, 2);
@@ -91,23 +92,38 @@ export default function MiniPeople({ region: propRegion }) {
           ) : people.length === 0 ? (
             <Empty>선택한 지역의 인물 정보가 없어요.</Empty>
           ) : (
-            people.map((p) => (
-              <Person key={`${region}-${p.id}`}>
-                <CardLink to={`${getPersonPath(p)}?region=${encodeURIComponent(region)}`}>
-                  {p.photo ? (
-                    <Img src={p.photo} alt={`${p.name} 사진`} />
-                  ) : (
-                    <AvatarFallback aria-label={`${p.name} 사진 없음`}>
-                      {getInitials(p.name)}
-                    </AvatarFallback>
-                  )}
-                  <Info>
-                    <Name title={p.name}>{p.name}</Name>
-                    <Title title={p.title}>{p.title}</Title>
-                  </Info>
-                </CardLink>
-              </Person>
-            ))
+            people.map((p) => {
+              const getBgColor = (polyName) => {
+                if (polyName?.includes("더불어민주당")) return "#4191E6";
+                if (polyName?.includes("국민의힘")) return "#F8575E";
+                return "#f5f5f5"; // 기본값
+              };
+
+              const bgColor = getBgColor(p.polyName);
+
+              return (
+                <Person key={`${region}-${p.id}`}>
+                  <CardLink to={`${getPersonPath(p)}?region=${encodeURIComponent(region)}`}>
+                    {p.photo ? (
+                      <ImageWrapper $bg={bgColor}>
+                        <Img src={p.photo} alt={`${p.name} 사진`} />
+                      </ImageWrapper>
+                    ) : (
+                      <AvatarFallback
+                        aria-label={`${p.name} 사진 없음`}
+                        style={{ background: bgColor }}
+                      >
+                        {getInitials(p.name)}
+                      </AvatarFallback>
+                    )}
+                    <Info>
+                      <Name title={p.name}>{p.name}</Name>
+                      <Title title={p.title}>{p.title}</Title>
+                    </Info>
+                  </CardLink>
+                </Person>
+              );
+            })
           )}
         </PeopleCard>
       </MiniPeopleWrap>
@@ -171,12 +187,12 @@ const CardLink = styled(Link)`
 `;
 
 const Img = styled.img`
-  width: 105%;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
   display: block;
   cursor: pointer;
-  border-radius: 8px;
-  object-fit: cover;
-  aspect-ratio: 1 / 1;
 `;
 
 const AvatarFallback = styled.div`
@@ -230,6 +246,18 @@ const Skeleton = styled.div`
       background-position: -100% 0;
     }
   }
+`;
+
+const ImageWrapper = styled.div`
+  position: relative;
+  width: 105%;
+  aspect-ratio: 1 / 1;
+  background: ${(p) => p.$bg};
+  border-radius: 8px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 
 const Empty = styled.div`

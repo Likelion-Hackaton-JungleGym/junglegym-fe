@@ -257,7 +257,6 @@ const TooltipWrapper = styled.div`
 const TooltipButton = styled.img`
   position: absolute;
   top: -7px;
-  cursor: pointer;
 `;
 const TooltipBox = styled.div`
   position: absolute;
@@ -265,7 +264,7 @@ const TooltipBox = styled.div`
   left: calc(100% + 20px);
   transform: translateY(-50%);
   width: 90px;
-  padding: 9px 9px;
+  padding: 9px 7px;
   background: #f8f8fb;
   border-radius: 10px;
   border: 1px dashed #8e8e8e;
@@ -276,7 +275,7 @@ const TooltipText = styled.div`
   line-height: 1.3;
   text-align: left;
   white-space: pre-line;
-  margin: 6px;
+  margin: 5px;
 `;
 const Empty = styled.div`
   padding: 40px 16px;
