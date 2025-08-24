@@ -261,15 +261,12 @@ const Dim = styled.div`
 
 const Modal = styled.div`
   position: fixed;
-  /* 상단을 헤더 + 안전영역만큼 비워두고, 남은 영역에서 중앙정렬 */
-  top: calc(env(safe-area-inset-top) + ${HEADER_H}px);
-  right: 0;
-  bottom: 0;
-  left: 0;
+  inset: 0;
   display: grid;
-  place-items: center;
+  justify-items: center; /* 가로 가운데 */
+  align-content: start;
   z-index: 1001;
-  padding: 12px;
+  padding: calc(env(safe-area-inset-top) + ${HEADER_H}px) 12px 12px;
 `;
 
 const ModalCard = styled.div`
