@@ -173,7 +173,8 @@ const Card = styled.article`
 
 const Top = styled.div`
   position: relative;
-  height: 200px;
+  height: 160px;
+  width: 160px;
   background: ${(p) => p.$bg};
   display: flex;
   align-items: center;
