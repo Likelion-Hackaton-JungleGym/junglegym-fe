@@ -163,13 +163,17 @@ const Card = styled.article`
   position: relative;
   margin-bottom: 10px;
   width: clamp(150px, 42vw, 200px);
+  //  aspect-ratio: 200 / 270; /* 높이 자동 */
   border-radius: 10px;
+  min-height: 270px;
+  min-width: 200px;
+  overflow: hidden;
   flex: 0 0 auto;
   cursor: pointer;
 `;
 
 const Bg = styled.img`
-  position: absolute;
+  position: absolute; //색으로 바꾸기
   inset: 0;
   width: 100%;
   height: 100%;
@@ -188,9 +192,12 @@ const Ribbon = styled.img`
 `;
 
 const Body = styled.div`
-  position: relative; /* 일반 흐름 */
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 15px 15px 0px 15px;
   z-index: 1;
-  padding: 15px 15px 12px 15px;
   @media (max-width: 390px) {
     padding: 12px;
   }
@@ -199,16 +206,16 @@ const Body = styled.div`
 const IconBox = styled.div`
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-end;
 `;
 const Icon = styled.img`
-  width: clamp(96px, 33vw, 135px);
+  width: clamp(130px, 40vw, 150px);
   height: auto;
-  margin: 10px 0px;
+  //margin: 10px 0px;
 `;
 
 const CardBottom = styled.div`
-  min-height: 60px; //80??
+  height: 80px;
   margin: 10px 0px;
 `;
 
@@ -347,7 +354,7 @@ const Desc = styled.div`
   line-height: 1.6;
   letter-spacing: -0.2px;
   color: #222;
-  //overflow: auto;
+  overflow: auto;
   padding-right: 2px;
   /* 마크다운 기본 요소 약간 정리 */
   & h1,
