@@ -27,7 +27,7 @@ const Wrapper = styled.div`
 
 const BigTexts = styled.div`
   margin-top: 10px;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 `;
 
 const BigText = styled.div`

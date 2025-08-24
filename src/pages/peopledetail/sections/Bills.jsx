@@ -131,7 +131,8 @@ const Bills = ({ bills = [], totalPages = 1, currentPage = 1, onPageChange }) =>
                           background: "#E1E0FF",
                           color: "#4B48F3",
                           whiteSpace: "nowrap",
-                          marginTop: "2px",
+                          marginTop: "0px",
+                          marginRight: "3px",
                         }}
                       >
                         {bill.status}
@@ -188,7 +189,7 @@ const Bills = ({ bills = [], totalPages = 1, currentPage = 1, onPageChange }) =>
                             display: "inline-block",
                             background: "#FFFFFF",
                             color: "#2F2E34",
-                            fontSize: 12,
+                            fontSize: 13,
                             fontWeight: 600,
                             borderRadius: 30,
                             padding: "5px 10px",
@@ -204,15 +205,15 @@ const Bills = ({ bills = [], totalPages = 1, currentPage = 1, onPageChange }) =>
                             target="_blank"
                             rel="noopener noreferrer"
                             style={{
-                              width: 26,
-                              height: 26,
+                              width: 27,
+                              height: 27,
                               borderRadius: "50%",
                               display: "inline-flex",
                               alignItems: "center",
                               justifyContent: "center",
                               textDecoration: "none",
                               color: "#fff",
-                              fontSize: 12,
+                              fontSize: 13,
                             }}
                             title="관련 링크"
                           >
@@ -224,7 +225,7 @@ const Bills = ({ bills = [], totalPages = 1, currentPage = 1, onPageChange }) =>
                       <div style={{ overflow: "visible", maxHeight: "none" }}>
                         <ul style={{ margin: 0, paddingLeft: 13 }}>
                           {(back.details ?? []).map((d, i) => (
-                            <li key={i} style={{ color: "#fff", fontSize: 12, marginBottom: 6 }}>
+                            <li key={i} style={{ color: "#fff", fontSize: 13, marginBottom: 6 }}>
                               {d.replace(/^[•·\s]+/, "")}
           </li>
         ))}

@@ -4,23 +4,10 @@ import api from "./api";
 export async function getChats({ limit = 10 } = {}) {
   console.log("[getChats] 요청 시작", { limit });
   try {
-    // 직접 API 호출
-    const res = await fetch(`https://www.junglegym.kr/api/chat?limit=${limit}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json'
-      }
-    });
-    
-    if (!res.ok) {
-      throw new Error(`HTTP error! status: ${res.status}`);
-    }
-    
-    const data = await res.json();
-    console.log("[getChats] 응답 도착", res.status, data);
-    const list = Array.isArray(data?.data) ? data.data : [];
-    return { raw: data, list };
+    const response = await api.get(`/api/chat?limit=${limit}`);
+    console.log("[getChats] 응답 도착", response.status, response.data);
+    const list = Array.isArray(response.data?.data) ? response.data.data : [];
+    return { raw: response.data, list };
   } catch (error) {
     console.log("[getChats] 서버 연결 실패, 더미 데이터 사용", error.message);
     // 백엔드 서버 다운 시 더미 데이터 반환
@@ -39,23 +26,9 @@ export async function getChats({ limit = 10 } = {}) {
 export async function askJungleTalkAI(question, { privated = false } = {}) {
   console.log("[askJungleTalkAI] 요청 시작", { question, privated });
   try {
-    // 직접 API 호출
-    const res = await fetch('https://www.junglegym.kr/api/chat', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json'
-      },
-      body: JSON.stringify({ question, privated })
-    });
-    
-    if (!res.ok) {
-      throw new Error(`HTTP error! status: ${res.status}`);
-    }
-    
-    const data = await res.json();
-    console.log("[askJungleTalkAI] 응답 도착", res.status, data);
-    return data?.data; // { question, answer, constitution }
+    const response = await api.post('/api/chat', { question, privated });
+    console.log("[askJungleTalkAI] 응답 도착", response.status, response.data);
+    return response.data?.data; // { question, answer, constitution }
   } catch (error) {
     console.log("[askJungleTalkAI] 서버 연결 실패, 더미 데이터 사용", error.message);
     // 백엔드 서버 다운 시 더미 데이터 반환

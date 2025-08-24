@@ -62,7 +62,6 @@ const OtherQuestion = ({ title, questions, onClick, showCheckAnswer = false, var
     <>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
         <SubTitle>{title}</SubTitle>
-        <QuestionCount>1</QuestionCount>
       </div>
       <OtherQuestionContainer>
         {displayQuestions.map((question, i) => (

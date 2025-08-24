@@ -53,7 +53,7 @@ export const Card = styled.div`
 export const CardTitle = styled.h3`
   font-size: 21px;
   font-weight: 700;
-  margin: 0 0 16px 0;
+  margin: 0 0 10px 0;
   color: #000;
 
   /* 텍스트 뒤에 라이트 퍼플 형광펜 효과 */
@@ -76,18 +76,20 @@ export const CardSubtitle = styled.p`
 export const Row = styled.div`
   display: flex;
   align-items: flex-start;
-  gap: 14px;
+  gap: 12px;
   margin: 10px 0 0;
 `;
 
 // 공통 아이콘 스타일
 export const InfoIcon = styled.span`
-  width: 17px;
-  height: 17px;
+  width: 18px;
+  height: auto;
   flex-shrink: 0;
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  margin-top: 6px;
+  margin-left: 10px;
 
   img {
     width: 100%;
@@ -98,8 +100,8 @@ export const InfoIcon = styled.span`
 
 // 공통 라벨 스타일
 export const InfoLabel = styled.span`
-  font-size: 14px;
-  font-weight: 700;
+  font-size: 15px;
+  font-weight: 500;
   color: #959595;
   min-width: 86px; /* 74 → 86로 살짝 늘려 정렬 안정 */
   line-height: 1.6;
@@ -120,13 +122,13 @@ export const InfoValue = styled.span`
 export const EmptyInfo = styled.div`
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 20px;
+  gap: 10px;
+  padding: 40px;
   border-radius: 8px;
 `;
 
 export const EmptyText = styled.span`
-  font-size: 14px;
+  font-size: 15px;
   color: #a7a7a7;
 `;
 
@@ -134,7 +136,8 @@ export const EmptyText = styled.span`
 export const ListContainer = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 10px;
+  margin: 5px 5px 0;
 `;
 
 // 공통 아이템 스타일
@@ -150,6 +153,7 @@ export const ItemText = styled.p`
   font-weight: 500;
   color: #000;
   margin: 5px 0;
+  line-height: 1.3;
 `;
 
 // 공통 링크 스타일
@@ -221,6 +225,8 @@ export const StatusBadge = styled.span`
 // 공통 섹션 스타일
 export const Section = styled.div`
   margin-bottom: 20px;
+  margin-left: 8px;
+  margin-top: 10px;
 
   &:last-child {
     margin-bottom: 0;
@@ -256,7 +262,7 @@ export const ListItemBullet = styled.li`
     content: "•";
     position: absolute;
     left: -16px;
-    color: #8b7ff9;
+    color: #000;
   }
 `;
 
@@ -353,7 +359,7 @@ export const Header = styled.div`
 // 공통 노트 섹션 스타일
 export const NoteSection = styled.div`
   display: flex;
-  gap: 5px;
+  gap: 0px;
   padding: 16px 0;
   color: #a7a7a7;
   margin-left: 10px;
@@ -368,7 +374,7 @@ export const NoteIcon = styled.span`
 export const NoteText = styled.p`
   font-size: 13px;
   color: #a7a7a7;
-  margin: 0 10px 0 27px;
+  margin: 0 6px 0 27px;
   line-height: 1.4;
   font-weight: 400;
 `;
@@ -474,7 +480,7 @@ export const ProposerNames = styled.span`
 
 // 값 기본은 작게(이미 있음). 아래는 상황별 variant
 export const InfoValuePrimary = styled(InfoValue)`
-  font-size: 18px; /* 생년월일처럼 크게 */
+  font-size: 19px; /* 생년월일처럼 크게 */
   font-weight: 500;
   color: #000;
 `;

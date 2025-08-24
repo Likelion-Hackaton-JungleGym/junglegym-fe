@@ -8,7 +8,7 @@ import {
   NoteText,
   Row,
   EmptyInfo,
-  EmptyText
+  EmptyText,
 } from "../ProfileDetail.styles.js";
 
 import CrimeStarIcon from "../../../assets/icons/CrimeStarIcon.svg";
@@ -45,7 +45,7 @@ const Crimes = ({ crimes }) => {
             fontWeight: 400,
             color: "#FF2B38",
             background: "#FFF1F2",
-            marginLeft: "5px",
+            marginLeft: "0px",
           }}
         >
           총 {crimes.count}건
@@ -103,8 +103,8 @@ const Crimes = ({ crimes }) => {
           <span style={{ fontSize: 15, fontWeight: 500, color: "#A7A7A7" }}>참고 사항</span>
         </div>
         <NoteText>
-          후보자 본인이 제출한 소명서를 기준으로 합니다. 자세한 정보는 중앙선거관리위원회
-          홈페이지에서 확인하실 수 있습니다.
+          후보자 본인이 제출한 소명서를 기준으로 합니다. <br />
+          자세한 정보는 중앙선거관리위원회 홈페이지에서 확인하실 수 있습니다.
         </NoteText>
       </NoteSection>
     </Card>

@@ -17,6 +17,7 @@ import {
   PromiseStatus,
   PromiseContent,
   MoreLink,
+  CardTitle,
 } from "../ProfileDetail.styles.js";
 import { getCategoryPromises } from "../../../shared/utils/politicianApi.js";
 
@@ -113,7 +114,7 @@ const KeyPromises = ({ categories = [] }) => {
     return (
       <KeyPromisesContainer>
         <div className="key-promises-title">
-          <Title>핵심 공약</Title>
+          <CardTitle>핵심 공약</CardTitle>
         </div>
         <div className="key-promises-content">
           <div style={{ textAlign: "center", padding: "40px 0", color: "#666" }}>
@@ -127,7 +128,7 @@ const KeyPromises = ({ categories = [] }) => {
   return (
     <KeyPromisesContainer>
       <div className="key-promises-title">
-        <Title>핵심 공약</Title>
+        <CardTitle>핵심 공약</CardTitle>
       </div>
       <div className="key-promises-content">
         {top5Categories.map((category) => {

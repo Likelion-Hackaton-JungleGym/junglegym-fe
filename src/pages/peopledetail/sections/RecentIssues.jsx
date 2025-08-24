@@ -9,7 +9,7 @@ const RecentIssues = ({ issues }) => (
           key={index} 
           style={{ 
             borderBottom: index === issues.length - 1 ? "none" : "1px solid #eee", 
-            paddingBottom: index === issues.length - 1 ? "0px" : "15px" 
+            paddingBottom: index === issues.length - 1 ? "0px" : "10px" 
           }}
         >
           <ItemText>{issue.title}</ItemText>

@@ -53,7 +53,7 @@ const TabContainer = styled.div`
   gap: 12px;
   padding: 6px 2px; /* 좌우 여백으로 스크롤 여지 */
   border-radius: 12px;
-  margin: 20px 25px;
+  margin: 20px 20px;
   position: relative;
 
   /* 스크롤 스냅(원하면 켜기) */

@@ -76,7 +76,6 @@ const JungleTalkAnswer = ({
           showCheckAnswer
           onClick={(i, q) => {
             if (loading) return;
-            console.log("[OtherQuestion click]", { index: i, q });
             onOtherClick?.(q);
           }}
           disabled={loading}

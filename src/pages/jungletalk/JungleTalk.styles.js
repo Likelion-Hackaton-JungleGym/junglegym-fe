@@ -13,6 +13,7 @@ export const Container = styled.div`
 
 export const Section = styled.section`
   margin-top: 35px;
+  margin-bottom: 20px;
   padding: 0 30px;
 `;
 
@@ -21,6 +22,7 @@ export const Title = styled.h2`
   display: inline-block;
   font-size: 24px;
   font-weight: 700;
+
   z-index: 0;
 `;
 
@@ -32,7 +34,7 @@ export const Description = styled.p`
 `;
 
 export const SubTitle = styled.h3`
-  font-size: 20px;
+  font-size: 19px;
   font-weight: 700;
   margin-bottom: 10px;
 `;
@@ -42,7 +44,7 @@ export const QuestionList = styled.div`
   flex-direction: column;
   gap: 12px;
   padding-bottom: 100px;
-  margin-top: 15px;
+  margin-top: 14px;
   align-items: center;
 `;
 
@@ -61,7 +63,7 @@ export const QuestionCard = styled.div`
 `;
 
 export const QuestionText = styled.div`
-  font-size: 15px;
+  font-size: 13px;
   color: #000;
   line-height: 1.4;
   margin-bottom: 0;
@@ -78,7 +80,7 @@ export const CheckAnswerText = styled.div`
 
 export const FloatingButton = styled.button`
   position: fixed;
-  bottom: 60px;
+  bottom: 30px;
   left: 50%;
   transform: translateX(-50%);
   width: 336px;
@@ -97,25 +99,24 @@ export const FloatingButton = styled.button`
 export const BackButton = styled.button`
   background: none;
   border: none;
-  font-size: 20px;
+  margin-top: 20px;
   margin-bottom: 16px;
   display: flex;
   align-items: center;
-  padding: 0;
+  padding: 30px 0 5px;
 `;
 
 export const AbsoluteBackButton = styled.button`
   background: none;
   border: none;
   font-size: 20px;
-  cursor: pointer;
   position: absolute;
   top: 16px;
   left: 16px;
   z-index: 10;
   display: flex;
   align-items: center;
-  padding: 0;
+  padding: 10px;
 `;
 
 export const Textarea = styled.textarea`
@@ -139,12 +140,14 @@ export const Textarea = styled.textarea`
 export const CheckBoxLabel = styled.label`
   display: flex;
   align-items: center;
-  margin: 12px 0px;
+  margin: 12px 5px;
   color: #b5b5b5;
+  font-weight: 600;
 
   input[type="checkbox"] {
     transform: scale(1.5);
     margin-right: 18px;
+    font-weight: 600;
   }
 `;
 
@@ -232,6 +235,7 @@ export const OtherQuestionContainer = styled.div`
   border-radius: 12px;
   border: 1px solid #e0e0e0;
   overflow: hidden;
+  margin: 0 15px 0;
 `;
 
 export const QuestionItem = styled.div`

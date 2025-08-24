@@ -118,12 +118,12 @@ const CardLink = styled(Link)`
 `;
 
 const Card = styled.article`
-  border-radius: 10px;
+  border-radius: 12px;
   overflow: hidden;
   background: #fff;
   display: flex;
   flex-direction: column;
-  border: 2px solid #d2d2d2;
+  border: 1.5px solid #d1d1d1;
   height: 230px;
 `;
 

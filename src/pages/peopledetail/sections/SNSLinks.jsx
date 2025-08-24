@@ -7,7 +7,7 @@ import {
 } from "../ProfileDetail.styles.js";
 import styled from "styled-components";
 
-import FacebookIcon from "../../../assets/icons/InstagramIcon.svg";
+import FacebookIcon from "../../../assets/icons/FacebookIcon.svg";
 import InstagramIcon from "../../../assets/icons/InstagramIcon.svg";
 import BlogIcon from "../../../assets/icons/BlogIcon.svg";
 import TwitterIcon from "../../../assets/icons/TwitterIcon.svg";
@@ -89,6 +89,7 @@ const DynamicGridContainer = styled.div`
   grid-template-columns: ${props => props.$columns};
   grid-template-rows: ${props => props.$rows};
   gap: 10px;
+  margin-top: 5px;
   
   /* SNS 1개일 때: 첫 번째 칸에만 배치 */
   ${props => props.$count === 1 && `
