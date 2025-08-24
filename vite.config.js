@@ -1,19 +1,17 @@
+// vite.config.js
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 
 export default defineConfig({
+  base: "/", // ⬅️ 루트 배포
   plugins: [react()],
+  build: { sourcemap: true },
   server: {
     proxy: {
       "/api": {
-        target: "https://www.junglegym.kr",
+        target: "https://api.junglegym.kr",
         changeOrigin: true,
-        secure: false,
-        headers: {
-          'Host': 'www.junglegym.kr',
-          'Origin': 'https://www.junglegym.kr',
-          'Referer': 'https://www.junglegym.kr'
-        }
+        secure: true,
       },
     },
   },

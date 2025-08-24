@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "svg:opt": "svgo -f src/assets_raw --config=svgo.config.js -o public/images",
+    "build": "npm run svg:opt && vite build",
     "lint": "eslint .",
     "preview": "vite preview"
   },
@@ -30,6 +31,8 @@
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.19",
     "globals": "^16.0.0",
+    "sharp": "^0.34.3",
+    "svgo": "^4.0.0",
     "vite": "^6.3.5"
   }
 }

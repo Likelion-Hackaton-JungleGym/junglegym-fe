@@ -8,7 +8,8 @@ import leftButton from "../components/img/leftButton.svg?url";
 import rightButton from "../components/img/rightButton.svg?url";
 
 function chooseIcon(category, key) {
-  const list = ICON_MAP[category] ?? [];
+  const c = String(category || "").trim();
+  const list = ICON_MAP[c] ?? [];
   if (!list.length) return null;
   let h = 0;
   const s = String(key ?? "");
@@ -21,13 +22,20 @@ export default function CardNews() {
   const [current, setCurrent] = useState(0);
   const [expanded, setExpanded] = useState(false);
 
+  // ✅ 기본 지역 (필요하면 props나 전역 상태로 치환하기 쉬움)
+  const DEFAULT_REGION = "성북구";
+
   useEffect(() => {
     const ctrl = new AbortController();
     (async () => {
       try {
-        const json = await getWeeklyNews({ signal: ctrl.signal });
-        const list = Array.isArray(json?.data) ? json.data : [];
+        // ✅ regionName 파라미터를 함께 전달
+        const json = await getWeeklyNews({
+          signal: ctrl.signal,
+          params: { regionName: DEFAULT_REGION },
+        });
 
+        const list = Array.isArray(json?.data) ? json.data : [];
         const toNum = (v) => (typeof v === "number" ? v : parseInt(v, 10) || 0);
         const sorted = list.slice().sort((a, b) => toNum(a.id) - toNum(b.id));
         const mapped = sorted.map((it, i) => ({
@@ -38,8 +46,8 @@ export default function CardNews() {
           summary: it.summary,
           date: it.date,
           link: it.link,
-          card: CARD_MAP[i + 1] ?? CARD_MAP[(i % 5) + 1],
-          mediaImgUrl: it.mediaImgUrl ?? null, // 그래프 이미지
+          card: CARD_MAP[i + 1] ?? CARD_MAP[(i % 6) + 1],
+          mediaImgUrl: it.mediaImgUrl,
           media: it.media,
         }));
 
@@ -56,18 +64,21 @@ export default function CardNews() {
           return;
         }
 
+        // ✅ 상태코드/본문 함께 출력
         console.error(
           "getWeeklyNews 실패:",
           err.userMessage || err.message,
           "| status:",
-          err.response?.status
+          err.response?.status,
+          "| body:",
+          err.response?.data
         );
 
         setItems([]);
       }
     })();
     return () => ctrl.abort();
-  }, []);
+  }, []); // DEFAULT_REGION을 바꿔서 재호출하고 싶다면 deps에 추가
 
   const len = items.length;
   const item = items[current];
@@ -85,10 +96,8 @@ export default function CardNews() {
     setExpanded(false);
   };
 
-  // 고정 랜덤 아이콘
   const iconSrc = useMemo(() => (item ? chooseIcon(item.newsCategory, item.id) : null), [item]);
 
-  // 로딩/빈 상태
   if (!len) {
     return (
       <Wrapper>
@@ -103,7 +112,6 @@ export default function CardNews() {
       <Date>25년 8월 3주차</Date>
 
       <Viewport>
-        {/* 배경: 이전/다음 프리뷰 */}
         <PrevPeek aria-hidden>
           <PeekImg src={items[prevIndex]?.card} alt="" />
         </PrevPeek>
@@ -111,14 +119,13 @@ export default function CardNews() {
           <PeekImg src={items[nextIndex]?.card} alt="" />
         </NextPeek>
 
-        {/* 카드 */}
         <Card
           role="group"
           aria-roledescription="slide"
           aria-label={`${current + 1} / ${len}`}
           onClick={() => setExpanded((v) => !v)}
         >
-          <MainImg src={item.card} alt="" />
+          <MainImg src={item.card} alt="" loading="lazy" decoding="async" />
 
           {!expanded ? (
             <CompactOverlay>
@@ -149,13 +156,14 @@ export default function CardNews() {
                 </FootrtRight>
               </FooterRow>
               <GraphWrapper>
-                {item.mediaImgUrl && <GraphImg src={item.mediaImgUrl} alt="" />}
+                {item.mediaImgUrl && (
+                  <GraphImg src={item.mediaImgUrl} alt="" loading="lazy" decoding="async" />
+                )}
               </GraphWrapper>
             </ExpandedOverlay>
           )}
         </Card>
 
-        {/* 화살표 & 점 */}
         <ArrowLeft onClick={prev} aria-label="이전">
           <ArrowIcon src={leftButton} alt="" />
         </ArrowLeft>
@@ -211,7 +219,6 @@ const Viewport = styled.div`
   height: 320px;
   margin: 0 auto;
   border-radius: 16px;
-  //overflow: hidden;
 `;
 
 const PeekBase = styled.div`
@@ -296,17 +303,15 @@ const OverlayTitle = styled.div`
   font-weight: 500;
   color: #fff;
   letter-spacing: -0.02em;
-
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
   word-break: break-word;
-
   line-height: 1.35;
   max-width: 90%;
   max-height: calc(2 * 1.35em);
-  margin-top: -30px; /* 필요하면 올리기 */
+  margin-top: -30px;
   position: relative;
   z-index: 2;
 `;
@@ -326,7 +331,7 @@ const OverlayDesc = styled.div`
 const ExpandedOverlay = styled.div`
   position: absolute;
   inset: 0;
-  padding: 18px 20px;
+  padding: 25px 25px;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -364,7 +369,7 @@ const GraphImg = styled.img`
 
 const GraphWrapper = styled.div`
   padding: 0px 0px 10px;
-  margin-top: 5px;
+  //margin-top: 5px;
 `;
 
 const ArrowBase = styled.button`
@@ -419,16 +424,16 @@ const Dot = styled.button`
 
 const FooterRow = styled.div`
   display: flex;
-  align-items: center;
   justify-content: space-between;
   gap: 12px;
-  margin-top: 20px;
+  // margin-top: 30px;
 `;
 
 const FooterLeft = styled.div`
   display: flex;
   gap: 5px;
   margin-left: 1px;
+  align-items: center;
 `;
 const FootrtRight = styled.div``;
 

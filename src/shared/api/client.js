@@ -1,20 +1,16 @@
 import axios from "axios";
 
-// .env가 없거나 값이 비어있으면 자동으로 '/api' 사용
-const baseURL = (() => {
-  const envUrl = (import.meta.env.VITE_API_BASE_URL || "").trim();
-  return envUrl || "/api";
-})();
 
 export const api = axios.create({
-  baseURL,
+  baseURL: "/api", // dev: Vite 프록시, prod: Vercel rewrite
   timeout: 10000,
 });
 
+
+// (선택) 응답 에러 메시지 깔끔히
 api.interceptors.response.use(
   (res) => res,
   (err) => {
-    // ✅ 요청 취소는 사용자 메시지 부여/로그 대상에서 제외
     if (
       axios.isCancel?.(err) ||
       err?.code === "ERR_CANCELED" ||
@@ -28,3 +24,4 @@ api.interceptors.response.use(
     return Promise.reject(err);
   }
 );
+
