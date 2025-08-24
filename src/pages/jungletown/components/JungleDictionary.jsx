@@ -267,6 +267,13 @@ const Modal = styled.div`
   align-content: start;
   z-index: 1001;
   padding: calc(env(safe-area-inset-top) + ${HEADER_H}px) 12px 12px;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  &::-webkit-scrollbar {
+    /* Chrome/Safari/Opera 숨김 */
+    display: none;
+  }
 `;
 
 const ModalCard = styled.div`
