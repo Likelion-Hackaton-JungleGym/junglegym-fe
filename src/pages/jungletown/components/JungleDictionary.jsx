@@ -246,7 +246,11 @@ const Sub = styled.p`
 /* ===== Modal ===== */
 const Dim = styled.div`
   position: fixed;
-  inset: 0;
+
+  top: calc(env(safe-area-inset-top) + ${HEADER_H}px);
+  right: 0;
+  bottom: 0;
+  left: 0;
   background: rgba(78, 78, 78, 0.5);
   backdrop-filter: blur(2px);
   z-index: 1000;
@@ -260,7 +264,6 @@ const Modal = styled.div`
   place-items: center;
   z-index: 1001;
   padding: 12px;
-  margin-top: 30px;
 `;
 
 const ModalCard = styled.div`
