@@ -45,7 +45,7 @@ export default function CardNews() {
           summary: it.summary,
           date: it.date,
           link: it.link,
-          card: CARD_MAP[i + 1] ?? CARD_MAP[(i % 5) + 1],
+          card: CARD_MAP[i + 1] ?? CARD_MAP[(i % 6) + 1],
           mediaImgUrl: it.mediaImgUrl ?? null,
           media: it.media,
         }));

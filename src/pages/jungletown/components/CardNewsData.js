@@ -3,6 +3,7 @@ import CardNews2 from "./img/CardNews2.svg";
 import CardNews3 from "./img/CardNews3.svg";
 import CardNews4 from "./img/CardNews4.svg";
 import CardNews5 from "./img/CardNews5.svg";
+import CardNews6 from "./img/CardNews6.svg";
 
 import graph1 from "./img/graph1.svg";
 import graph2 from "./img/graph1.svg";
@@ -37,6 +38,7 @@ export const CARD_MAP = {
   3: CardNews3,
   4: CardNews4,
   5: CardNews5,
+  6: CardNews6,
 };
 
 export const CARDNEWS = [
