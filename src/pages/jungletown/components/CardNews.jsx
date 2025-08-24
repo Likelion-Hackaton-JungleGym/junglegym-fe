@@ -11,6 +11,11 @@ import leftButton from "../components/img/leftButton.svg?url";
 import rightButton from "../components/img/rightButton.svg?url";
 
 /* ---------- utils ---------- */
+function truncateText(str = "", max = 105) {
+  if (str.length <= max) return str;
+  return str.slice(0, max) + "…";
+}
+
 function chooseIcon(category, key) {
   const c = String(category || "").trim();
   const list = ICON_MAP[c] ?? [];
@@ -153,30 +158,32 @@ export default function CardNews({ regions }) {
             <ExpandedOverlay>
               <RegionChip>{item.region}</RegionChip>
               {item.title && <OverlayTitle2>{item.title}</OverlayTitle2>}
-              {item.summary && <OverlayBody>{item.summary}</OverlayBody>}
-              <FooterRow>
-                <FooterLeft>
-                  <Media>{item.media && <span className="media">{item.media}</span>}</Media>
-                  <Source>{item.date && <span className="date">{item.date}</span>}</Source>
-                </FooterLeft>
-                <FootrtRight>
-                  {item.link && (
-                    <ArticleBtn
-                      href={item.link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      onClick={(e) => e.stopPropagation()}
-                    >
-                      원문 기사 보기
-                    </ArticleBtn>
+              {item.summary && <OverlayBody>{truncateText(item.summary, 105)}</OverlayBody>}
+              <BottomStack>
+                <GraphWrapper>
+                  {item.mediaImgUrl && (
+                    <GraphImg src={item.mediaImgUrl} alt="" loading="lazy" decoding="async" />
                   )}
-                </FootrtRight>
-              </FooterRow>
-              <GraphWrapper>
-                {item.mediaImgUrl && (
-                  <GraphImg src={item.mediaImgUrl} alt="" loading="lazy" decoding="async" />
-                )}
-              </GraphWrapper>
+                </GraphWrapper>
+                <FooterRow>
+                  <FooterLeft>
+                    <Media>{item.media && <span className="media">{item.media}</span>}</Media>
+                    <Source>{item.date && <span className="date">{item.date}</span>}</Source>
+                  </FooterLeft>
+                  <FooterRight>
+                    {item.link && (
+                      <ArticleBtn
+                        href={item.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        원문 기사 보기
+                      </ArticleBtn>
+                    )}
+                  </FooterRight>
+                </FooterRow>
+              </BottomStack>
             </ExpandedOverlay>
           )}
         </Card>
@@ -292,13 +299,13 @@ const CompactOverlay = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-end;
   text-align: center;
-  padding: 0px 20px 40px;
+  padding: 0 20px 50px;
   color: #fff;
   z-index: 3;
   pointer-events: none;
-  gap: 6px;
+  gap: 8px;
 `;
 
 const RegionChip = styled.span`
@@ -315,17 +322,18 @@ const RegionChip = styled.span`
 `;
 
 const IconWrapper = styled.div`
-  width: 200px;
-  height: 200px;
+  width: clamp(160px, 42vw, 200px);
+  height: clamp(120px, 38vw, 170px);
   display: flex;
   justify-content: center;
+  margin-bottom: 4px;
 `;
 
 const OverlayIcon = styled.img`
   width: 230px;
   height: 200px;
   z-index: 1;
-  transform: translateY(-10px);
+  transform: translateY(-6px);
 `;
 
 const OverlayTitle = styled.div`
@@ -340,8 +348,7 @@ const OverlayTitle = styled.div`
   word-break: break-word;
   line-height: 1.35;
   max-width: 90%;
-  max-height: calc(2 * 1.35em);
-  margin-top: -30px;
+  max-height: calc(2 * em);
   position: relative;
   z-index: 2;
 `;
@@ -358,10 +365,13 @@ const OverlayDesc = styled.div`
   z-index: 2;
 `;
 
+//----------------------------------
+
 const ExpandedOverlay = styled.div`
   position: absolute;
   inset: 0;
-  padding: 25px 25px;
+  padding: 30px 30px 40px;
+  min-height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -369,7 +379,14 @@ const ExpandedOverlay = styled.div`
   color: #fff;
   z-index: 3;
   pointer-events: none;
-  gap: 10px;
+`;
+
+const BottomStack = styled.div`
+  display: flex;
+  flex-direction: column;
+  //  gap: 10px;
+  margin-top: auto;
+  pointer-events: none;
 `;
 
 const OverlayTitle2 = styled.div`
@@ -398,7 +415,9 @@ const GraphImg = styled.img`
 `;
 
 const GraphWrapper = styled.div`
-  padding: 0px 0px 10px;
+  padding: 5px 0px;
+  pointer-events: none;
+  //  margin-bottom: -15px;
 `;
 
 const ArrowBase = styled.button`
@@ -429,41 +448,20 @@ const ArrowIcon = styled.img`
   display: block;
 `;
 
-const Dots = styled.div`
-  position: absolute;
-  display: flex;
-  bottom: 38px;
-  transform: translateX(-50%);
-  left: 50%;
-  justify-content: center;
-  align-items: center;
-  gap: 6px;
-  z-index: 5;
-`;
-
-const Dot = styled.button`
-  width: ${(p) => (p.$active ? 7 : 4)}px;
-  height: ${(p) => (p.$active ? 7 : 4)}px;
-  border-radius: 50%;
-  border: none;
-  background: ${(p) => (p.$active ? "#FFFFFF" : "#e0e0e0")};
-  cursor: pointer;
-  transition: all 160ms ease;
-`;
-
 const FooterRow = styled.div`
   display: flex;
   justify-content: space-between;
-  gap: 12px;
+  align-items: flex-end;
+  // pointer-events: auto; /* 버튼 클릭 가능 */
 `;
 
 const FooterLeft = styled.div`
   display: flex;
   gap: 5px;
-  margin-left: 1px;
-  align-items: center;
+  margin-left: 2px;
+  padding: 3px 0px;
 `;
-const FootrtRight = styled.div``;
+const FooterRight = styled.div``;
 
 const Media = styled.div`
   font-size: 12px;
@@ -500,4 +498,26 @@ const ArticleBtn = styled.a`
   &:active {
     transform: translateY(0);
   }
+`;
+
+const Dots = styled.div`
+  position: absolute;
+  display: flex;
+  bottom: 38px;
+  transform: translateX(-50%);
+  left: 50%;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  z-index: 5;
+`;
+
+const Dot = styled.button`
+  width: ${(p) => (p.$active ? 7 : 4)}px;
+  height: ${(p) => (p.$active ? 7 : 4)}px;
+  border-radius: 50%;
+  border: none;
+  background: ${(p) => (p.$active ? "#FFFFFF" : "#e0e0e0")};
+  cursor: pointer;
+  transition: all 160ms ease;
 `;
