@@ -1,9 +1,11 @@
 import axios from "axios";
 
+
 export const api = axios.create({
   baseURL: "/api", // dev: Vite 프록시, prod: Vercel rewrite
   timeout: 10000,
 });
+
 
 // (선택) 응답 에러 메시지 깔끔히
 api.interceptors.response.use(
@@ -22,3 +24,4 @@ api.interceptors.response.use(
     return Promise.reject(err);
   }
 );
+

@@ -1,3 +1,4 @@
+
 import { api } from "../api/client";
 
 /* ---------- small utils ---------- */
@@ -72,6 +73,7 @@ export async function getNewsletterDetail(newsletterId) {
   try {
     const res = await api.get(`/newsletters/${idStr}`);
     const raw = res?.data?.data;
+
     if (raw) {
       return {
         ...raw,
@@ -86,6 +88,7 @@ export async function getNewsletterDetail(newsletterId) {
       };
     }
   } catch {
+
     // fallback to list lookup
   }
   try {
@@ -123,5 +126,19 @@ export async function getNewsletterDetail(newsletterId) {
 export async function getWeeklyNews({ signal, params } = {}) {
   const regionName = params?.regionName ?? "성북구";
   const res = await api.get("/regions/weeklynews", { signal, params: { regionName } });
+  return res.data;
+
+}
+
+/* ──────────────────────────────
+ * 정글피플 / 정글톡 (예시)
+ * ────────────────────────────── */
+export async function getJunglePeople({ signal, params } = {}) {
+  const res = await api.get("/junglepeople", { signal, params });
+  return getData(res) ?? [];
+}
+
+export async function createJungleTalk(payload, { signal } = {}) {
+  const res = await api.post("/jungletalk", payload, { signal });
   return res.data;
 }
