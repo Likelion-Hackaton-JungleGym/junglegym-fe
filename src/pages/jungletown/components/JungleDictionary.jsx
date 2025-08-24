@@ -267,7 +267,6 @@ const Modal = styled.div`
   align-content: start;
   z-index: 1001;
   padding: calc(env(safe-area-inset-top) + ${HEADER_H}px) 12px 12px;
-  overflow: auto;
 `;
 
 const ModalCard = styled.div`
