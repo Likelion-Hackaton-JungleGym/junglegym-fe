@@ -380,9 +380,10 @@ export const NoteText = styled.p`
 export const MoreLink = styled.a`
   display: block;
   text-align: center;
-  color: #8b7ff9;
+  color: #000;
   text-decoration: none;
-  font-size: 14px;
+  font-size: 13px;
+  font-weight: 500;
   margin-top: 16px;
 
   &:hover {
@@ -658,7 +659,7 @@ export const CategoryArrow = styled.span`
 export const DetailPromises = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 0px;
 `;
 
 export const PromiseCard = styled.div`
@@ -673,7 +674,6 @@ export const PromiseCardFront = styled.div`
   width: 100%;
   height: 100%;
   backface-visibility: hidden;
-  padding: 12px;
   border-radius: 10px;
   background-color: #fff;
   transform: rotateY(0deg);
@@ -712,7 +712,7 @@ export const PromiseStatus = styled.span`
   border-radius: 9px;
   font-size: 11px;
   font-weight: 500;
-  margin: 0;
+  margin-left: 30px;
 `;
 
 export const PromiseContent = styled.div`
@@ -740,15 +740,9 @@ export const Card3DWrapper = styled.div`
 
 // 카드 앞면
 export const CardFront = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
   border: 1px solid #D2D2D2;
   border-radius: 10px;
   background: #fff;
-  padding: 10px 15px;
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
   align-items: center;

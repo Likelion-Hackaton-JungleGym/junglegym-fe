@@ -476,8 +476,32 @@ export default function ProfileDetails({ politicianId, politician }) {
 
   // Career 섹션용 원문 문자열: 상위 politician > apiData 순서로 폴백
   const careerRaw = useMemo(() => {
-    return politician?.careerSummary ?? apiData?.careerSummary ?? "";
+    const raw = politician?.careerSummary ?? apiData?.careerSummary ?? "";
+    console.log("Career Raw Data:", { 
+      politicianCareer: politician?.careerSummary, 
+      apiDataCareer: apiData?.careerSummary, 
+      finalRaw: raw 
+    });
+    return raw;
   }, [politician, apiData]);
+
+  // 파싱된 경력 데이터 확인
+  const parsedCareerData = useMemo(() => {
+    const education = data?.education || [];
+    const experience = data?.experience || [];
+    const books = data?.books || [];
+    
+    console.log("Parsed Career Data:", {
+      education,
+      experience,
+      books,
+      hasEducation: education.length > 0,
+      hasExperience: experience.length > 0,
+      hasBooks: books.length > 0
+    });
+    
+    return { education, experience, books };
+  }, [data]);
 
   // 정치인 직책 확인 (구청장, 시장인 경우 발의법률안 탭 숨김)
   const shouldHideBillsTab = useMemo(() => {
@@ -511,7 +535,12 @@ export default function ProfileDetails({ politicianId, politician }) {
       {active === TABS.BASIC && (
         <SectionList>
           <BasicInfo basic={data.basicInfo} />
-          <Career raw={careerRaw} />
+          <Career 
+            raw={careerRaw} 
+            education={parsedCareerData.education}
+            experience={parsedCareerData.experience}
+            books={parsedCareerData.books}
+          />
           <RecentIssues issues={data.issues} />
           <SNSLinks sns={data.sns} />
         </SectionList>
@@ -523,7 +552,10 @@ export default function ProfileDetails({ politicianId, politician }) {
           {!shouldHidePromiseProgress && (
             <PromiseProgress promiseData={transformedPromisesData} />
           )}
-          <KeyPromises categories={data.keyPromises} />
+          <KeyPromises 
+            categories={data.keyPromises} 
+            homepageUrl={snsData?.find(item => item.linkType === "홈페이지")?.link || null}
+          />
           <OtherActivities activities={data.otherActivities} />
         </SectionList>
       )}

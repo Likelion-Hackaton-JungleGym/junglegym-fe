@@ -5,6 +5,7 @@ import { getPoliticianById } from "../../../shared/utils/politicianApi.js";
 import TooltipImg from "./profiles/img/TooltipButton.svg";
 
 import ProfileDetails from "../../peopledetail/ProfileDetails.jsx";
+import LoadingScreen from "../../../shared/components/LoadingScreen.jsx";
 
 import BlueParty from "./profiles/img/BlueParty.svg";
 import RedParty from "./profiles/img/RedParty.svg";
@@ -60,7 +61,7 @@ export default function PersonProfile() {
   }, [id]);
 
   if (isLoading) {
-    return <Empty>정치인 정보를 불러오는 중...</Empty>;
+    return <LoadingScreen />;
   }
 
   if (error && !politician) {

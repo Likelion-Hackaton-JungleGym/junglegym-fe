@@ -14,12 +14,31 @@ export default function Career({ raw, education = [], experience = [], books = [
     exp = experience,
     bks = books;
 
-  // 원문 문자열이 온 경우 우선 파싱 사용
-  if (raw) {
+  // 이미 파싱된 데이터가 있으면 우선 사용
+  if (education.length > 0 || experience.length > 0 || books.length > 0) {
+    edu = education;
+    exp = experience;
+    bks = books;
+    console.log("Career Component Debug: Using pre-parsed data", {
+      education: edu,
+      experience: exp,
+      books: bks
+    });
+  }
+  // 원문 문자열이 온 경우 파싱 사용
+  else if (raw) {
     const parsed = parseCareer(raw);
     edu = parsed.education;
     exp = parsed.experience;
     bks = parsed.books;
+    
+    console.log("Career Component Debug: Parsed from raw", {
+      raw,
+      parsed,
+      finalEducation: edu,
+      finalExperience: exp,
+      finalBooks: bks
+    });
   }
 
   const hasEdu = Array.isArray(edu) && edu.length > 0;
