@@ -10,18 +10,18 @@ import graph3 from "./img/graph1.svg";
 import graph4 from "./img/graph1.svg";
 import graph5 from "./img/graph1.svg";
 
-import pol1 from "./img/정치1.svg";
-import pol2 from "./img/정치2.svg";
-import eco1 from "./img/경제1.svg";
-import eco2 from "./img/경제2.svg";
-import soc1 from "./img/사회1.svg";
-import soc2 from "./img/사회2.svg";
-import world1 from "./img/세계1.svg";
-import world2 from "./img/세계2.svg";
-import cul1 from "./img/생활문화1.svg";
-import cul2 from "./img/생활문화2.svg";
-import it1 from "./img/IT과학1.svg";
-import it2 from "./img/IT과학2.svg";
+import pol1 from "./img/pol1.svg";
+import pol2 from "./img/pol2.svg";
+import eco1 from "./img/eco1.svg";
+import eco2 from "./img/eco2.svg";
+import soc1 from "./img/soc1.svg";
+import soc2 from "./img/soc2.svg";
+import world1 from "./img/world1.svg";
+import world2 from "./img/world2.svg";
+import cul1 from "./img/cul1.svg";
+import cul2 from "./img/cul2.svg";
+import it1 from "./img/it1.svg";
+import it2 from "./img/it2.svg";
 
 export const ICON_MAP = {
   정치: [pol1, pol2],
