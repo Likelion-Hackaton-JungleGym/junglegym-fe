@@ -163,13 +163,17 @@ const Card = styled.article`
   position: relative;
   margin-bottom: 10px;
   width: clamp(150px, 42vw, 200px);
+  //  aspect-ratio: 200 / 270; /* 높이 자동 */
   border-radius: 10px;
+  min-height: 270px;
+  min-width: 200px;
+  overflow: hidden;
   flex: 0 0 auto;
   cursor: pointer;
 `;
 
 const Bg = styled.img`
-  position: absolute;
+  position: absolute; //색으로 바꾸기
   inset: 0;
   width: 100%;
   height: 100%;
@@ -202,12 +206,12 @@ const Body = styled.div`
 const IconBox = styled.div`
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-end;
 `;
 const Icon = styled.img`
-  width: clamp(96px, 33vw, 135px);
+  width: clamp(130px, 40vw, 150px);
   height: auto;
-  margin: 10px 0px;
+  //margin: 10px 0px;
 `;
 
 const CardBottom = styled.div`
@@ -259,10 +263,17 @@ const Modal = styled.div`
   position: fixed;
   inset: 0;
   display: grid;
-  justify-items: center; /* 가로 가운데 */
+  justify-items: center;
   align-content: start;
   z-index: 1001;
   padding: calc(env(safe-area-inset-top) + ${HEADER_H}px) 12px 12px;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  &::-webkit-scrollbar {
+    /* Chrome/Safari/Opera 숨김 */
+    display: none;
+  }
 `;
 
 const ModalCard = styled.div`
