@@ -14,10 +14,17 @@ const LandingPage = () => {
   const [selectedDistrict, setSelectedDistrict] = useState("성북구");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
+  //현재 데이터 담긴 지역 상위로 넣음. 나중에 다 들어가면 가나다순으로 재정렬
   const [districts, setDistricts] = useState([
     "강남구",
-    "강동구",
     "강북구",
+    "서초구",
+    "성북구",
+    "송파구",
+    "영등포구",
+    "은평구",
+    "종로구",
+    "강동구",
     "강서구",
     "관악구",
     "광진구",
@@ -29,15 +36,9 @@ const LandingPage = () => {
     "동작구",
     "마포구",
     "서대문구",
-    "서초구",
     "성동구",
-    "성북구",
-    "송파구",
     "양천구",
-    "영등포구",
     "용산구",
-    "은평구",
-    "종로구",
     "중구",
     "중랑구",
   ]);
