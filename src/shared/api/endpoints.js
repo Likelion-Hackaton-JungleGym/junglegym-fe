@@ -1,4 +1,3 @@
-
 import { api } from "../api/client";
 
 /* ---------- small utils ---------- */
@@ -8,11 +7,25 @@ const youtubeThumb = (link) => {
   return m ? `https://img.youtube.com/vi/${m[1]}/hqdefault.jpg` : null;
 };
 
+/* 공통: 응답에서 배열을 뽑아내기 */
+const pickArray = (payload) => {
+  const cands = [
+    payload?.data?.data,
+    payload?.data?.items,
+    payload?.data?.list,
+    payload?.data,
+    payload?.items,
+    payload?.list,
+    Array.isArray(payload) ? payload : null,
+  ].filter(Array.isArray);
+  return cands[0] || [];
+};
+
 /* ---------- JungleDictionary ---------- */
 export async function getDictionaries() {
   try {
     const res = await api.get("/dictionaries");
-    const raw = Array.isArray(res?.data?.data) ? res.data.data : [];
+    const raw = pickArray(res?.data);
     return raw.map((item) => ({
       id: item.id,
       category: item.keyword,
@@ -46,22 +59,39 @@ export async function getDictionariesDetail(dictionaryId) {
 }
 
 /* ---------- JungleSound (Newsletters) ---------- */
-export async function getNewsletters() {
+/** 지역별 뉴스레터 목록 (URL ?region= / props.region → params.regionName 으로 전달) */
+export async function getNewsletters({ signal, params } = {}) {
   try {
-    const res = await api.get("/regions/newsletters");
-    const arr = Array.isArray(res?.data?.data) ? res.data.data : [];
-    return arr.map((it) => ({
-      ...it,
-      id: it.newsletterId ?? it.id,
-      thumbnail:
-        it.thumbnailUrl?.trim?.() ||
-        "" ||
-        it.thumbnailImg?.trim?.() ||
-        "" ||
-        (it.link ? `https://img.youtube.com/vi/${it.link.split("v=")[1]}/hqdefault.jpg` : null) ||
-        "/placeholder.png",
-    }));
+    const regionName = params?.regionName; // 없으면 서버가 전체 반환
+    const res = await api.get("/regions/newsletters", {
+      signal,
+      params: regionName ? { regionName } : undefined,
+    });
+
+    const arr = pickArray(res?.data);
+    return arr.map((it) => {
+      const id = it.newsletterId ?? it.id;
+      const thumb =
+        clean(it.thumbnailUrl) ||
+        clean(it.thumbnailImg) ||
+        youtubeThumb(clean(it.link)) ||
+        "/placeholder.png";
+      return {
+        ...it,
+        id,
+        newsletterId: id,
+        thumbnail: thumb,
+        regionName: it.regionName ?? it.region ?? it.districtName ?? "",
+      };
+    });
   } catch (err) {
+    if (
+      err?.code === "ERR_CANCELED" ||
+      err?.name === "CanceledError" ||
+      err?.message === "canceled"
+    ) {
+      throw err; // 조용히 위로 전달
+    }
     console.error("뉴스레터 목록 실패:", err);
     throw err;
   }
@@ -73,7 +103,6 @@ export async function getNewsletterDetail(newsletterId) {
   try {
     const res = await api.get(`/newsletters/${idStr}`);
     const raw = res?.data?.data;
-
     if (raw) {
       return {
         ...raw,
@@ -88,12 +117,11 @@ export async function getNewsletterDetail(newsletterId) {
       };
     }
   } catch {
-
-    // fallback to list lookup
+    // 개별 상세가 없으면 목록에서 찾아서 변환
   }
   try {
     const res = await api.get("/regions/newsletters");
-    const arr = Array.isArray(res?.data?.data) ? res.data.data : [];
+    const arr = pickArray(res?.data);
     const found = arr.find((it) => String(it.newsletterId || it.id) === idStr);
     if (found) {
       return {
@@ -116,18 +144,30 @@ export async function getNewsletterDetail(newsletterId) {
         questionContent: null,
       };
     }
-  } catch {
-    // ignore
+  } catch (err) {
+    console.warn("뉴스레터 상세 조회 실패(목록 fallback으로 진행):", err);
   }
   return null;
 }
 
 /* ---------- WeeklyNews ---------- */
+/** 지역별 주간 뉴스 (정규화해서 배열 반환) */
 export async function getWeeklyNews({ signal, params } = {}) {
   const regionName = params?.regionName ?? "성북구";
   const res = await api.get("/regions/weeklynews", { signal, params: { regionName } });
-  return res.data;
 
+  const raw = pickArray(res?.data);
+  return raw.map((it, i) => ({
+    id: it.id ?? it.newsId ?? i,
+    newsCategory: it.newsCategory ?? it.category ?? "",
+    title: it.title ?? "",
+    oneLineContent: it.oneLineContent ?? it.subtitle ?? "",
+    summary: it.summary ?? "",
+    date: it.date ?? it.publishedAt ?? "",
+    link: it.link ?? it.url ?? "",
+    mediaImgUrl: it.mediaImgUrl ?? it.imageUrl ?? it.thumbnailImg ?? "",
+    media: it.media ?? it.source ?? "",
+  }));
 }
 
 /* ──────────────────────────────
@@ -135,7 +175,8 @@ export async function getWeeklyNews({ signal, params } = {}) {
  * ────────────────────────────── */
 export async function getJunglePeople({ signal, params } = {}) {
   const res = await api.get("/junglepeople", { signal, params });
-  return getData(res) ?? [];
+  const arr = pickArray(res?.data);
+  return arr ?? [];
 }
 
 export async function createJungleTalk(payload, { signal } = {}) {

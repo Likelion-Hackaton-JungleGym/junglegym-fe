@@ -1,76 +1,101 @@
 import styled from "styled-components";
-import { Link } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { Link, useSearchParams } from "react-router-dom";
+import { useEffect, useMemo, useState } from "react";
 import { getNewsletters } from "../../../shared/api/endpoints";
 
-// HTML & 마크다운 기호 제거 함수
 const stripMarkdown = (s = "") =>
   String(s)
-    // 이미지 ![alt](url)
     .replace(/!\[[^\]]*]\([^)]*\)/g, "")
-    // 링크 [text](url) -> text
     .replace(/\[([^\]]+)]\([^)]*\)/g, "$1")
-    // 굵게/기울임 **, *, _, __
     .replace(/(\*\*|__|\*|_)/g, "")
-    // 취소선 ~~
     .replace(/~~/g, "")
-    // 인라인 코드 `code`
     .replace(/`{1,3}[^`]*`{1,3}/g, (m) => m.replace(/`/g, ""))
-    // 헤더/리스트/인용
     .replace(/^[>]\s+/gm, "")
     .replace(/^#{1,6}\s+/gm, "")
-    // HTML 태그
     .replace(/<br\s*\/?>/gi, "\n")
     .replace(/<[^>]+>/g, "")
-    // 특수 엔티티
     .replace(/&nbsp;/g, " ")
     .replace(/&amp;/g, "&")
     .replace(/&lt;/g, "<")
     .replace(/&gt;/g, ">")
-    // 공백 정리
     .replace(/\s+/g, " ")
     .trim();
 
 const ellipsize = (text = "", max = 60) => {
   const t = text.trim();
-  return t.length > max
-    ? { text: t.slice(0, max), truncated: true }
-    : { text: t, truncated: false };
+  return t.length > max ? { text: t.slice(0, max), truncated: true } : { text, truncated: false };
 };
 
-export default function NewsPreview() {
+const DEFAULT_REGION = "성북구";
+const toNum = (v) => (typeof v === "number" ? v : parseInt(v, 10) || 0);
+
+export default function NewsPreview({ region: propRegion }) {
+  const [searchParams] = useSearchParams();
+  // URL > props > sessionStorage > 기본값
+  const region = useMemo(() => {
+    const fromUrl = searchParams.get("region");
+    if (fromUrl) return decodeURIComponent(fromUrl);
+    if (propRegion) return propRegion;
+    return sessionStorage.getItem("selectedRegion") || DEFAULT_REGION;
+  }, [propRegion, searchParams]);
+
   const [list, setList] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    const ctrl = new AbortController();
+    let cancelled = false;
     (async () => {
       try {
-        const data = await getNewsletters();
-        const toNum = (v) => (typeof v === "number" ? v : parseInt(v, 10) || 0);
-        const sorted = (Array.isArray(data) ? data : [])
-          .slice()
-          .sort((a, b) => toNum(a.id) - toNum(b.id));
+        setLoading(true);
+        // ⬇️ 지역 파라미터 전달!
+        const data = await getNewsletters({
+          signal: ctrl.signal,
+          params: { regionName: region },
+        });
+
+        const arr = Array.isArray(data) ? data : [];
+        // 서버가 region 필터를 안 해주면 클라에서 한 번 더 필터
+        const filtered = arr.some((x) => x.regionName)
+          ? arr.filter((x) => x.regionName === region)
+          : arr;
+
+        const sorted = filtered.slice().sort((a, b) => toNum(a.id) - toNum(b.id));
         setList(sorted);
-      } catch {
+      } catch (e) {
+        // 🔇 취소는 무시 (StrictMode 개발모드에서 흔함)
+        if (
+          e?.code === "ERR_CANCELED" ||
+          e?.name === "CanceledError" ||
+          e?.message === "canceled" ||
+          ctrl.signal.aborted
+        ) {
+          return;
+        }
+        console.error("[NewsPreview] fetch 실패:", e);
         setList([]);
       } finally {
-        setLoading(false);
+        if (!cancelled) setLoading(false); // 언마운트 후 상태 변경 방지
       }
     })();
-  }, []);
+    return () => {
+      cancelled = true;
+      ctrl.abort();
+    };
+  }, [region]);
 
   if (loading) return <Empty>불러오는 중…</Empty>;
-  if (!list.length) return <Empty>표시할 뉴스레터가 없어요.</Empty>;
+  if (!list.length) return <Empty>이 지역의 뉴스레터가 없어요.</Empty>;
 
   return (
     <>
       {list.map((it) => {
-        const title = stripMarkdown(it.title); // 제목에서도 기호 제거
-        const preview = stripMarkdown(it.content1); // 본문 요약도 기호 제거
+        const title = stripMarkdown(it.title);
+        const preview = stripMarkdown(it.content1);
         const { text, truncated } = ellipsize(preview, 60);
 
         return (
-          <Wrapper key={it.id}>
+          <Wrapper key={`${region}-${it.id}`}>
             <PreviewWrapper>
               <NewsTitle>{title}</NewsTitle>
               <Date>{it.date}</Date>
@@ -82,7 +107,8 @@ export default function NewsPreview() {
                 <Thumbnail src={it.thumbnail} alt="" />
               </ThumbnailWrapper>
             </PreviewWrapper>
-            <LinkButton to={`/junglesound/${it.id}`}>
+            {/* 지역 컨텍스트 유지 */}
+            <LinkButton to={`/junglesound/${it.id}?region=${encodeURIComponent(region)}`}>
               <Detail>{`자세히 보기 >`}</Detail>
             </LinkButton>
           </Wrapper>
