@@ -10,7 +10,7 @@ import {
   NavItem,
   HeaderWrapper,
 } from "./HeaderStyles";
-import TextLogo from "../../assets/icons/TextLogo.svg";
+import TextLogo from "../../assets/icons/TextLogo.jpg";
 import Map from "../../assets/icons/mapImg.svg";
 
 export default function Header({ mode = "fixed" }) {
