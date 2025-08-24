@@ -9,7 +9,7 @@ export const LogoImg = styled.img`
 export const LogoWrapper = styled.div`
   position: absolute;
   left: 50%;
-  top: 65%;
+  top: 50%;
   transform: translate(-50%, -50%);
   height: 30px;
   display: flex;
@@ -27,15 +27,15 @@ export const LogoLink = styled(Link)`
 export const MapImg = styled.img`
   height: 20px;
   background: transparent;
+  margin-top: 3px;
 `;
 
 export const TopWrapper = styled.div`
   position: relative;
-  height: 110px;
+  height: 80px;
   display: flex;
   align-items: center;
   padding-left: 30px;
-  padding-top: 40px;
 `;
 
 export const Nav = styled.nav`
