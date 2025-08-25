@@ -3,7 +3,7 @@ import { useNavigate, useOutletContext, useSearchParams } from "react-router-dom
 import styled from "styled-components";
 //import LandingImage from "../assets/images/Landing.svg";
 //import LandingIcon from "../assets/icons/LandingIcon2.jpg";
-import LandingIcon from "../assets/icons/LandingIcon2.svg";
+import LandingIcon from "../assets/icons/LandingIcon.svg";
 import LandingMap from "../assets/icons/LandingMap.svg";
 
 import BackArrowIcon from "../assets/icons/BackArrowIcon.svg";
