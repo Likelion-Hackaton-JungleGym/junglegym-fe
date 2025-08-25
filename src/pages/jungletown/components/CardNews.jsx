@@ -13,7 +13,7 @@ import rightButton from "../components/img/rightButton.svg?url";
 
 /* ---------- utils ---------- */
 
-function truncateText(str = "", max = 32) {
+function truncateText(str = "", max = 35) {
   if (str.length <= max) return str;
   return str.slice(0, max) + "…"; //점점점대신 뭔가 바꾸고 싶음
 }
@@ -166,7 +166,7 @@ export default function CardNews({ regions }) {
           {/* 뒷면 */}
           <ExpandedOverlay>
             <RegionChip>{item.region}</RegionChip>
-            {item.title && <OverlayTitle2>{truncateText(item.title, 32)}</OverlayTitle2>}
+            {item.title && <OverlayTitle2>{truncateText(item.title, 35)}</OverlayTitle2>}
             {item.summary && <OverlayBody>{item.summary}</OverlayBody>}
             <BottomStack>
               <GraphWrapper>
@@ -293,8 +293,9 @@ const Card = styled.div`
   cursor: pointer;
   transform: scale(0.95);
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-  contain: layout paint; /* 안쪽 변화 격리 */
+  contain: layout paint;
   backface-visibility: hidden;
+
   &[data-expanded="true"]::after {
     opacity: 0.55;
   }
@@ -304,10 +305,13 @@ const layerBase = `
   position: absolute;
   inset: 0;
   z-index: 3;
-  pointer-events: none; /* 링크/버튼만 개별로 auto */
- will-change: opacity;
+  will-change: opacity, transform;
   transform: translateZ(0);
-  transition: opacity 360ms ease, visibility 360ms step-end;
+  -webkit-transform: translateZ(0);
+  -webkit-backface-visibility: hidden;
+  /* 부드러운 ‘스르륵’ 커브 */
+  transition: opacity 260ms cubic-bezier(0.22,1,0.36,1),
+  transform 320ms cubic-bezier(0.22,1,0.36,1);
 
   @media (prefers-reduced-motion: reduce) { transition: none; }
 `;
@@ -329,16 +333,14 @@ const CompactOverlay = styled.div`
   padding: 0 20px 45px;
   color: #fff;
   gap: 8px;
-
-  /* 기본(앞면 표시) */
-  visibility: visible;
-  opacity: 1;
-
-  /* 확장 시 페이드아웃 + 아래로 살짝 */
+  opacity: 1; /* 기본: 보임(앞면) */
+  pointer-events: auto;
+  transform: translateY(0);
+  transition: opacity 280ms ease-in; /* 앞면은 살짝 먼저/빠르게 */
   ${Card}[data-expanded="true"] & {
-    visibility: hidden; /* 전환 끝나고 숨김 처리 */
     opacity: 0;
-    transition: opacity 360ms ease, visibility 0s 360ms;
+    pointer-events: none;
+    transform: translateY(10px);
   }
 `;
 
@@ -413,15 +415,14 @@ const ExpandedOverlay = styled.div`
   text-align: left;
   color: #fff;
 
-  /* 기본(뒷면 숨김) */
-  visibility: hidden;
-  opacity: 0;
-
-  /* 확장 시 페이드인 + 위로 */
+  opacity: 0; /* 기본: 투명(숨김) */
+  pointer-events: none;
+  transform: translateY(12px);
   ${Card}[data-expanded="true"] & {
-    visibility: visible;
     opacity: 1;
-    transition: opacity 360ms ease, visibility 0s;
+    pointer-events: auto;
+    transform: translateY(0); /* 위로 ‘스르륵’ 들어옴 */
+    transition-delay: 40ms;
   }
 `;
 
