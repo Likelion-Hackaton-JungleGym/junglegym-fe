@@ -417,7 +417,7 @@ const GraphImg = styled.img`
 `;
 
 const GraphWrapper = styled.div`
-  padding: 5px 0px;
+  padding: 5px 0px 0px 0px;
   pointer-events: none;
   //  margin-bottom: -15px;
 `;
@@ -454,6 +454,7 @@ const FooterRow = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
+  margin-bottom: 10px;
   // pointer-events: auto; /* 버튼 클릭 가능 */
 `;
 

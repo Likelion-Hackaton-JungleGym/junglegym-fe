@@ -211,6 +211,7 @@ const IconBox = styled.div`
 const Icon = styled.img`
   width: clamp(130px, 40vw, 150px);
   height: auto;
+  //  padding-bottom: 5px;
   //margin: 10px 0px;
 `;
 
