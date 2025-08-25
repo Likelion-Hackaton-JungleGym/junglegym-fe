@@ -13,7 +13,7 @@ import rightButton from "../components/img/rightButton.svg?url";
 
 /* ---------- utils ---------- */
 
-function truncateText(str = "", max = 35) {
+function truncateText(str = "", max = 32) {
   if (str.length <= max) return str;
   return str.slice(0, max) + "…"; //점점점대신 뭔가 바꾸고 싶음
 }
@@ -68,10 +68,20 @@ export default function CardNews({ regions }) {
           region,
           key: buildKey(region, it),
           ...it,
-          card: CARD_MAP[(i % 8) + 1],
+          card: CARD_MAP[(i % 6) + 1], // 1~6 반복
         }));
 
-        setItems(mapped);
+        // 지역구 이름이 title에 포함된 기사를 우선 정렬
+        const sorted = mapped.sort((a, b) => {
+          const aHasRegion = a.title && a.title.includes(region);
+          const bHasRegion = b.title && b.title.includes(region);
+          
+          if (aHasRegion && !bHasRegion) return -1; // a가 우선
+          if (!aHasRegion && bHasRegion) return 1;  // b가 우선
+          return 0; // 둘 다 같으면 순서 유지
+        });
+
+        setItems(sorted);
         setCurrent(0);
         setExpanded(false);
       } catch (err) {
@@ -166,7 +176,7 @@ export default function CardNews({ regions }) {
           {/* 뒷면 */}
           <ExpandedOverlay>
             <RegionChip>{item.region}</RegionChip>
-            {item.title && <OverlayTitle2>{truncateText(item.title, 35)}</OverlayTitle2>}
+            {item.title && <OverlayTitle2>{truncateText(item.title, 32)}</OverlayTitle2>}
             {item.summary && <OverlayBody>{item.summary}</OverlayBody>}
             <BottomStack>
               <GraphWrapper>
@@ -293,9 +303,8 @@ const Card = styled.div`
   cursor: pointer;
   transform: scale(0.95);
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-  contain: layout paint;
+  contain: layout paint; /* 안쪽 변화 격리 */
   backface-visibility: hidden;
-
   &[data-expanded="true"]::after {
     opacity: 0.55;
   }
@@ -305,13 +314,10 @@ const layerBase = `
   position: absolute;
   inset: 0;
   z-index: 3;
-  will-change: opacity, transform;
+  pointer-events: none; /* 링크/버튼만 개별로 auto */
+ will-change: opacity;
   transform: translateZ(0);
-  -webkit-transform: translateZ(0);
-  -webkit-backface-visibility: hidden;
-  /* 부드러운 ‘스르륵’ 커브 */
-  transition: opacity 260ms cubic-bezier(0.22,1,0.36,1),
-  transform 320ms cubic-bezier(0.22,1,0.36,1);
+  transition: opacity 360ms ease, visibility 360ms step-end;
 
   @media (prefers-reduced-motion: reduce) { transition: none; }
 `;
@@ -333,14 +339,16 @@ const CompactOverlay = styled.div`
   padding: 0 20px 45px;
   color: #fff;
   gap: 8px;
-  opacity: 1; /* 기본: 보임(앞면) */
-  pointer-events: auto;
-  transform: translateY(0);
-  transition: opacity 280ms ease-in; /* 앞면은 살짝 먼저/빠르게 */
+
+  /* 기본(앞면 표시) */
+  visibility: visible;
+  opacity: 1;
+
+  /* 확장 시 페이드아웃 + 아래로 살짝 */
   ${Card}[data-expanded="true"] & {
+    visibility: hidden; /* 전환 끝나고 숨김 처리 */
     opacity: 0;
-    pointer-events: none;
-    transform: translateY(10px);
+    transition: opacity 360ms ease, visibility 0s 360ms;
   }
 `;
 
@@ -415,14 +423,15 @@ const ExpandedOverlay = styled.div`
   text-align: left;
   color: #fff;
 
-  opacity: 0; /* 기본: 투명(숨김) */
-  pointer-events: none;
-  transform: translateY(12px);
+  /* 기본(뒷면 숨김) */
+  visibility: hidden;
+  opacity: 0;
+
+  /* 확장 시 페이드인 + 위로 */
   ${Card}[data-expanded="true"] & {
+    visibility: visible;
     opacity: 1;
-    pointer-events: auto;
-    transform: translateY(0); /* 위로 ‘스르륵’ 들어옴 */
-    transition-delay: 40ms;
+    transition: opacity 360ms ease, visibility 0s;
   }
 `;
 

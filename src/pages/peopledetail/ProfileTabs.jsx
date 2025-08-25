@@ -51,9 +51,9 @@ const TabScrollWrap = styled.div`
 const TabContainer = styled.div`
   display: inline-flex; /* 내용 너비만큼만 차지해서 가로 스크롤 유도 */
   gap: 12px;
-  padding: 6px 2px; /* 좌우 여백으로 스크롤 여지 */
+  padding: 0px 2px 6px; /* 좌우 여백으로 스크롤 여지 */
   border-radius: 12px;
-  margin: 5px 20px 20px;
+  margin: 0px 20px 20px;
   position: relative;
 
   /* 스크롤 스냅(원하면 켜기) */

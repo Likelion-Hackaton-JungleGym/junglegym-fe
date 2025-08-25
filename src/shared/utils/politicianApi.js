@@ -282,42 +282,88 @@ export const getCategoryPromises = async (categoryId) => {
 export const getAllRegions = async () => {
   try {
     const response = await api.get(`/api/regions/politicians`);
-    
+
     if (response.data.success) {
       const politicians = response.data.data || [];
       const regionSet = new Set();
-      
-      politicians.forEach(politician => {
+
+      politicians.forEach((politician) => {
         if (politician.regionText) {
-          const regions = politician.regionText.split(',').map(r => r.trim());
-          regions.forEach(region => {
+          const regions = politician.regionText.split(",").map((r) => r.trim());
+          regions.forEach((region) => {
             if (region) regionSet.add(region);
           });
         }
-        
+
         if (politician.regionList && Array.isArray(politician.regionList)) {
-          politician.regionList.forEach(region => {
+          politician.regionList.forEach((region) => {
             if (region) regionSet.add(region);
           });
         }
       });
-      
+
       const regions = Array.from(regionSet).sort();
-      
-      return regions.length > 0 ? regions : [
-        "종로구", "중구", "용산구", "성동구", "광진구", "동대문구", "중랑구", "성북구", 
-        "강북구", "도봉구", "노원구", "은평구", "서대문구", "마포구", "양천구", "강서구", 
-        "구로구", "금천구", "영등포구", "동작구", "관악구", "서초구", "강남구", "송파구", "강동구"
-      ];
+
+      return regions.length > 0
+        ? regions
+        : [
+            "종로구",
+            "중구",
+            "용산구",
+            "성동구",
+            "광진구",
+            "동대문구",
+            "중랑구",
+            "성북구",
+            "강북구",
+            "도봉구",
+            "노원구",
+            "은평구",
+            "서대문구",
+            "마포구",
+            "양천구",
+            "강서구",
+            "구로구",
+            "금천구",
+            "영등포구",
+            "동작구",
+            "관악구",
+            "서초구",
+            "강남구",
+            "송파구",
+            "강동구",
+          ];
     } else {
       throw new Error(response.data.message || "지역구 목록 조회 실패");
     }
   } catch (error) {
     if (error.response?.status === 500 || error.response?.status === 400) {
       return [
-        "종로구", "중구", "용산구", "성동구", "광진구", "동대문구", "중랑구", "성북구", 
-        "강북구", "도봉구", "노원구", "은평구", "서대문구", "마포구", "양천구", "강서구", 
-        "구로구", "금천구", "영등포구", "동작구", "관악구", "서초구", "강남구", "송파구", "강동구"
+        "종로구",
+        "중구",
+        "용산구",
+        "성동구",
+        "광진구",
+        "동대문구",
+        "중랑구",
+        "성북구",
+        "강북구",
+        "도봉구",
+        "노원구",
+        "은평구",
+        "서대문구",
+        "마포구",
+        "양천구",
+        "강서구",
+        "구로구",
+        "금천구",
+        "영등포구",
+        "동작구",
+        "관악구",
+        "서초구",
+        "강남구",
+        "송파구",
+        "강동구",
       ];
     }
     throw error;
@@ -329,7 +375,7 @@ export const getAllRegions = async () => {
  * @param {string} regionName - 지역구명 (선택사항)
  * @returns {Promise<Array>} 정치인 리스트
  */
-export const getPoliticiansByRegion = async (regionName = '성북구') => {
+export const getPoliticiansByRegion = async (regionName = "성북구") => {
   try {
     let url = `/api/regions/politicians`;
     if (regionName) {
@@ -400,6 +446,7 @@ export const transformPoliticianData = (apiData) => {
     },
     education: education,
     experience: experience,
+    books: books,
     issues: [], // 최근 이슈는 별도 API로 조회
     sns: {
       facebook: "",
@@ -445,7 +492,5 @@ export const transformPoliticianData = (apiData) => {
     regionText: apiData.regionText,
   };
 };
-
-
 
 export default api;

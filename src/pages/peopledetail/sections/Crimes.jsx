@@ -45,7 +45,7 @@ const Crimes = ({ crimes }) => {
             fontWeight: 400,
             color: "#FF2B38",
             background: "#FFF1F2",
-            marginLeft: "0px",
+            marginLeft: "8px",
           }}
         >
           총 {crimes.count}건

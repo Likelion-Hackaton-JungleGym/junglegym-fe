@@ -50,7 +50,7 @@ export const SubTitle = styled.h3`
 export const SectionTitle = styled.h3`
   font-size: 19px;
   font-weight: 700;
-  margin-bottom: 8px;
+  margin-bottom: -4px;
   margin-left: 10px;
   margin-top: 20px;
 `;
@@ -234,7 +234,7 @@ export const OverlayText = styled.div`
   font-size: 17px;
   line-height: 1.4;
   white-space: pre-line;
-  font-family: "ChosunilboNM", serif;
+  font-family: 'Chosun-Ilbo-Myungjo', serif;
 `;
 
 export const WhiteContainer = styled.div`
@@ -250,13 +250,13 @@ export const MyQuestion = styled.div`
   font-weight: 400;
   line-height: 1.4;
   margin-right: 10px;
-  margin-bottom: 20px;
+  margin-bottom: 25px;
 `;
 
 export const AnswerText = styled.div`
   font-size: 14px;
   line-height: 1.4;
-  margin: 3px 10px 20px;
+  margin: 0px 10px 20px 12px;
   color: #000;
   font-weight: 400;
 `;

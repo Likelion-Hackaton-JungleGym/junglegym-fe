@@ -18,33 +18,34 @@ const LandingPage = () => {
   const [selectedDistrict, setSelectedDistrict] = useState("성북구");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
-  //현재 데이터 담긴 지역 상위로 넣음. 나중에 다 들어가면 가나다순으로 재정렬
+  //선택된 지역구들만 표시 (나중에 추가할 수도 있어서 주석으로 보존)
   const [districts, setDistricts] = useState([
     "강남구",
     "강북구",
+    "마포구",
     "서초구",
+    "성동구",
     "성북구",
-    "송파구",
+    //"송파구",
     "영등포구",
+    "용산구",
     "은평구",
     "종로구",
-    "강동구",
-    "강서구",
-    "관악구",
-    "광진구",
-    "구로구",
-    "금천구",
-    "노원구",
-    "도봉구",
-    "동대문구",
-    "동작구",
-    "마포구",
-    "서대문구",
-    "성동구",
-    "양천구",
-    "용산구",
     "중구",
-    "중랑구",
+    // 나중에 추가할 수 있는 지역구들:
+    // "강동구",
+    // "강서구",
+    // "관악구",
+    // "광진구",
+    // "구로구",
+    // "금천구",
+    // "노원구",
+    // "도봉구",
+    // "동대문구",
+    // "동작구",
+    // "서대문구",
+    // "양천구",
+    // "중랑구",
   ]);
   const [isLoadingDistricts, setIsLoadingDistricts] = useState(true);
 
@@ -66,17 +67,38 @@ const LandingPage = () => {
     }
   }, [searchParams]);
 
-  // API에서 지역구 목록 가져오기 (정렬 ❌)
+  // API에서 지역구 목록 가져오기 (선택된 지역구들만 필터링)
   useEffect(() => {
     const fetchDistricts = async () => {
       try {
         const regions = await getAllRegions();
-        const list = Array.isArray(regions) ? regions.filter(Boolean) : [];
+        const allRegions = Array.isArray(regions) ? regions.filter(Boolean) : [];
 
-        setDistricts(list);
+        // 원하는 지역구들만 필터링 (나중에 추가할 수도 있어서 주석으로 보존)
+        const allowedRegions = [
+          "강남구",
+          "강북구",
+          "마포구",
+          "서초구",
+          "성동구",
+          "성북구",
+          //"송파구",
+          "영등포구",
+          "용산구",
+          "은평구",
+          "종로구",
+          "중구",
+          // 나중에 추가할 수 있는 지역구들:
+          // "강동구", "강서구", "관악구", "광진구", "구로구", "금천구",
+          // "노원구", "도봉구", "동대문구", "동작구", "서대문구", "양천구", "중랑구"
+        ];
+
+        const filteredList = allRegions.filter((region) => allowedRegions.includes(region));
+
+        setDistricts(filteredList);
 
         // 현재 선택이 목록에 없으면 첫 항목으로 보정
-        setSelectedDistrict((cur) => (list.includes(cur) ? cur : list[0] ?? cur));
+        setSelectedDistrict((cur) => (filteredList.includes(cur) ? cur : filteredList[0] ?? cur));
       } catch (err) {
         console.error("지역구 목록 조회 실패:", err);
         // 실패 시 초기 하드코딩 목록 그대로 사용

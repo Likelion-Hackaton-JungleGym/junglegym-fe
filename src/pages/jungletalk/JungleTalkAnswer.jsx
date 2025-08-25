@@ -72,11 +72,11 @@ const JungleTalkAnswer = ({
               {fromOthers ? "다른 이의 질문" : "나의 질문"}
             </CardTitle>
           </div>
-          <div style={{ display: "flex", alignItems: "flex-start", gap: "3px" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "3px" }}>
             <img
               src={RectangleIcon}
               alt=""
-              style={{ width: "10px", height: "16px", marginTop: "4px", flexShrink: 0 }}
+              style={{ width: "10px", height: "16px", flexShrink: 0, marginLeft: "3px" }}
             />
             {(question && question.trim()) || ""}
           </div>

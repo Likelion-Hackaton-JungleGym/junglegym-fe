@@ -215,6 +215,22 @@ const KeyPromises = ({ categories = [], homepageUrl = null }) => {
                                   width: "100%",
                                 }}
                               >
+                                {/* 숫자를 카드 중앙에 별도로 배치 (페이드 애니메이션 적용) */}
+                                <div
+                                  style={{
+                                    position: "absolute",
+                                    left: "20px",
+                                    top: "50%",
+                                    transform: "translateY(-50%)",
+                                    zIndex: 3,
+                                    opacity: isFlipped ? 0 : 1,
+                                    transition: "opacity 0.6s ease-in-out",
+                                    pointerEvents: isFlipped ? "none" : "auto",
+                                  }}
+                                >
+                                  <PromiseNumber>{promiseIndex + 1}</PromiseNumber>
+                                </div>
+
                                 {/* 앞면: 공약 내용 */}
                                 <div
                                   style={{
@@ -222,6 +238,7 @@ const KeyPromises = ({ categories = [], homepageUrl = null }) => {
                                     borderRadius: 12,
                                     background: "#fff",
                                     padding: "10px 20px",
+                                    paddingLeft: "50px", /* 숫자 공간 확보 */
                                     opacity: isFlipped ? 0 : 1,
                                     transition: "opacity 0.6s ease-in-out",
                                     pointerEvents: isFlipped ? "none" : "auto",
@@ -237,7 +254,7 @@ const KeyPromises = ({ categories = [], homepageUrl = null }) => {
                                     style={{
                                       display: "flex",
                                       flexDirection: "column",
-                                      gap: 4,
+                                      gap: 6,
                                       width: "100%",
                                       justifyContent: "center",
                                     }}
@@ -252,10 +269,7 @@ const KeyPromises = ({ categories = [], homepageUrl = null }) => {
                                         {statusDisplay.label}
                                       </PromiseStatus>
                                     )}
-                                    <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                                      <PromiseNumber>{promiseIndex + 1}</PromiseNumber>
-                                      <PromiseContent>{promise.name}</PromiseContent>
-                                    </div>
+                                    <PromiseContent>{promise.name}</PromiseContent>
                                   </div>
                                 </div>
 
@@ -268,7 +282,6 @@ const KeyPromises = ({ categories = [], homepageUrl = null }) => {
                                       left: 0,
                                       right: 0,
                                       bottom: 0,
-                                      border: "1px solid #D2D2D2",
                                       borderRadius: 12,
                                       background: "#7471F9",
                                       padding: " 10px 20px",
@@ -299,7 +312,6 @@ const KeyPromises = ({ categories = [], homepageUrl = null }) => {
                                           fontSize: "12px",
                                           fontWeight: "700",
                                           background: "#fff",
-                                          border: "1px solid #D2D2D2",
                                           borderRadius: "9px",
                                           padding: "1px 9px",
                                           alignSelf: "flex-start",
@@ -313,6 +325,11 @@ const KeyPromises = ({ categories = [], homepageUrl = null }) => {
                                           fontSize: "13px",
                                           lineHeight: "1.4",
                                           width: "100%",
+                                          display: "-webkit-box",
+                                          WebkitLineClamp: 2,
+                                          WebkitBoxOrient: "vertical",
+                                          overflow: "hidden",
+                                          textOverflow: "ellipsis",
                                         }}
                                       >
                                         {promise.goal}
