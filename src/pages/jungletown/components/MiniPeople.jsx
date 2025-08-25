@@ -207,6 +207,7 @@ const AvatarFallback = styled.div`
   display: grid;
   place-items: center;
   border-radius: 8px;
+  border: 1px solid #d9d9d9;
   background: #f0f1f5;
   color: #555;
   font-weight: 700;
@@ -260,6 +261,7 @@ const ImageWrapper = styled.div`
   aspect-ratio: 1 / 1;
   background: ${(p) => p.$bg};
   border-radius: 8px;
+  border: 1px solid #e0e0e0;
   overflow: hidden;
   display: flex;
   align-items: center;
