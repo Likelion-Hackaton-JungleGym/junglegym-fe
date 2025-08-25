@@ -150,49 +150,50 @@ export default function CardNews({ regions }) {
           role="group"
           aria-roledescription="slide"
           aria-label={`${current + 1} / ${len}`}
+          data-expanded={expanded ? "true" : "false"}
           onClick={() => setExpanded((v) => !v)}
         >
           <MainImg src={item.card} alt="" loading="lazy" decoding="async" />
 
-          {!expanded ? (
-            <CompactOverlay>
-              <RegionChip>{item.region}</RegionChip>
-              <IconWrapper>{!!iconSrc && <OverlayIcon src={iconSrc} alt="" />}</IconWrapper>
-              {item.title && <OverlayTitle>{item.title}</OverlayTitle>}
-              {item.oneLineContent && <OverlayDesc>{item.oneLineContent}</OverlayDesc>}
-            </CompactOverlay>
-          ) : (
-            <ExpandedOverlay>
-              <RegionChip>{item.region}</RegionChip>
-              {item.title && <OverlayTitle2>{truncateText(item.title, 32)}</OverlayTitle2>}
-              {item.summary && <OverlayBody>{item.summary}</OverlayBody>}
-              <BottomStack>
-                <GraphWrapper>
-                  {item.mediaImgUrl && (
-                    <GraphImg src={item.mediaImgUrl} alt="" loading="lazy" decoding="async" />
+          {/* 앞면 */}
+          <CompactOverlay>
+            <RegionChip>{item.region}</RegionChip>
+            <IconWrapper>{!!iconSrc && <OverlayIcon src={iconSrc} alt="" />}</IconWrapper>
+            {item.title && <OverlayTitle>{item.title}</OverlayTitle>}
+            {item.oneLineContent && <OverlayDesc>{item.oneLineContent}</OverlayDesc>}
+          </CompactOverlay>
+
+          {/* 뒷면 */}
+          <ExpandedOverlay>
+            <RegionChip>{item.region}</RegionChip>
+            {item.title && <OverlayTitle2>{truncateText(item.title, 32)}</OverlayTitle2>}
+            {item.summary && <OverlayBody>{item.summary}</OverlayBody>}
+            <BottomStack>
+              <GraphWrapper>
+                {item.mediaImgUrl && (
+                  <GraphImg src={item.mediaImgUrl} alt="" loading="lazy" decoding="async" />
+                )}
+              </GraphWrapper>
+              <FooterRow>
+                <FooterLeft>
+                  <Media>{item.media && <span className="media">{item.media}</span>}</Media>
+                  <Source>{item.date && <span className="date">{item.date}</span>}</Source>
+                </FooterLeft>
+                <FooterRight>
+                  {item.link && (
+                    <ArticleBtn
+                      href={item.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      원문 기사 보기
+                    </ArticleBtn>
                   )}
-                </GraphWrapper>
-                <FooterRow>
-                  <FooterLeft>
-                    <Media>{item.media && <span className="media">{item.media}</span>}</Media>
-                    <Source>{item.date && <span className="date">{item.date}</span>}</Source>
-                  </FooterLeft>
-                  <FooterRight>
-                    {item.link && (
-                      <ArticleBtn
-                        href={item.link}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        onClick={(e) => e.stopPropagation()}
-                      >
-                        원문 기사 보기
-                      </ArticleBtn>
-                    )}
-                  </FooterRight>
-                </FooterRow>
-              </BottomStack>
-            </ExpandedOverlay>
-          )}
+                </FooterRight>
+              </FooterRow>
+            </BottomStack>
+          </ExpandedOverlay>
         </Card>
 
         <ArrowLeft onClick={prev} aria-label="이전">
@@ -287,12 +288,28 @@ const Card = styled.div`
   left: ${GUTTER}px;
   right: ${GUTTER}px;
   border-radius: 16px;
-  //  bottom: 10px;
   overflow: hidden;
   z-index: 2;
   cursor: pointer;
   transform: scale(0.95);
-  box-shadow: 0px 10px 40px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+  contain: layout paint; /* 안쪽 변화 격리 */
+  backface-visibility: hidden;
+  &[data-expanded="true"]::after {
+    opacity: 0.55;
+  }
+`;
+
+const layerBase = `
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none; /* 링크/버튼만 개별로 auto */
+ will-change: opacity;
+  transform: translateZ(0);
+  transition: opacity 360ms ease, visibility 360ms step-end;
+
+  @media (prefers-reduced-motion: reduce) { transition: none; }
 `;
 
 const MainImg = styled.img`
@@ -303,8 +320,7 @@ const MainImg = styled.img`
 `;
 
 const CompactOverlay = styled.div`
-  position: absolute;
-  inset: 0;
+  ${layerBase}
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -312,9 +328,18 @@ const CompactOverlay = styled.div`
   text-align: center;
   padding: 0 20px 45px;
   color: #fff;
-  z-index: 3;
-  pointer-events: none;
   gap: 8px;
+
+  /* 기본(앞면 표시) */
+  visibility: visible;
+  opacity: 1;
+
+  /* 확장 시 페이드아웃 + 아래로 살짝 */
+  ${Card}[data-expanded="true"] & {
+    visibility: hidden; /* 전환 끝나고 숨김 처리 */
+    opacity: 0;
+    transition: opacity 360ms ease, visibility 0s 360ms;
+  }
 `;
 
 const RegionChip = styled.span`
@@ -380,27 +405,27 @@ const OverlayDesc = styled.div`
 //----------------------------------
 
 const ExpandedOverlay = styled.div`
-  position: absolute;
-  inset: 0;
+  ${layerBase}
   padding: 30px 30px 40px;
-  min-height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   text-align: left;
   color: #fff;
-  z-index: 3;
-  pointer-events: none;
+
+  /* 기본(뒷면 숨김) */
+  visibility: hidden;
+  opacity: 0;
+
+  /* 확장 시 페이드인 + 위로 */
+  ${Card}[data-expanded="true"] & {
+    visibility: visible;
+    opacity: 1;
+    transition: opacity 360ms ease, visibility 0s;
+  }
 `;
 
-const BottomStack = styled.div`
-  display: flex;
-  flex-direction: column;
-  //  gap: 10px;
-  margin-top: auto;
-  pointer-events: none;
-`;
-
+/* 확장 타이틀 살짝 딜레이로 더 자연스럽게 (선택) */
 const OverlayTitle2 = styled.div`
   margin: 0 0 8px;
   font-size: 22px;
@@ -409,6 +434,18 @@ const OverlayTitle2 = styled.div`
   letter-spacing: -0.02em;
   max-width: 95%;
   white-space: pre-line;
+
+  ${Card}[data-expanded="true"] & {
+    opacity: 1;
+  }
+`;
+
+const BottomStack = styled.div`
+  display: flex;
+  flex-direction: column;
+  //  gap: 10px;
+  margin-top: auto;
+  pointer-events: none;
 `;
 
 const OverlayBody = styled.p`
