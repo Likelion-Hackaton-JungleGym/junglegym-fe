@@ -68,7 +68,7 @@ export default function CardNews({ regions }) {
           region,
           key: buildKey(region, it),
           ...it,
-          card: CARD_MAP[(i % 6) + 1], // 1~6 반복
+          card: CARD_MAP[(i % 8) + 1],
         }));
 
         setItems(mapped);

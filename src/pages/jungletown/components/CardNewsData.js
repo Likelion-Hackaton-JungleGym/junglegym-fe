@@ -9,6 +9,8 @@ import CardNews3 from "./img/CardNews3.svg?url";
 import CardNews4 from "./img/CardNews4.svg?url";
 import CardNews5 from "./img/CardNews5.svg?url";
 import CardNews6 from "./img/CardNews6.svg?url";
+import CardNews7 from "./img/CardNews7.svg?url";
+import CardNews8 from "./img/CardNews8.svg?url";
 
 const pol1 = img("pol1.svg");
 const pol2 = img("pol2.svg");
@@ -38,6 +40,8 @@ export const CARD_MAP = {
   4: CardNews4,
   5: CardNews5,
   6: CardNews6,
+  7: CardNews7,
+  8: CardNews8,
 };
 
 export const CARDNEWS = [
