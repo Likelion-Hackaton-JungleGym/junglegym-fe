@@ -268,6 +268,8 @@ const ImageWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  box-shadow: 0 1px 7px rgba(0, 0, 0, 0.03), 1px 0px 7px rgba(0, 0, 0, 0.03),
+    0px 1px 7px rgba(0, 0, 0, 0.03);
 `;
 
 const Empty = styled.div`

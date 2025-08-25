@@ -124,6 +124,9 @@ const Card = styled.article`
   flex-direction: column;
   border: 1.5px solid #d6d6d6;
   height: 230px;
+  box-shadow: 0 1px 10px rgba(0, 0, 0, 0.03), 1px 0px 10px rgba(0, 0, 0, 0.03),
+    0px 1px 10px rgba(0, 0, 0, 0.03);
+  //offset-x offset-y blur-radius spread-radius color;
 `;
 
 const Top = styled.div`
