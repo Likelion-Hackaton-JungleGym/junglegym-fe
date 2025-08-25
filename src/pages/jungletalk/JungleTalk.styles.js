@@ -37,7 +37,7 @@ export const SubTitle = styled.h3`
   font-size: 19px;
   font-weight: 700;
   margin-bottom: 10px;
-  
+
   /* 텍스트 뒤에 라이트 퍼플 형광펜 효과 */
   display: inline-block;
   background-image: linear-gradient(#edebff, #edebff);
@@ -99,10 +99,25 @@ export const CheckAnswerText = styled.div`
   margin-top: 4px;
 `;
 
-export const FloatingButton = styled.button`
+export const FloatingWrapper = styled.div`
   position: fixed;
   bottom: 30px;
   left: 30px;
+  z-index: 20;
+`;
+
+export const ButtonBackground = styled.div`
+  position: absolute;
+  bottom: -20px;
+  left: -20px;
+  width: 370px;
+  height: 80px;
+  background: white;
+  border-radius: 999px;
+  z-index: -1;
+`;
+
+export const FloatingButton = styled.button`
   width: 330px;
   height: 55px;
   display: flex;
@@ -114,8 +129,6 @@ export const FloatingButton = styled.button`
   font-weight: 600;
   border: none;
   border-radius: 999px;
-  z-index: 20;
-  transition: all 0.2s ease;
 `;
 
 export const BackButton = styled.button`
@@ -270,7 +283,7 @@ export const QuestionItem = styled.div`
   padding: 16px 20px;
   cursor: pointer;
   transition: background-color 0.2s ease;
-  
+
   &:hover {
     background-color: #f8f9fa;
   }
