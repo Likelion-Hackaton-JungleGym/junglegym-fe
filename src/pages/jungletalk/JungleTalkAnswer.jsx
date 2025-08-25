@@ -9,9 +9,6 @@ import {
   MyQuestion,
   AnswerText,
   AbsoluteBackButton,
-  SubTitle,
-  Title,
-  Highlight,
 } from "./JungleTalk.styles";
 import BackIcon from "../../assets/icons/BackIcon.svg";
 import RectangleIcon from "../../assets/icons/Rectangle.svg";
@@ -85,7 +82,7 @@ const JungleTalkAnswer = ({
           </div>
         </MyQuestion>
 
-        <div>
+        <div style={{ marginLeft: "8px" }}>
           <CardTitle style={{ marginLeft: "5px" }}>정글챗</CardTitle>
         </div>
         <AnswerText>

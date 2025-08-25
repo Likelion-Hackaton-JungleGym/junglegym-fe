@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useLayoutEffect, useMemo, useState } from "react";
 import JungleTalkMain from "./JungleTalkMain";
 import JungleTalkQuestion from "./JungleTalkQuestion";
 import JungleTalkAnswer from "./JungleTalkAnswer";
@@ -6,10 +6,8 @@ import { useJungleTalkStore } from "../../store/jungleTalkStore";
 import { askJungleTalkAI, getChats } from "../../shared/utils/chatApi.js";
 import LoadingBar from "./LoadingBar";
 
-
-
 const JungleTalkPage = () => {
-  const { step, setStep } = useJungleTalkStore();
+  const { step, setStep: setStepRaw } = useJungleTalkStore();
 
   const [question, setQuestion] = useState("");
   const [isPrivate, setIsPrivate] = useState(false);
@@ -20,9 +18,43 @@ const JungleTalkPage = () => {
 
   const [latestQuestions, setLatestQuestions] = useState([]);
 
-  const questionsForUI = useMemo(() => {
-    return latestQuestions;
-  }, [latestQuestions]);
+  // --- 최상단으로 스크롤 유틸 ---
+  const scrollToTop = () => {
+    try {
+      console.log("스크롤 시도 중...");
+      
+      // scrollRoot div를 찾아서 스크롤
+      const scrollRoot = document.getElementById('scrollRoot');
+      if (scrollRoot) {
+        scrollRoot.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+        scrollRoot.scrollTop = 0;
+        scrollRoot.scrollLeft = 0;
+        console.log("scrollRoot 스크롤 완료");
+      } else {
+        console.log("scrollRoot를 찾을 수 없음");
+      }
+      
+    } catch (error) {
+      console.log("스크롤 에러:", error);
+    }
+  };
+
+  // --- setStep 래퍼: 호출 즉시 상단 이동 ---
+  const setStepAndScroll = (next) => {
+    setStepRaw(next);
+    // setState는 비동기이므로 setTimeout으로 지연 실행
+    setTimeout(() => {
+      scrollToTop();
+    }, 100);
+  };
+
+  const questionsForUI = useMemo(() => latestQuestions, [latestQuestions]);
+
+  // step 변경 시마다 상단으로 (useLayoutEffect로 DOM 업데이트 후 즉시 실행)
+  useLayoutEffect(() => {
+    console.log("스크롤 실행 - step:", step);
+    scrollToTop();
+  }, [step]);
 
   useEffect(() => {
     const load = async () => {
@@ -63,14 +95,13 @@ const JungleTalkPage = () => {
       setLawText(data?.constitution ?? "");
     } catch (e) {
       console.log("[handleSubmit] API 에러", e?.response?.data || e.message);
-      // 에러 발생 시 기본 답변 설정
-      setAnswer("죄송합니다. 현재 서버에 일시적인 문제가 있어 답변을 제공할 수 없습니다. 잠시 후 다시 시도해주세요.");
-      setLawText("서버 연결 문제로 관련 법 조항을 불러올 수 없습니다.");
+      // 에러 발생 시 기본 답변 설정 (사과 문구 제거, 중립 톤)
+      setAnswer("현재 일시적인 문제로 답변 생성이 제한되어 있습니다. 잠시 후 다시 시도해 주세요.");
+      setLawText("연결 문제로 관련 법 조항을 불러오지 못했습니다.");
     } finally {
-      // 로딩 상태를 조금 더 유지하여 사용자가 로딩 화면을 볼 수 있도록 함
       setTimeout(() => {
         setIsAnswerLoading(false);
-        setStep(3);
+        setStepAndScroll(3); // Answer로 전환 + 상단 고정
       }, 1000);
     }
   };
@@ -91,14 +122,12 @@ const JungleTalkPage = () => {
       setLawText(data?.constitution ?? "");
     } catch (e) {
       console.log("[openAnswer] API 에러", e?.response?.data || e.message);
-      // 에러 발생 시 기본 답변 설정
-      setAnswer("죄송합니다. 현재 서버에 일시적인 문제가 있어 답변을 제공할 수 없습니다. 잠시 후 다시 시도해주세요.");
-      setLawText("서버 연결 문제로 관련 법 조항을 불러올 수 없습니다.");
+      setAnswer("현재 일시적인 문제로 답변 생성이 제한되어 있습니다. 잠시 후 다시 시도해 주세요.");
+      setLawText("연결 문제로 관련 법 조항을 불러오지 못했습니다.");
     } finally {
-      // 로딩 상태를 조금 더 유지하여 사용자가 로딩 화면을 볼 수 있도록 함
       setTimeout(() => {
         setIsAnswerLoading(false);
-        setStep(3);
+        setStepAndScroll(3);
       }, 1000);
     }
   };
@@ -106,7 +135,11 @@ const JungleTalkPage = () => {
   return (
     <>
       {step === 1 && (
-        <JungleTalkMain setStep={setStep} questions={questionsForUI} onQuestionClick={openAnswer} />
+        <JungleTalkMain
+          setStep={setStepAndScroll}
+          questions={questionsForUI}
+          onQuestionClick={openAnswer}
+        />
       )}
 
       {step === 2 && (
@@ -115,21 +148,19 @@ const JungleTalkPage = () => {
           setQuestion={setQuestion}
           isPrivate={isPrivate}
           setIsPrivate={setIsPrivate}
-          setStep={setStep}
+          setStep={setStepAndScroll}
           handleSubmit={handleSubmit}
         />
       )}
 
-      {isAnswerLoading && (
-        <LoadingBar durationMs={5000} />
-      )}
+      {isAnswerLoading && <LoadingBar durationMs={5000} />}
 
       {step === 3 && (
         <JungleTalkAnswer
           question={question}
           answer={answer}
           lawText={lawText}
-          setStep={setStep}
+          setStep={setStepAndScroll}
           fromOthers={fromOthers}
           dummyQuestions={questionsForUI}
           onOtherClick={openAnswer}

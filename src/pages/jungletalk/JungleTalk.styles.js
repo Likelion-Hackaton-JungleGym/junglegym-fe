@@ -134,7 +134,7 @@ export const FloatingButton = styled.button`
 export const BackButton = styled.button`
   background: none;
   border: none;
-  margin-top: 20px;
+  margin-top: 35px;
   margin-bottom: 16px;
   display: flex;
   align-items: center;
@@ -246,6 +246,7 @@ export const MyQuestion = styled.div`
   margin-top: 8px;
   font-size: 14px;
   color: #000;
+  padding: 0 8px;
   font-weight: 400;
   line-height: 1.4;
   margin-right: 10px;
