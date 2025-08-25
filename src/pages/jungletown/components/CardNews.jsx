@@ -428,7 +428,7 @@ const ExpandedOverlay = styled.div`
 /* 확장 타이틀 살짝 딜레이로 더 자연스럽게 (선택) */
 const OverlayTitle2 = styled.div`
   margin: 0 0 8px;
-  font-size: 22px;
+  font-size: 21px;
   font-weight: 500;
   line-height: 1.3;
   letter-spacing: -0.02em;
@@ -450,8 +450,9 @@ const BottomStack = styled.div`
 
 const OverlayBody = styled.p`
   margin: 0;
-  font-size: 14px;
-  line-height: 1.5;
+  font-size: 13px;
+  font-weight: 300;
+  line-height: 1.4;
   color: rgba(255, 255, 255, 0.95);
 `;
 

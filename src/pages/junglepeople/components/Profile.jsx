@@ -5,7 +5,6 @@ import LoadingScreen from "../../../shared/components/LoadingScreen";
 import RedPartyWhite from "./img/redPartyWhite.svg";
 import BluePartyWhite from "./img/bluePartyWhite.svg";
 
-
 export default function Profile({ politicians = [], isLoading = false, selectedRegion }) {
   // API 데이터를 새로운 UI 구조에 맞게 변환
   const people = politicians.map((politician) => {
@@ -62,10 +61,9 @@ export default function Profile({ politicians = [], isLoading = false, selectedR
             fontSize: "16px",
           }}
         >
-          {selectedRegion 
+          {selectedRegion
             ? `${selectedRegion}의 정치인 정보를 준비 중입니다.`
-            : "정치인 정보를 준비 중입니다."
-          }
+            : "정치인 정보를 준비 중입니다."}
         </div>
       </Wrapper>
     );
@@ -79,13 +77,15 @@ export default function Profile({ politicians = [], isLoading = false, selectedR
             <Card>
               <Top $borderColor={p.borderColor}>
                 <Badge src={p.badge} alt="정당" />
-                <Person
-                  src={p.cropPhoto}
-                  alt={`${p.name}`}
-                  onError={(e) => {
-                    e.target.src = "/dummy-profile.jpg";
-                  }}
-                />
+                <PersonWrapper>
+                  <Person
+                    src={p.cropPhoto}
+                    alt={`${p.name}`}
+                    onError={(e) => {
+                      e.target.src = "/dummy-profile.jpg";
+                    }}
+                  />
+                </PersonWrapper>
               </Top>
               <Bottom>
                 <Name>{p.name}</Name>
@@ -122,7 +122,7 @@ const Card = styled.article`
   background: #fff;
   display: flex;
   flex-direction: column;
-  border: 1.5px solid #d1d1d1;
+  border: 1.5px solid #d6d6d6;
   height: 230px;
 `;
 
@@ -131,11 +131,17 @@ const Top = styled.div`
   height: 200px;
   background: #f5f5f5;
   border-radius: 10px 10px 0 0;
-  border-bottom: 3px solid ${(p) => p.$borderColor};
+  border-bottom: 5px solid ${(p) => p.$borderColor};
   overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
+`;
+
+const PersonWrapper = styled.div`
+  background-color: white;
+  width: 100%;
+  height: 100%;
 `;
 
 const Person = styled.img`
@@ -148,10 +154,8 @@ const Person = styled.img`
   display: block;
   border-radius: 10px 10px 0 0;
   transition: transform 0.2s ease;
-
-  &:hover {
-    transform: scale(1.05);
-  }
+  //transform: translateY(10px);
+  margin-top: 10px;
 
   /* 이미지가 없거나 로드 실패 시 배경색 표시 */
   &:not([src]),
