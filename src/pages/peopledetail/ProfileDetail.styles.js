@@ -55,14 +55,21 @@ export const CardTitle = styled.h3`
   font-weight: 700;
   margin: 0 0 10px 0;
   color: #000;
-
-  /* 텍스트 뒤에 라이트 퍼플 형광펜 효과 */
+  position: relative;
   display: inline-block;
-  background-image: linear-gradient(#e1e0ff);
-  background-position: 0 100%;
-  background-size: 100% 12px;
-  background-repeat: no-repeat;
-  padding: 0 8px;
+  z-index: 1;
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 1px;
+    left: -10px;
+    width: calc(100% + 20px);
+    height: 15px;
+    background: #edebff;
+    border-radius: 2px;
+    z-index: -1;
+  }
 `;
 
 // 공통 부제목 스타일

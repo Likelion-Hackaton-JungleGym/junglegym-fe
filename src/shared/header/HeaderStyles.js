@@ -44,7 +44,7 @@ export const Nav = styled.nav`
   padding: 10px;
   font-size: 14px;
   background-color: #ffffff;
-  border-bottom: 0.5px solid #e5e5e5;
+  border-bottom: 1px solid #d0d0d0;
 `;
 
 export const NavItem = styled(Link)`
@@ -62,10 +62,10 @@ export const NavItem = styled(Link)`
     &::after {
       content: "";
       position: absolute;
-      bottom: -22px;
+      bottom: -23px;
       left: 0;
       width: 100%;
-      height: 2px;
+      height: 3px;
       background-color: black;
     }
   }

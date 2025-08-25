@@ -6,6 +6,8 @@ import {
   Description,
   FloatingButton,
   Highlight,
+  ButtonBackground,
+  FloatingWrapper,
 } from "./JungleTalk.styles";
 
 import OtherQuestion from "./OtherQuestion";
@@ -37,7 +39,10 @@ const JungleTalkMain = ({ setStep, onQuestionClick, questions }) => {
             onClick={(i, q) => onQuestionClick?.(q)}
             variant="card"
           />
-          <FloatingButton onClick={() => setStep(2)}>+ 질문하기</FloatingButton>
+          <FloatingWrapper>
+            <ButtonBackground />
+            <FloatingButton onClick={() => setStep(2)}>+ 질문하기</FloatingButton>
+          </FloatingWrapper>
         </Section>
       </Container>
     </Mainwrapper>

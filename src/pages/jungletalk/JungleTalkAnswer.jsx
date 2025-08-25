@@ -9,9 +9,6 @@ import {
   MyQuestion,
   AnswerText,
   AbsoluteBackButton,
-  SubTitle,
-  Title,
-  Highlight,
 } from "./JungleTalk.styles";
 import BackIcon from "../../assets/icons/BackIcon.svg";
 import RectangleIcon from "../../assets/icons/Rectangle.svg";
@@ -44,7 +41,7 @@ const JungleTalkAnswer = ({
   lawText,
   setStep,
   fromOthers,
-  dummyQuestions,
+  dummyQuestions: questions,
   onOtherClick,
   loading,
 }) => {
@@ -66,16 +63,7 @@ const JungleTalkAnswer = ({
         <AbsoluteBackButton onClick={() => setStep(1)}>
           <img src={BackIcon} alt="뒤로가기" style={{ filter: "brightness(0) invert(1)" }} />
         </AbsoluteBackButton>
-        <OverlayText>
-          {(lawText &&
-            lawText
-              .trim()
-              .replace(/([^.!?]+[.!?])(?!\d)/g, "$1\n")
-              .replace(/(제\d+조)/g, "$1\n")
-              .replace(/\n+/g, "\n")
-              .trim()) ||
-            ""}
-        </OverlayText>
+        <OverlayText>{(lawText && lawText.trim()) || ""}</OverlayText>
       </TopImageWrapper>
       <WhiteContainer>
         <MyQuestion>
@@ -94,7 +82,7 @@ const JungleTalkAnswer = ({
           </div>
         </MyQuestion>
 
-        <div>
+        <div style={{ marginLeft: "8px" }}>
           <CardTitle style={{ marginLeft: "5px" }}>정글챗</CardTitle>
         </div>
         <AnswerText>
@@ -102,7 +90,7 @@ const JungleTalkAnswer = ({
         </AnswerText>
         <OtherQuestion
           title="다른 사람들의 질문"
-          questions={dummyQuestions}
+          questions={questions}
           showCheckAnswer
           onClick={(i, q) => {
             if (loading) return;
