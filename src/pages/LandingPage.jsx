@@ -243,17 +243,18 @@ const ImageContainer = styled.div`
 `;
 
 const LandingMapImg = styled.img`
-  width: 100%;
+  width: 70%;
   height: auto;
   display: block; /* 여백 제거 */
   z-index: 1; /* 아래쪽 레이어 */
   margin-bottom: 50px;
+  margin-left: 70px;
 `;
 
 const LandingIconImg = styled.img`
   position: absolute; /* 지도 위에 겹치기 */
-  bottom: 0px; /* 위치 미세조정 */
-  width: 35%; /* 아이콘 크기 (반응형) */
+  bottom: 20px; /* 위치 미세조정 */
+  width: 25%; /* 아이콘 크기 (반응형) */
   height: auto;
   z-index: 2; /* 지도보다 위 */
   pointer-events: none; /* 클릭 방해 안 하도록(선택) */
