@@ -50,6 +50,11 @@ const JungleTalkPage = () => {
 
   const questionsForUI = useMemo(() => latestQuestions, [latestQuestions]);
 
+  // 페이지 마운트 시 step을 1로 초기화
+  useEffect(() => {
+    setStepRaw(1);
+  }, []);
+
   // step 변경 시마다 상단으로 (useLayoutEffect로 DOM 업데이트 후 즉시 실행)
   useLayoutEffect(() => {
     console.log("스크롤 실행 - step:", step);

@@ -71,7 +71,17 @@ export default function CardNews({ regions }) {
           card: CARD_MAP[(i % 6) + 1], // 1~6 반복
         }));
 
-        setItems(mapped);
+        // 지역구 이름이 title에 포함된 기사를 우선 정렬
+        const sorted = mapped.sort((a, b) => {
+          const aHasRegion = a.title && a.title.includes(region);
+          const bHasRegion = b.title && b.title.includes(region);
+          
+          if (aHasRegion && !bHasRegion) return -1; // a가 우선
+          if (!aHasRegion && bHasRegion) return 1;  // b가 우선
+          return 0; // 둘 다 같으면 순서 유지
+        });
+
+        setItems(sorted);
         setCurrent(0);
         setExpanded(false);
       } catch (err) {
