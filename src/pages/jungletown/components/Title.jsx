@@ -7,8 +7,11 @@ export default function Title() {
         동네 한 바퀴
         <Highlight />
       </HighlightText>
-      <SubText>우리 동네, 지금 꼭 알아야 할 이슈 모음 </SubText>
-      <SubText>카드를 눌러 빠르게 확인해보세요</SubText>
+      <SubText>
+        우리 동네, 지금 꼭 알아야 할 이슈 모음
+        <br />
+        카드를 눌러 빠르게 확인해보세요
+      </SubText>
     </Wrapper>
   );
 }
