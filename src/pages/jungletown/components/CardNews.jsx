@@ -11,6 +11,18 @@ import { CARD_MAP } from "./CardNewsData";
 import leftButton from "../components/img/leftButton.svg?url";
 import rightButton from "../components/img/rightButton.svg?url";
 
+// 상단 근처 어딘가에 추가
+const LAST_CARD_ID = 8; // 마지막 카드에 항상 쓸 배경
+
+const cardIdFor = (index, total) => {
+  // 마지막 아이템이면 고정 카드 사용
+  if (index === total - 1) return LAST_CARD_ID;
+
+  // 나머지는 1~7 범위에서 순환(8은 건너뜀)
+  const pool = [1, 2, 3, 4, 5, 6, 7];
+  return pool[index % pool.length];
+};
+
 /* ---------- utils ---------- */
 
 function truncateText(str = "", max = 35) {
@@ -68,7 +80,7 @@ export default function CardNews({ regions }) {
           region,
           key: buildKey(region, it),
           ...it,
-          card: CARD_MAP[(i % 8) + 1],
+          card: CARD_MAP[cardIdFor(i, list.length)],
         }));
 
         setItems(mapped);
