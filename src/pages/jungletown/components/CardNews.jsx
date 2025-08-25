@@ -417,7 +417,7 @@ const GraphImg = styled.img`
 `;
 
 const GraphWrapper = styled.div`
-  padding: 5px 0px 0px 0px;
+  padding: 5px 0px;
   pointer-events: none;
   //  margin-bottom: -15px;
 `;
@@ -506,7 +506,7 @@ const ArticleBtn = styled.a`
 const Dots = styled.div`
   position: absolute;
   display: flex;
-  bottom: 38px;
+  bottom: 35px;
   transform: translateX(-50%);
   left: 50%;
   justify-content: center;
