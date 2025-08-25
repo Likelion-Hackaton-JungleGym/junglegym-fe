@@ -221,7 +221,7 @@ const KeyPromises = ({ categories = [], homepageUrl = null }) => {
                                     border: "1px solid #D2D2D2",
                                     borderRadius: 12,
                                     background: "#fff",
-                                    padding: "20px",
+                                    padding: "10px 20px",
                                     opacity: isFlipped ? 0 : 1,
                                     transition: "opacity 0.6s ease-in-out",
                                     pointerEvents: isFlipped ? "none" : "auto",
@@ -237,7 +237,7 @@ const KeyPromises = ({ categories = [], homepageUrl = null }) => {
                                     style={{
                                       display: "flex",
                                       flexDirection: "column",
-                                      gap: 8,
+                                      gap: 4,
                                       width: "100%",
                                       justifyContent: "center",
                                     }}
@@ -271,7 +271,7 @@ const KeyPromises = ({ categories = [], homepageUrl = null }) => {
                                       border: "1px solid #D2D2D2",
                                       borderRadius: 12,
                                       background: "#7471F9",
-                                      padding: "20px",
+                                      padding: " 10px 20px",
                                       opacity: isFlipped ? 1 : 0,
                                       transition: "opacity 0.6s ease-in-out",
                                       pointerEvents: isFlipped ? "auto" : "none",
@@ -288,7 +288,7 @@ const KeyPromises = ({ categories = [], homepageUrl = null }) => {
                                       style={{
                                         display: "flex",
                                         flexDirection: "column",
-                                        gap: 8,
+                                        gap: 4,
                                         alignItems: "flex-start",
                                         width: "100%",
                                       }}
@@ -301,7 +301,7 @@ const KeyPromises = ({ categories = [], homepageUrl = null }) => {
                                           background: "#fff",
                                           border: "1px solid #D2D2D2",
                                           borderRadius: "9px",
-                                          padding: "2px 10px",
+                                          padding: "1px 9px",
                                           alignSelf: "flex-start",
                                         }}
                                       >
