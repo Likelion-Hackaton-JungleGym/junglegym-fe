@@ -328,7 +328,7 @@ const IconWrapper = styled.div`
   height: clamp(120px, 38vw, 170px);
   display: flex;
   justify-content: center;
-  margin-bottom: 8px;
+  margin-bottom: 22px;
 `;
 
 const OverlayIcon = styled.img`
