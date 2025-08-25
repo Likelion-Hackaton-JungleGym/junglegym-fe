@@ -159,7 +159,7 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 30px 20px;
+  padding: 30px 20px 0;
   margin-top: 20px;
   // padding: 60px 20px 0;
   font-family: Pretendard;

@@ -64,7 +64,7 @@ const Bills = ({ bills = [], totalPages = 1, currentPage = 1, onPageChange }) =>
 
   return (
     <>
-      <ListContainer style={{ gap: 24 }}>
+      <ListContainer style={{ gap: 12 }}>
         {bills.map((bill, index) => {
           const isFlipped = !!flipped[index];
           const back = backMap.get(index); // 뒷면에 쓸 nextBills 데이터(없으면 null)
@@ -91,7 +91,7 @@ const Bills = ({ bills = [], totalPages = 1, currentPage = 1, onPageChange }) =>
                     border: "1px solid #D2D2D2",
                     borderRadius: 15,
                     background: "#fff",
-                    padding: 20,
+                    padding: "15px 20px",
                     opacity: isFlipped ? 0 : 1,
                     transition: "opacity 0.6s ease-in-out",
                     pointerEvents: isFlipped ? "none" : "auto",
@@ -169,7 +169,7 @@ const Bills = ({ bills = [], totalPages = 1, currentPage = 1, onPageChange }) =>
                     background: "#746F89",
                     padding: "20px 20px",
                     opacity: isFlipped ? 1 : 0,
-                    transition: "opacity 0.6s ease-in-out",
+                    transition: "opacity 0.4s ease-in-out",
                     pointerEvents: isFlipped ? "auto" : "none",
                     display: "flex",
                     flexDirection: "column",
@@ -218,7 +218,14 @@ const Bills = ({ bills = [], totalPages = 1, currentPage = 1, onPageChange }) =>
                             }}
                             title="관련 링크"
                           >
-                            <img src={LinkIcon} alt="Notice" />
+                            <img
+                              src={LinkIcon}
+                              alt="Notice"
+                              style={{
+                                width: "25px",
+                                height: "25px",
+                              }}
+                            />
                           </a>
                         )}
                       </div>
