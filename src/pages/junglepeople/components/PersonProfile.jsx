@@ -65,9 +65,11 @@ export default function PersonProfile() {
   }
 
   if (error && !politician) {
-    const currentRegion = searchParams.get('region');
-    const backLink = currentRegion ? `/junglepeople?region=${encodeURIComponent(currentRegion)}` : "/junglepeople";
-    
+    const currentRegion = searchParams.get("region");
+    const backLink = currentRegion
+      ? `/junglepeople?region=${encodeURIComponent(currentRegion)}`
+      : "/junglepeople";
+
     return (
       <Empty>
         존재하지 않는 인물이에요. <Link to={backLink}>뒤로가기</Link>
@@ -97,12 +99,12 @@ function ProfileView({ politician = {} }) {
         .filter(Boolean)
     : [];
 
-  const getBgColor = (polyName) => {
-    if (polyName?.includes("더불어민주당")) return "#4191E6";
-    if (polyName?.includes("국민의힘")) return "#F8575E";
-    return "#f5f5f5"; // 기본값
-  };
-  const bg = getBgColor(politician.polyName);
+  //const getBgColor = (polyName) => {
+  //if (polyName?.includes("더불어민주당")) return "#4191E6";
+  //if (polyName?.includes("국민의힘")) return "#F8575E";
+  //return "#f5f5f5"; // 기본값
+  //};
+  //  const bg = getBgColor(politician.polyName);
 
   const getPartyIcon = (polyName) => {
     if (polyName?.includes("더불어민주당")) return BlueParty;
@@ -119,7 +121,7 @@ function ProfileView({ politician = {} }) {
   return (
     <Wrapper>
       <Card>
-        <Top $bg={bg}>
+        <Top>
           <ProfileImg
             src={politician.profileImg || "/dummy-profile.jpg"}
             alt={`${politician.name} 사진`}
@@ -158,7 +160,7 @@ const Wrapper = styled.div`
   flex-direction: column;
   align-items: center;
   padding: 30px 20px;
-  margin-top: 35px;
+  margin-top: 20px;
   // padding: 60px 20px 0;
   font-family: Pretendard;
 `;
@@ -192,10 +194,7 @@ const ProfileImg = styled.img`
   display: block;
   border-radius: 10px 10px 0 0;
   transition: transform 0.2s ease;
-
-  &:hover {
-    transform: scale(1.05);
-  }
+  margin-top: 20px;
 
   /* 이미지가 없거나 로드 실패 시 배경색 표시 */
   &:not([src]),
@@ -276,7 +275,6 @@ const TooltipText = styled.div`
   text-align: left;
   white-space: pre-line;
   margin: 2px 2px 2px 2px;
-
 `;
 const Empty = styled.div`
   padding: 40px 16px;
