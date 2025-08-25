@@ -149,8 +149,14 @@ const MiniPeopleWrap = styled.div`
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
   }
+  &.scroll-container {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE/Edge */
+  }
   &.scroll-container::-webkit-scrollbar {
-    height: 0;
+    display: none; /* Chrome/Safari */
   }
 `;
 
