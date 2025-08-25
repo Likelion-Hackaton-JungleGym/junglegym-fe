@@ -25,22 +25,21 @@ const cardIdFor = (index, total) => {
 
 /* ---------- utils ---------- */
 
-function truncateText(str = "", max = 35) {
-function truncateText(str = "", max = 35) {
+function truncateText(str = "", max = 35, suffix = "…") {
   if (str.length <= max) return str;
-  return str.slice(0, max) + "…"; //점점점대신 뭔가 바꾸고 싶음
+  return str.slice(0, max) + suffix; // " 더보기" 등으로 교체 가능
 }
 
 function chooseIcon(category, key, index = 0) {
   const c = String(category || "").trim();
   const list = ICON_MAP[c] ?? [];
   if (!list.length) return null;
-  
+
   // 카테고리, 키, 인덱스를 모두 고려하여 아이콘 선택
   let h = 0;
   const s = String(key ?? "") + String(index);
   for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) | 0;
-  
+
   return list[Math.abs(h) % list.length];
 }
 const buildKey = (region, it) =>
@@ -84,7 +83,7 @@ export default function CardNews({ regions }) {
           region,
           key: buildKey(region, it),
           ...it,
-          card: CARD_MAP[(i % 8) + 1],
+          card: CARD_MAP[cardIdFor(i, list.length)], // ← 여기서 실제 사용
         }));
 
         // 지역구 이름이 title에 포함된 기사를 우선 정렬
@@ -125,8 +124,6 @@ export default function CardNews({ regions }) {
     return () => ctrl.abort();
   }, [region]);
 
-
-
   const len = items.length;
   const item = items[current];
 
@@ -144,8 +141,11 @@ export default function CardNews({ regions }) {
     setExpanded(false);
   };
 
-  const iconSrc = useMemo(() => (item ? chooseIcon(item.newsCategory, item.key, current) : null), [item?.newsCategory, item?.key, current]);
-  
+  const iconSrc = useMemo(
+    () => (item ? chooseIcon(item.newsCategory, item.key, current) : null),
+    [item?.newsCategory, item?.key, current]
+  );
+
   // 다음 카드의 아이콘도 미리 계산 (빠른 전환을 위해)
   const nextIconSrc = useMemo(() => {
     const nextItem = items[nextIndex];
@@ -178,7 +178,13 @@ export default function CardNews({ regions }) {
         </PrevPeek>
         <NextPeek aria-hidden>
           <PeekImg src={items[nextIndex]?.card} alt="" />
-          {nextIconSrc && <OverlayIcon src={nextIconSrc} alt="" style={{ position: 'absolute', opacity: 0, pointerEvents: 'none' }} />}
+          {nextIconSrc && (
+            <OverlayIcon
+              src={nextIconSrc}
+              alt=""
+              style={{ position: "absolute", opacity: 0, pointerEvents: "none" }}
+            />
+          )}
         </NextPeek>
 
         <Card
@@ -193,7 +199,9 @@ export default function CardNews({ regions }) {
           {/* 앞면 */}
           <CompactOverlay>
             <RegionChip>{item.region}</RegionChip>
-            <IconWrapper>{!!iconSrc && <OverlayIcon src={iconSrc} alt="" loading="eager" />}</IconWrapper>
+            <IconWrapper>
+              {!!iconSrc && <OverlayIcon src={iconSrc} alt="" loading="eager" />}
+            </IconWrapper>
             {item.title && <OverlayTitle>{item.title}</OverlayTitle>}
             {item.oneLineContent && <OverlayDesc>{item.oneLineContent}</OverlayDesc>}
           </CompactOverlay>
@@ -201,7 +209,6 @@ export default function CardNews({ regions }) {
           {/* 뒷면 */}
           <ExpandedOverlay>
             <RegionChip>{item.region}</RegionChip>
-            {item.title && <OverlayTitle2>{truncateText(item.title, 35)}</OverlayTitle2>}
             {item.title && <OverlayTitle2>{truncateText(item.title, 35)}</OverlayTitle2>}
             {item.summary && <OverlayBody>{item.summary}</OverlayBody>}
             <BottomStack>
