@@ -172,6 +172,7 @@ const Card = styled.article`
   display: flex;
   flex-direction: column;
   border: 1px solid #d2d2d2;
+  // box-shadow: 2px 0 6px rgba(0, 0, 0, 0.08), /* 오른쪽 */ -2px 0 6px rgba(0, 0, 0, 0.08), /* 왼쪽 */ 0 4px 8px rgba(0, 0, 0, 0.12); /* 아래쪽 */
 `;
 
 const Top = styled.div`
