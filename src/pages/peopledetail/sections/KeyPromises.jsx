@@ -215,20 +215,21 @@ const KeyPromises = ({ categories = [], homepageUrl = null }) => {
                                   width: "100%",
                                 }}
                               >
-                                {/* 숫자를 카드 중앙에 별도로 배치 (뒤집히지 않았을 때만 표시) */}
-                                {!isFlipped && (
-                                  <div
-                                    style={{
-                                      position: "absolute",
-                                      left: "20px",
-                                      top: "50%",
-                                      transform: "translateY(-50%)",
-                                      zIndex: 3,
-                                    }}
-                                  >
-                                    <PromiseNumber>{promiseIndex + 1}</PromiseNumber>
-                                  </div>
-                                )}
+                                {/* 숫자를 카드 중앙에 별도로 배치 (페이드 애니메이션 적용) */}
+                                <div
+                                  style={{
+                                    position: "absolute",
+                                    left: "20px",
+                                    top: "50%",
+                                    transform: "translateY(-50%)",
+                                    zIndex: 3,
+                                    opacity: isFlipped ? 0 : 1,
+                                    transition: "opacity 0.6s ease-in-out",
+                                    pointerEvents: isFlipped ? "none" : "auto",
+                                  }}
+                                >
+                                  <PromiseNumber>{promiseIndex + 1}</PromiseNumber>
+                                </div>
 
                                 {/* 앞면: 공약 내용 */}
                                 <div
@@ -324,6 +325,11 @@ const KeyPromises = ({ categories = [], homepageUrl = null }) => {
                                           fontSize: "13px",
                                           lineHeight: "1.4",
                                           width: "100%",
+                                          display: "-webkit-box",
+                                          WebkitLineClamp: 2,
+                                          WebkitBoxOrient: "vertical",
+                                          overflow: "hidden",
+                                          textOverflow: "ellipsis",
                                         }}
                                       >
                                         {promise.goal}

@@ -234,7 +234,7 @@ export const OverlayText = styled.div`
   font-size: 17px;
   line-height: 1.4;
   white-space: pre-line;
-  font-family: "ChosunilboNM", serif;
+  font-family: 'Chosun-Ilbo-Myungjo', serif;
 `;
 
 export const WhiteContainer = styled.div`
@@ -256,7 +256,7 @@ export const MyQuestion = styled.div`
 export const AnswerText = styled.div`
   font-size: 14px;
   line-height: 1.4;
-  margin: 0px 10px 20px;
+  margin: 0px 10px 20px 12px;
   color: #000;
   font-weight: 400;
 `;

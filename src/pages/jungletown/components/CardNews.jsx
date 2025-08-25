@@ -13,18 +13,21 @@ import rightButton from "../components/img/rightButton.svg?url";
 
 /* ---------- utils ---------- */
 
-function truncateText(str = "", max = 32) {
+function truncateText(str = "", max = 35) {
   if (str.length <= max) return str;
   return str.slice(0, max) + "…"; //점점점대신 뭔가 바꾸고 싶음
 }
 
-function chooseIcon(category, key) {
+function chooseIcon(category, key, index = 0) {
   const c = String(category || "").trim();
   const list = ICON_MAP[c] ?? [];
   if (!list.length) return null;
+  
+  // 카테고리, 키, 인덱스를 모두 고려하여 아이콘 선택
   let h = 0;
-  const s = String(key ?? "");
+  const s = String(key ?? "") + String(index);
   for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) | 0;
+  
   return list[Math.abs(h) % list.length];
 }
 const buildKey = (region, it) =>
@@ -75,9 +78,9 @@ export default function CardNews({ regions }) {
         const sorted = mapped.sort((a, b) => {
           const aHasRegion = a.title && a.title.includes(region);
           const bHasRegion = b.title && b.title.includes(region);
-          
+
           if (aHasRegion && !bHasRegion) return -1; // a가 우선
-          if (!aHasRegion && bHasRegion) return 1;  // b가 우선
+          if (!aHasRegion && bHasRegion) return 1; // b가 우선
           return 0; // 둘 다 같으면 순서 유지
         });
 
@@ -109,6 +112,8 @@ export default function CardNews({ regions }) {
     return () => ctrl.abort();
   }, [region]);
 
+
+
   const len = items.length;
   const item = items[current];
 
@@ -126,7 +131,13 @@ export default function CardNews({ regions }) {
     setExpanded(false);
   };
 
-  const iconSrc = useMemo(() => (item ? chooseIcon(item.newsCategory, item.key) : null), [item]);
+  const iconSrc = useMemo(() => (item ? chooseIcon(item.newsCategory, item.key, current) : null), [item?.newsCategory, item?.key, current]);
+  
+  // 다음 카드의 아이콘도 미리 계산 (빠른 전환을 위해)
+  const nextIconSrc = useMemo(() => {
+    const nextItem = items[nextIndex];
+    return nextItem ? chooseIcon(nextItem.newsCategory, nextItem.key, nextIndex) : null;
+  }, [items, nextIndex]);
   if (loading) {
     return (
       <Wrapper>
@@ -154,6 +165,7 @@ export default function CardNews({ regions }) {
         </PrevPeek>
         <NextPeek aria-hidden>
           <PeekImg src={items[nextIndex]?.card} alt="" />
+          {nextIconSrc && <OverlayIcon src={nextIconSrc} alt="" style={{ position: 'absolute', opacity: 0, pointerEvents: 'none' }} />}
         </NextPeek>
 
         <Card
@@ -168,7 +180,7 @@ export default function CardNews({ regions }) {
           {/* 앞면 */}
           <CompactOverlay>
             <RegionChip>{item.region}</RegionChip>
-            <IconWrapper>{!!iconSrc && <OverlayIcon src={iconSrc} alt="" />}</IconWrapper>
+            <IconWrapper>{!!iconSrc && <OverlayIcon src={iconSrc} alt="" loading="eager" />}</IconWrapper>
             {item.title && <OverlayTitle>{item.title}</OverlayTitle>}
             {item.oneLineContent && <OverlayDesc>{item.oneLineContent}</OverlayDesc>}
           </CompactOverlay>
@@ -176,7 +188,7 @@ export default function CardNews({ regions }) {
           {/* 뒷면 */}
           <ExpandedOverlay>
             <RegionChip>{item.region}</RegionChip>
-            {item.title && <OverlayTitle2>{truncateText(item.title, 32)}</OverlayTitle2>}
+            {item.title && <OverlayTitle2>{truncateText(item.title, 35)}</OverlayTitle2>}
             {item.summary && <OverlayBody>{item.summary}</OverlayBody>}
             <BottomStack>
               <GraphWrapper>
@@ -315,9 +327,9 @@ const layerBase = `
   inset: 0;
   z-index: 3;
   pointer-events: none; /* 링크/버튼만 개별로 auto */
- will-change: opacity;
+  will-change: opacity;
   transform: translateZ(0);
-  transition: opacity 360ms ease, visibility 360ms step-end;
+  transition: opacity 500ms ease-in-out, visibility 500ms ease-in-out;
 
   @media (prefers-reduced-motion: reduce) { transition: none; }
 `;
@@ -344,11 +356,11 @@ const CompactOverlay = styled.div`
   visibility: visible;
   opacity: 1;
 
-  /* 확장 시 페이드아웃 + 아래로 살짝 */
+  /* 확장 시 페이드아웃 */
   ${Card}[data-expanded="true"] & {
-    visibility: hidden; /* 전환 끝나고 숨김 처리 */
+    visibility: hidden;
     opacity: 0;
-    transition: opacity 360ms ease, visibility 0s 360ms;
+    transition: opacity 500ms ease-in-out, visibility 0s 500ms;
   }
 `;
 
@@ -427,11 +439,11 @@ const ExpandedOverlay = styled.div`
   visibility: hidden;
   opacity: 0;
 
-  /* 확장 시 페이드인 + 위로 */
+  /* 확장 시 페이드인 */
   ${Card}[data-expanded="true"] & {
     visibility: visible;
     opacity: 1;
-    transition: opacity 360ms ease, visibility 0s;
+    transition: opacity 500ms ease-in-out, visibility 0s;
   }
 `;
 

@@ -63,8 +63,8 @@ export const CardTitle = styled.h3`
     content: "";
     position: absolute;
     bottom: -1px;
-    left: -10px;
-    width: calc(100% + 20px);
+    left: -7px;
+    width: calc(100% + 15px);
     height: 15px;
     background: #edebff;
     border-radius: 2px;

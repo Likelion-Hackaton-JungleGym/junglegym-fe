@@ -76,7 +76,7 @@ const JungleTalkAnswer = ({
             <img
               src={RectangleIcon}
               alt=""
-              style={{ width: "10px", height: "16px", flexShrink: 0 }}
+              style={{ width: "10px", height: "16px", flexShrink: 0, marginLeft: "3px" }}
             />
             {(question && question.trim()) || ""}
           </div>

@@ -235,8 +235,8 @@ const Bills = ({ bills = [], totalPages = 1, currentPage = 1, onPageChange }) =>
                           {(back.details ?? []).map((d, i) => (
                             <li key={i} style={{ color: "#fff", fontSize: 13, marginBottom: 6 }}>
                               {d.replace(/^[•·\s]+/, "")}
-                            </li>
-                          ))}
+          </li>
+        ))}
                         </ul>
                       </div>
                     </>
