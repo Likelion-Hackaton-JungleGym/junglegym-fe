@@ -4,6 +4,7 @@ import { useSearchParams } from "react-router-dom";
 import styled from "styled-components";
 // 🔁 새 API 유틸
 import { getWeeklyNewsByRegion } from "../../../shared/utils/newsApi";
+import { getCurrentKoreanWeekLabel } from "../../../shared/utils/dateUtils";
 
 import { ICON_MAP } from "./CardNewsData";
 import { CARD_MAP } from "./CardNewsData";
@@ -11,6 +12,7 @@ import leftButton from "../components/img/leftButton.svg?url";
 import rightButton from "../components/img/rightButton.svg?url";
 
 /* ---------- utils ---------- */
+
 function truncateText(str = "", max = 32) {
   if (str.length <= max) return str;
   return str.slice(0, max) + "…"; //점점점대신 뭔가 바꾸고 싶음
@@ -33,6 +35,11 @@ const DEFAULT_REGION = "성북구";
 
 export default function CardNews({ regions }) {
   const [searchParams] = useSearchParams();
+  const [weekLabel, setWeekLabel] = useState("");
+
+  useEffect(() => {
+    setWeekLabel(getCurrentKoreanWeekLabel(new Date()));
+  }, []);
 
   // URL > props(배열/문자열) > sessionStorage > 기본값
   const region = useMemo(() => {
@@ -113,7 +120,7 @@ export default function CardNews({ regions }) {
   if (loading) {
     return (
       <Wrapper>
-        <Date>25년 8월 3주차</Date>
+        <WeekLabel>{weekLabel}</WeekLabel>
         <Empty>뉴스를 불러오는 중...</Empty>
       </Wrapper>
     );
@@ -121,7 +128,7 @@ export default function CardNews({ regions }) {
   if (!len) {
     return (
       <Wrapper>
-        <Date>25년 8월 3주차</Date>
+        <WeekLabel>{weekLabel}</WeekLabel>
         <Empty>이 지역의 주간 뉴스가 없어요.</Empty>
       </Wrapper>
     );
@@ -129,7 +136,7 @@ export default function CardNews({ regions }) {
 
   return (
     <Wrapper>
-      <Date>25년 8월 3주차</Date>
+      <WeekLabel>{weekLabel}</WeekLabel>
 
       <Viewport>
         <PrevPeek aria-hidden>
@@ -229,7 +236,7 @@ const Empty = styled.div`
   padding: 20px 0 40px;
 `;
 
-const Date = styled.div`
+const WeekLabel = styled.div`
   color: #111;
   text-align: center;
   font-size: 17px;
