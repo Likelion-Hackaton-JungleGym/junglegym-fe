@@ -4,7 +4,7 @@ import styled from "styled-components";
 //import LandingImage from "../assets/images/Landing.svg";
 //import LandingIcon from "../assets/icons/LandingIcon2.jpg";
 import LandingIcon from "../assets/icons/LandingIcon.svg";
-import LandingMap from "../assets/icons/LandingMap.svg";
+import LandingMap from "../assets/icons/LandingMap2.svg";
 
 import BackArrowIcon from "../assets/icons/BackArrowIcon.svg";
 import ArrowDownIcon from "../assets/icons/ArrowDownIcon.svg";
