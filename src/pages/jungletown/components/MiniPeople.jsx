@@ -199,6 +199,7 @@ const Img = styled.img`
   object-position: center;
   display: block;
   cursor: pointer;
+  margin-top: 10px;
 `;
 
 const AvatarFallback = styled.div`
@@ -259,7 +260,8 @@ const ImageWrapper = styled.div`
   position: relative;
   width: 105%;
   aspect-ratio: 1 / 1;
-  background: ${(p) => p.$bg};
+  background-color: white;
+  //  background: ${(p) => p.$bg};
   border-radius: 8px;
   border: 1px solid #e0e0e0;
   overflow: hidden;
