@@ -44,7 +44,7 @@ const JungleTalkAnswer = ({
   lawText,
   setStep,
   fromOthers,
-  dummyQuestions,
+  dummyQuestions: questions,
   onOtherClick,
   loading,
 }) => {
@@ -102,7 +102,7 @@ const JungleTalkAnswer = ({
         </AnswerText>
         <OtherQuestion
           title="다른 사람들의 질문"
-          questions={dummyQuestions}
+          questions={questions}
           showCheckAnswer
           onClick={(i, q) => {
             if (loading) return;

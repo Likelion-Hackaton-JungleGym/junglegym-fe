@@ -6,18 +6,7 @@ import { useJungleTalkStore } from "../../store/jungleTalkStore";
 import { askJungleTalkAI, getChats } from "../../shared/utils/chatApi.js";
 import LoadingBar from "./LoadingBar";
 
-const DUMMY_QUESTIONS = [
-  "비례대표와 지역갑을은 어떻게 다른건가요?",
-  "국회의원은 몇 명이고, 다 뭐 하는 사람들이에요?",
-  "정당이 많던데, 무소속이랑 정당 후보는 뭐가 달라?",
-  "뉴스에서 비례 몇 석 가져간다 이런 건 무슨 뜻이야?",
-  "선거 공보물 진짜 봐야 돼? 뭘 보고 판단해요?",
-  "의원이 법안 발의했다는데, 그게 통과되려면 뭐가 필요한데?",
-  "정책은 많은데 왜 내 삶은 그대로일까?",
-  "안녕하세용",
-  "배고파용",
-  "너무졸리당",
-];
+
 
 const JungleTalkPage = () => {
   const { step, setStep } = useJungleTalkStore();
@@ -32,8 +21,7 @@ const JungleTalkPage = () => {
   const [latestQuestions, setLatestQuestions] = useState([]);
 
   const questionsForUI = useMemo(() => {
-    if (latestQuestions.length > 0) return latestQuestions;
-    return DUMMY_QUESTIONS;
+    return latestQuestions;
   }, [latestQuestions]);
 
   useEffect(() => {
@@ -49,7 +37,6 @@ const JungleTalkPage = () => {
         setLatestQuestions(onlyQuestions);
       } catch (e) {
         console.log("[JungleTalkPage] API 호출 실패", e?.response?.data || e.message);
-        // API 실패 시 더미 데이터 사용
         setLatestQuestions([]);
       }
     };
@@ -146,7 +133,7 @@ const JungleTalkPage = () => {
           fromOthers={fromOthers}
           dummyQuestions={questionsForUI}
           onOtherClick={openAnswer}
-          isLoading={isAnswerLoading}
+          loading={isAnswerLoading}
         />
       )}
     </>
