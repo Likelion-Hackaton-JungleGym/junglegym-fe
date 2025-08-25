@@ -264,7 +264,7 @@ const Modal = styled.div`
   position: fixed;
   inset: 0;
   display: grid;
-  justify-items: center;
+  justify-items: start;
   align-content: start;
   z-index: 1001;
   padding: calc(env(safe-area-inset-top) + ${HEADER_H}px) 12px 12px;
