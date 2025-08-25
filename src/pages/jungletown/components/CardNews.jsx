@@ -331,18 +331,20 @@ const RegionChip = styled.span`
 `;
 
 const IconWrapper = styled.div`
-  width: clamp(160px, 42vw, 200px);
-  height: clamp(120px, 38vw, 170px);
+  width: clamp(180px, 55vw, 220px);
+  //  height: clamp(120px, 38vw, 170px);
+  height: auto;
   display: flex;
   justify-content: center;
-  margin-bottom: 22px;
+  margin-bottom: -5px;
 `;
 
 const OverlayIcon = styled.img`
-  width: 230px;
-  height: 200px;
+  width: clamp(180px, 55vw, 220px);
+  height: auto; /* 비율 유지하면서 자동 높이 */
+  max-height: 200px; /* 너무 커지지 않게 제한 */
   z-index: 1;
-  transform: translateY(-6px);
+  margin: 10px 0;
 `;
 
 const OverlayTitle = styled.div`
@@ -357,9 +359,10 @@ const OverlayTitle = styled.div`
   word-break: break-word;
   line-height: 1.35;
   max-width: 90%;
-  max-height: calc(2 * em);
+  max-height: 2.7em;
   position: relative;
   z-index: 2;
+  //margin-top: 5px;
 `;
 
 const OverlayDesc = styled.div`
