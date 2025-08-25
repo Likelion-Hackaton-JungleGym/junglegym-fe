@@ -221,6 +221,7 @@ export const OverlayText = styled.div`
   font-size: 17px;
   line-height: 1.4;
   white-space: pre-line;
+  font-family: "ChosunilboNM", serif;
 `;
 
 export const WhiteContainer = styled.div`

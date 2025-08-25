@@ -66,16 +66,7 @@ const JungleTalkAnswer = ({
         <AbsoluteBackButton onClick={() => setStep(1)}>
           <img src={BackIcon} alt="뒤로가기" style={{ filter: "brightness(0) invert(1)" }} />
         </AbsoluteBackButton>
-        <OverlayText>
-          {(lawText &&
-            lawText
-              .trim()
-              .replace(/([^.!?]+[.!?])(?!\d)/g, "$1\n")
-              .replace(/(제\d+조)/g, "$1\n")
-              .replace(/\n+/g, "\n")
-              .trim()) ||
-            ""}
-        </OverlayText>
+        <OverlayText>{(lawText && lawText.trim()) || ""}</OverlayText>
       </TopImageWrapper>
       <WhiteContainer>
         <MyQuestion>
