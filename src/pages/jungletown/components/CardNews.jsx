@@ -68,7 +68,7 @@ export default function CardNews({ regions }) {
           region,
           key: buildKey(region, it),
           ...it,
-          card: CARD_MAP[(i % 6) + 1], // 1~6 반복
+          card: CARD_MAP[(i % 8) + 1],
         }));
 
         // 지역구 이름이 title에 포함된 기사를 우선 정렬

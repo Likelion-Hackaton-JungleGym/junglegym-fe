@@ -172,9 +172,11 @@ function NewsletterView({
         {todayQuestion && <TodayQuestion>{todayQuestion}</TodayQuestion>}
         {titleQuestion && <TitleQuestion>{titleQuestion}</TitleQuestion>}
         {questionContent && (
-          <Md>
-            <ReactMarkdown remarkPlugins={[remarkGfm]}>{md(questionContent)}</ReactMarkdown>
-          </Md>
+          <QuestionContentWrapper>
+            <Md>
+              <ReactMarkdown remarkPlugins={[remarkGfm]}>{md(questionContent)}</ReactMarkdown>
+            </Md>
+          </QuestionContentWrapper>
         )}
       </Bottom>
     </Wrapper>
@@ -262,14 +264,14 @@ const NewsLink = styled.img`
 const PercentWrapper = styled.div`
   background-color: #f3f3f3;
   border-radius: 8px;
-  margin: 0px 3px 40px 3px;
+  margin: 0px 3px 40px;
   height: 70px;
   border: 1px solid #e1e1e1;
 `;
 
 const PercentText = styled.div`
   font-size: 14px;
-  margin: 3px;
+  margin: 1px 3px 3px;
   padding: 10px 10px 0px;
 `;
 
@@ -315,6 +317,7 @@ const Md = styled.div`
   ol {
     margin: 0 0 10px 18px;
     line-height: 1.2;
+    // margin-bottom: 0;
   }
   strong {
     font-weight: 600;
@@ -353,7 +356,7 @@ const TodayQuestion = styled.div`
 const TitleQuestion = styled.div`
   position: relative;
   font-size: 17px;
-  font-weight: 400;
+  font-weight: 500;
   padding: 5px 5px 5px 16px;
   margin: 5px 3px;
 
@@ -365,5 +368,30 @@ const TitleQuestion = styled.div`
     bottom: 4px;
     width: 4px;
     background: #9290ff;
+  }
+`;
+
+const QuestionContentWrapper = styled.div`
+  margin-top: -10px;
+  letter-spacing: 0.01em; /* 글자 간격 */
+  word-spacing: 0.02em; /* 단어 간격 (한국어엔 영향 적지만 섞인 영문에 도움) */
+  line-height: 1.7; /* 줄 간격 */
+  //word-break: keep-all; /* 한국어 단어 중간 줄바꿈 방지 */
+  overflow-wrap: anywhere; /* 너무 긴 단어 강제 줄바꿈 */
+
+  /* ⬇️ 이 섹션(질문 리스트) 안에서만 목록 간격 타이트하게 */
+  ${Md} ul,
+ ${Md} ol {
+    margin: 0 0 6px 18px; /* 리스트 블록 자체 아래 여백 살짝 축소 */
+  }
+  ${Md} li {
+    margin-bottom: -13px; /* 항목-항목 간격 축소 (필요시 0~6px 사이에서 조절) */
+    line-height: 1.4; /* 항목 내부 줄간도 약간 타이트하게 */
+  }
+  ${Md} li:last-child {
+    margin-bottom: 0; /* 마지막 항목은 추가 여백 제거 */
+  }
+  ${Md} li p {
+    margin: 0; /* ReactMarkdown이 li 안에 p를 넣어 줄 때 생기는 여백 제거 */
   }
 `;
